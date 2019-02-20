@@ -1,0 +1,67 @@
+     DIGITAL SPATIAL DATA DOCUMENTATION FORM                   ENTRY DATE: 4/29/11
+
+     NAME OF DATA SET:            Maryland 2010 Voting Districts as certified by the Local Board of elections with minor
+				  corrections to misassigned census blocks to correct VTD\Precinct, 2002 Legislative and 
+				  Congressioanal districts made by Maryland Departments of Planning and Legislative Services. 
+				  
+
+     KEYWORDS:		          Voting District (VTD)
+				  Precinct
+
+     ORIGINATING AGENCY:          Maryland Department of Planning
+     DIVISION:                    Clearinghouse, Redistricting
+     PHONE NUMBER:                (410) 767-4490
+
+     DESCRIPTION OF DATA SET:     2010 Voting District (VTD)\Precinct for Maryland.
+	  Derived from the U.S. Census Bureau TIGER\Line Files for Maryland with minor corrections to misassigned
+	  census blocks to correct VTD\Precinct made by Maryland Departments of Planning and Legislative Services.
+
+     PROJECT OR INTENDED PURPOSE: 2010 Adjusted Census Population for use of Maryland Redistricting pursuant to 
+				  the "No representation Without Population" Act of 2010
+
+     RELATED DATA SETS (include catalog #:)  2002 Congressional and Legislative Districts 
+
+     DIGITAL DATA (agency/vendor/other):     Maryland Department of Planning
+     TYPE OF DATA (raster/vector/cad/database/text):     Vector
+     TYPE OF SOURCE MATERIAL (Map/photo/field/document): U.S. Census Bureau
+                  			   TIGER\Line Files for Maryland
+
+     SCALE OR ACCURACY OF SOURCE MATERIAL:   1:100,000 (varies)
+
+     DATE(s) OF SOURCE MATERIAL:             2010
+     METHOD OF DATA COLLECTION/DIGITIZATION: 2010 Census Blocks were aggregated with minor corrections to
+     	 misassigned census blocks to create 2010 Voting District (VTD)\Precinct
+
+     DATE(s) OF DIGITAL PRODUCTION:          April 29, 2010
+     STATUS OF DATA SET:                     Completed
+     INTENDED ACCURACY OR OUTPUT SCALE:      1:100,000 (varies)
+     RESOLUTION (pixel size or min. unit):   N/A
+
+     GEOGRAPHIC AREA COVERED:                All of Maryland covered
+     GEOGRAPHIC UNITS (quad/county/other):   State
+     COORDINATE SYSTEM AND UNITS:            Maryland State Plane Coordinates
+     HORIZONTAL DATUM (1927/1983):           NAD 1983 meters (U.S. State Plane)
+     VERTICAL DATUM:                         N/A
+
+     ATTRIBUTES OR DATA BASE (see TERMS and P.L.94-171 DATA files):
+     FORMAT OF DATA:                	     ARC Shape File and Block Assignment 
+	      			             file in Dbase formats are available. 
+     FILE/COVERAGE SIZE (mb/unit):           4 and 2.1 megabytes
+     AVAILABLE MEDIA:                        CD ROM
+     AVAILABLE HARDCOPY:                     Yes, black and white and color maps are
+					     available for a fee or via web
+                                   
+
+     CONDITIONS AND RESTRICTIONS:            Contact the Maryland Office of Planning					
+                                             for a copy of the Product Announcement
+				             describing this data set.
+
+     COMMENTS: Any question Related to Voting District (VTD)\Precinct contact: 
+      Nasrin Rahman
+      Maryland Department of Planning
+      Clearinghouse,Redistricting
+      301 W. Preston St., Baltimore, MD 21201
+      Phone # (410)767-4211
+      Email nrahman@mdp.state.md.us
+
+
