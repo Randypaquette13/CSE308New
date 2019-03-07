@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
   <title>A Leaflet map!</title>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
@@ -7,9 +7,22 @@
     #map{ width: 900px; height: 500px; }
   </style>
 </head>
-<body>
+<body style="background-color:powderblue;">
 
-  <div id="map"></div>
+  <div>
+  	<table style="width:100%">
+  	  <tr>
+  	  	<td id="map"></td>
+  	  	<td>
+  	  		<form method="post" action="">
+  	  			<table>
+  	  			  <tr><td><input name="logout" type="button" onclick="window.location.href = 'LoginDOM.html'" value="logout"></td></tr>
+  	  			</table>
+  	  		</form>
+  	  	</td>
+  	  </tr>
+  	</table>
+  </div>
 
   <script>
 
