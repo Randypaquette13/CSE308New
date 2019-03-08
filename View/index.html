@@ -2,6 +2,8 @@
 <head>
   <title>A Leaflet map!</title>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="IndexStyle.css" rel="stylesheet" type="text/css">
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   <style>
     #map{ width: 900px; height: 500px; }
@@ -9,6 +11,19 @@
 </head>
 <body style="background-color:powderblue;">
 
+	<!-- The navigation menu -->
+	<div class="navbar">
+	  <div class="subnav">
+	    <button class="subnavbtn">File <i class="fa fa-caret-down"></i></button>
+	    <div class="subnav-content">
+	      <a href="#company">Open</a>
+	      <a href="#team">Save</a>
+	      <a href="#careers">Save As...</a>
+	    </div>
+	  </div> 
+	  <a href="LoginDOM.html">Logout</a>
+	</div>  
+  <div><p><br></p></div>
   <div>
   	<table style="width:100%">
   	  <tr>
@@ -17,6 +32,13 @@
   	  		<form method="post" action="">
   	  			<table>
   	  			  <tr><td><input name="logout" type="button" onclick="window.location.href = 'LoginDOM.html'" value="logout"></td></tr>
+  	  			  <tr><td><select name="Select1">
+					<option>Arizona</option>
+					<option>Maryland</option>
+					<option>New Hampshire</option>
+					</select></td>
+				  </tr>
+				  
   	  			</table>
   	  		</form>
   	  	</td>
