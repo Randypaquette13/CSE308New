@@ -1,4 +1,4 @@
-/* The navigation menu */
+﻿/* The navigation menu */
 .navbar {
   overflow: hidden;
   background-color: #333;
@@ -63,4 +63,54 @@
 /* When you move the mouse over the subnav container, open the subnav content */
 .subnav:hover .subnav-content {
   display: block;
+}
+
+.slidecontainer {
+  width: 200px; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 200px; /* Full-width */
+  height: 10px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 5px; /* Set a specific slider handle width */
+  height: 15px; /* Slider handle height */
+  background: #000000; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* black background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+table#mapfields 
+{
+    border-collapse:separate;
+    border-spacing:25px 0px;
+}
+.Console {
+	
+	background:#000000;
+	
 }

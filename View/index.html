@@ -25,23 +25,31 @@
 	</div>  
   <div><p><br></p></div>
   <div>
-  	<table style="width:100%">
-  	  <tr>
+  	<table id="mapfields">
+  	  <tr cellspacing="25">
   	  	<td id="map"></td>
-  	  	<td>
+  	  	<td style="background-color:#42b9f4; padding: 10px">
   	  		<form method="post" action="">
   	  			<table>
-  	  			  <tr><td><input name="logout" type="button" onclick="window.location.href = 'LoginDOM.html'" value="logout"></td></tr>
   	  			  <tr><td><select name="Select1">
 					<option>Arizona</option>
 					<option>Maryland</option>
 					<option>New Hampshire</option>
 					</select></td>
 				  </tr>
-				  
+				  <tr><td><p style="padding-top:10px; margin:0px">compactness</p><div class="slidecontainer"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div></td></tr>
+				  <tr><td><p style="padding-top:10px; margin:0px">contiguity</p><div class="slidecontainer"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div></td></tr>
+				  <tr><td><p style="padding-top:10px; margin:0px">Population Equality</p><div class="slidecontainer"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div></td></tr>
+				  <tr><td><p style="padding-top:10px; margin:0px">Partisan Fairness</p><div class="slidecontainer"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div></td></tr>
+				  <tr><td><p style="padding-top:10px; margin:0px">Racial/Ethnic</p><div class="slidecontainer"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div></td></tr>
+				  <tr><td><p style="padding-top:10px; margin:0px">Console</p><textarea name="Console" style="width: 192px; height: 126px"></textarea></td></tr>
+				  <tr><td><input name="play" type="button" value="play"><input name="pause" type="button" value="pause"></td></tr>
   	  			</table>
   	  		</form>
   	  	</td>
+  	  </tr>
+  	  <tr style="height:100px" bgcolor="#42B9F4">
+  	    <td><input name="play" type="button" value="play"><input name="pause" type="button" value="pause"></td>
   	  </tr>
   	</table>
   </div>
