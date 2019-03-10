@@ -1,0 +1,125 @@
+@font-face {
+    font-family: Montserrat;
+    font-display: auto;
+    src: url(../fonts/Montserrat-Regular.ttf);
+}
+@font-face {
+    font-family: Montserrat-L;
+    font-display: auto;
+    src: url(../fonts/Montserrat-Light.ttf);
+}
+
+@font-face {
+    font-family: Montserrat-B;
+    font-display: auto;
+    src: url(../fonts/Montserrat-SemiBold.ttf);
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+body{
+    font-family: Montserrat-L;
+    font-size: 15px;
+    font-weight: 400;
+    color: #555;
+}
+h1, h2, h3, h4, h5, h6{
+    font-weight: 400;
+}
+.bg-light {
+    background-color: #F8F8F8 !important;
+}
+.navbar-light .navbar-brand {
+    color: rgba(0,0,0,.6);
+    font-size: 1.35rem;
+}
+.navbar{
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none; 
+}
+header{
+    margin-bottom: 30px;
+}
+.form-section{
+    padding: 0;
+    background: #F8F8F8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.form-title{
+    margin: 0;
+    padding: 35px 20px 20px;
+    border-bottom: 1px solid #ddd;
+}
+form{
+    padding: 20px;
+    background: white;
+    border-radius: 5px;
+}
+form .form-control{
+
+}
+.btn-primary {
+    color: #fff;
+    background-color: #337AB7;
+    border-color: #337AB7;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #246aa7;
+    border-color: #246aa7;
+}
+form.login button{
+    margin-top: 10px;
+}
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: none;
+}
+input::placeholder{
+    color: #aaa !important;
+}
+::-webkit-input-placeholder { /* Edge */
+  color: #aaa;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #aaa;
+}
+
+::placeholder {
+  color: #aaa;
+}
+.navbar-light .navbar-nav .nav-link {
+    /*font-family: Montserrat-L;*/
+}
+
+
+
+
+
+
+@media (max-width: 991px){
+    
+}
+
+@media (max-width: 767px){
+    
+}
+
+@media (max-width: 575px){
+    
+}
+
+@media (max-width: 480px){
+    
+
+}
