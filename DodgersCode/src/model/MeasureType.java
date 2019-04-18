@@ -4,13 +4,13 @@ public enum MeasureType {
 
     SCHWARTZBERG_COMPACTNESS {
         @Override
-        public double calculateMeasure() {
+        public double calculateMeasure(District D) {
             return -1.0;//TODO
         }
     },
     REOCK_COMPACTNESS {
         @Override
-        public double calculateMeasure() {
+        public double calculateMeasure(District D) {
             return -1.0;//TODO
         }
     },
