@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+<div class="container border">
+    <nav class="navbar navbar-light navbar-expand-lg">
+        <a class="navbar-brand" href="index.html">Districts</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="login.html">Login <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="signup.html">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="container mt-5 border">
+    <h3 class="form-title p-3">Login</h3>
+    <form class="pt-1 pl-3 pr-3">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" required id="username"
+                   aria-describedby="emailHelp" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <label for="Password">Password</label>
+            <input type="password" class="form-control" required name="password" id="Password"
+                   placeholder="Password">
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" class="form-check-input" name="remember" id="remember">
+            <label class="form-check-label" for="remember">Remember me</label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary mt-1">Login</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
