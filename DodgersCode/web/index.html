@@ -33,7 +33,7 @@
             <a class="dropdown-item" href="#">Save</a>
             <a class="dropdown-item" href="#">Save As...</a>
         </div>
-        <button class="btn btn-secondary btn-sm" type="button">
+        <button class="btn btn-secondary btn-sm" id="logout" type="button">
             Logout
         </button>
     </div>
@@ -126,7 +126,7 @@
 
         document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
 
-        let map = L.map('mapContainer').setView([39.8870, -97.9803], 5);
+        var map = L.map('mapContainer').setView([39.8870, -97.9803], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
             maxZoom: 17,
@@ -144,7 +144,7 @@
 
             document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
 
-            let map = L.map('mapContainer').setView([latitude, longitude], 7);
+            var map = L.map('mapContainer').setView([latitude, longitude], 7);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
@@ -172,6 +172,12 @@
 
 
         });
+
+
+        $("#logout").click(function(){
+            window.location.href="./login.html";
+        });
+
     });
 </script>
 </body>
