@@ -33,4 +33,9 @@ public class State {
         precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
         targetNumMaxMinDistricts = p.getNumMaxMinDistricts();
     }
+
+    public void combinePair(Cluster c1, Cluster c2) {
+        clusters.remove(c2);
+        c1.absorbCluster(c2);
+    }
 }
