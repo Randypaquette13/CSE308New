@@ -1,5 +1,8 @@
 package controller;
 
+import model.District;
+import model.Precinct;
+
 public class Move {
 
     private District from;
@@ -12,11 +15,6 @@ public class Move {
         precinct = initPrecinct;
 
     }
-
-
-
-
-
 
     public District getFrom(){
         return from;

@@ -18,6 +18,13 @@ public class Cluster {
         population = p.population;
     }
 
+    public Cluster(Cluster c) {
+        precinctSet = c.getPrecinctSet();
+        edgeSet = c.getEdgeSet();
+        population = c.getPopulation();
+        demographicPercentages = c.getDemographicPercentages();
+    }
+
     public Set<Precinct> getPrecinctSet() {
         return precinctSet;
     }

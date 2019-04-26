@@ -13,6 +13,10 @@ public class Preference {
         return weights;
     }
 
+    public double getWeight(MeasureType m) {//TODO
+        return -1;
+    }
+
     public int getNumMaxMinDistricts() {
         return numMaxMinDistricts;
     }
