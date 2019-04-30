@@ -64,9 +64,7 @@ public enum MeasureType {
 
     /**
      * Gives the normalized [0-1] value of a measure for a particular District. In our Context,
-     * having a higher
-     * @param d
-     * @return
+     * having a higher calculateMeasure() output is better.
      */
     public abstract double calculateMeasure(District d);
 }

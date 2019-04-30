@@ -2,10 +2,6 @@ package controller;
 
 import model.*;
 
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Map;
-
 public class Algorithm {
     Preference pref;
     State state;
