@@ -2,6 +2,10 @@ package controller;
 
 import model.*;
 
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Map;
+
 public class Algorithm {
     Preference pref;
     State state;
@@ -14,30 +18,9 @@ public class Algorithm {
     }
 
     public Summary doJob() {//TODO maybe make static
-        //you must reset the state so we dont have to make database calls
-        state.reset(pref);
         doGraphPartitioning();//TODO this is a placeHolder
 
-        int annealingSteps = 0;
-        Move candidateMove;
-        //anneal until the objective function output is acceptable or the max steps is reached
-        while(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
-            candidateMove = state.findCandidateMove();
-
-            if(candidateMove != null) {
-                state.doMove(candidateMove);
-                double currObjFunVal = calculateObjectiveFunction();
-
-                if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
-                    lastObjFunVal = currObjFunVal;
-                } else {
-                    state.undoMove();
-                }
-            }
-            annealingSteps++;
-        }
-
-        return new Summary(state,lastObjFunVal,null);//TODO this is a placeholder
+        return doSimulatedAnnealing();
     }
 
     /**
@@ -56,11 +39,53 @@ public class Algorithm {
         return objFunOutput;
     }
 
+    private double[] calculateTotalMeasuresScores() {
+        double[] measureScores = new double[MeasureType.values().length];
+
+        for(District d : state.getDistrictSet()) {
+            for(int ii = 0; ii < MeasureType.values().length; ii++) {
+                measureScores[ii] = MeasureType.values()[ii].calculateMeasure(d);
+            }
+        }
+        for(int ii = 0; ii < measureScores.length; ii++) {
+            measureScores[ii] = measureScores[ii]/(double)state.getDistrictSet().size();
+        }
+        return measureScores;
+    }
+
     /**
      * this is a placeholder
      * TODO
      */
-    private void doGraphPartitioning() {
-//        pref.getNumDistricts()
+    public void doGraphPartitioning() {
+        //you must reset the state so we dont have to make database calls
+        state.reset(pref);
+        while(state.getClusters().size() != pref.getNumDistricts()) {
+            final ClusterPair clusterPair = state.findCandidatePair();
+            state.combinePair(clusterPair.getC1(), clusterPair.getC2());
+        }
     }
+    public Summary doSimulatedAnnealing() {
+        int annealingSteps = 0;
+        Move candidateMove;
+        //anneal until the objective function output is acceptable or the max steps is reached
+        while(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
+            candidateMove = state.findCandidateMove();
+
+            if(candidateMove != null) {
+                state.doMove(candidateMove);
+                final double currObjFunVal = calculateObjectiveFunction();
+
+                if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
+                    lastObjFunVal = currObjFunVal;
+                } else {
+                    state.undoMove();
+                }
+            }
+            //TODO send update steps to client if it is just one batch job
+            annealingSteps++;
+        }
+        return new Summary(state,lastObjFunVal,calculateTotalMeasuresScores());
+    }
+
 }
