@@ -106,8 +106,17 @@ public class State {
 
             }
         }
-        //TODO should we try again?
 //        findCandidateMove()
         return null;
+    }
+
+    /**
+     * Get a new candidate pair for graph partitioning
+     * @return
+     */
+    public ClusterPair findCandidatePair() {
+        //TODO find candidate cluster pair for graph parittioning
+
+        return new ClusterPair(null,null);//TODO output
     }
 }
