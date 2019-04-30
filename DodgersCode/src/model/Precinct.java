@@ -4,11 +4,11 @@ import java.util.Set;
 
 public class Precinct extends Cluster {
     long id;
-    long population;
+    int population;
     Set<Edge> neighborEdges;
     District district;
 
-    public Precinct(long id, long population, Set<Edge> neighborEdges) {
+    public Precinct(long id, int population, Set<Edge> neighborEdges) {
         super(new Precinct(id,population,neighborEdges));//TODO
         this.id = id;
         this.population = population;
@@ -19,7 +19,7 @@ public class Precinct extends Cluster {
         return id;
     }
 
-    public long getPopulation() {
+    public int getPopulation() {
         return population;
     }
 
@@ -33,5 +33,9 @@ public class Precinct extends Cluster {
 
     public void setDistrict(District district) {
         this.district = district;
+    }
+
+    public double getArea() {
+        return -1.0;//TODO
     }
 }

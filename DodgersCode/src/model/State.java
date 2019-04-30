@@ -69,6 +69,7 @@ public class State {
         recentMove = m;
         m.getFrom().getPrecinctSet().remove(m.getPrecinct());
         m.getTo().getPrecinctSet().add(m.getPrecinct());
+        m.getPrecinct().setDistrict(m.getTo());
         //TODO finish?
     }
     public void undoMove() {
@@ -76,7 +77,8 @@ public class State {
             return;
         }
         recentMove.getFrom().getPrecinctSet().add(recentMove.getPrecinct());
-        recentMove.getTo().getPrecinctSet().add(recentMove.getPrecinct());
+        recentMove.getTo().getPrecinctSet().remove(recentMove.getPrecinct());
+        recentMove.getPrecinct().setDistrict(recentMove.getFrom());
     }
 
     /**

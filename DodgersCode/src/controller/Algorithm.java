@@ -18,7 +18,7 @@ public class Algorithm {
     }
 
     public Summary doJob() {//TODO maybe make static
-        doGraphPartitioning();//TODO this is a placeHolder
+        doGraphPartitioning();
 
         return doSimulatedAnnealing();
     }

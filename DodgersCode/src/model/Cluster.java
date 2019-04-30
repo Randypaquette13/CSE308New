@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class Cluster {
     private Set<Precinct> precinctSet;
     private Set<Edge> edgeSet;
-    long population;
+    int population;
     double[] demographicPercentages = new double[DemographicType.values().length];
 
     public Cluster(Precinct p) {
@@ -33,7 +33,7 @@ public class Cluster {
         return edgeSet;
     }
 
-    public long getPopulation() {
+    public int getPopulation() {
         return population;
     }
 
