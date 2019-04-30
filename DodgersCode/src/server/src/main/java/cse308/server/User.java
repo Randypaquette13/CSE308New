@@ -1,15 +1,18 @@
 package cse308.server;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class User {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
     private String email;
-    private String passwordHash;
-    private String salt;
+    private String password;    //actually hashed and salted
     private String sessionCookie;
     private String firstName;
     private String lastName;
@@ -17,28 +20,27 @@ public class User {
 
     protected User(){ }
 
-    public User(String initEmail, String initPasswordHash, String initSalt, String initSessionCookie,
+    public User(String initEmail, String initPassword, String initSessionCookie,
                 String initFirstName, String initLastName, boolean initAdmin){
 
         email = initEmail;
-        passwordHash = initPasswordHash;
-        salt = initSalt;
+        password = initPassword;
         sessionCookie = initSessionCookie;
         firstName = initFirstName;
         lastName = initLastName;
         admin = initAdmin;
     }
 
+    public Long getId(){
+        return id;
+    }
+
     public String getEmail(){
         return email;
     }
 
-    public String getPasswordHash(){
-        return passwordHash;
-    }
-
-    public String getSalt(){
-        return salt;
+    public String getPassword(){
+        return password;
     }
 
     public String getSessionCookie(){
@@ -57,16 +59,16 @@ public class User {
         return admin;
     }
 
+    public void setId(Long newId){
+        id = newId;
+    }
+
     public void setEmail(String newEmail){
         email = newEmail;
     }
 
-    public void setPasswordHash(String newPasswordHash){
-        passwordHash = newPasswordHash;
-    }
-
-    public void setSalt(String newSalt){
-        salt = newSalt;
+    public void setPassword(String newPassword){
+        password = newPassword;
     }
 
     public void setSessionCookie(String newSessionCookie){
@@ -87,8 +89,8 @@ public class User {
 
     @Override
     public String toString(){
-        return String.format("User[email='%s', passwordHash='%s', salt='%s', sessionCookie='%s', " +
+        return String.format("User[email='%s', password='%s', sessionCookie='%s', " +
                 "firstName='%s', lastName='%s', admin='%b']",
-                email, passwordHash, salt, sessionCookie, firstName, lastName, admin);
+                email, password, sessionCookie, firstName, lastName, admin);
     }
 }
