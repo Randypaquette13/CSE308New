@@ -1,7 +1,11 @@
 package cse308.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Email;
 
 /**
  * This class specifies the endpoints and behavior used to handle users logging in, logging out, and registering.
@@ -39,8 +43,14 @@ public class UserAccountController {
      * Proper security will have this method receive password hashes instead of plaintext passwords.
      * @return  Success or Failure, depending on if the user was registered successfully or not.
      */
-    @RequestMapping("/register")
-    public String register(){
-        return "Register goes here.";
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity register(@RequestBody User user){
+        try {
+            userService.registerNewUser(user);
+        }
+        catch(EmailAlreadyRegisteredException e){
+            return new ResponseEntity(HttpStatus.CONFLICT); //409 Response
+        }
+        return new ResponseEntity((HttpStatus.CREATED));    //201 Response
     }
 }
