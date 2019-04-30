@@ -4,17 +4,40 @@ import model.*;
 
 public class Algorithm {
     Preference pref;
-    State s;
-    Move candidateMove;
+    State state;
 
-    public Algorithm(Preference pref, State s) {
+    private double lastObjFunVal = 0;
+
+    public Algorithm(Preference pref, State state) {
         this.pref = pref;
-        this.s = s;
+        this.state = state;
     }
 
     public Summary doJob() {//TODO maybe make static
+        //you must reset the state so we dont have to make database calls
+        state.reset(pref);
+        doGraphPartitioning();//TODO this is a placeHolder
 
-        return null;//TODO
+        int annealingSteps = 0;
+        Move candidateMove;
+        //anneal until the objective function output is acceptable or the max steps is reached
+        while(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
+            candidateMove = state.findCandidateMove();
+
+            if(candidateMove != null) {
+                state.doMove(candidateMove);
+                double currObjFunVal = calculateObjectiveFunction();
+
+                if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
+                    lastObjFunVal = currObjFunVal;
+                } else {
+                    state.undoMove();
+                }
+            }
+            annealingSteps++;
+        }
+
+        return new Summary(state,lastObjFunVal,null);//TODO this is a placeholder
     }
 
     /**
@@ -23,13 +46,21 @@ public class Algorithm {
      *
      * @return the output of the objective function
      */
-    public double calculateObjectiveFunction() {
+    private double calculateObjectiveFunction() {
         double objFunOutput = 0;
-        for(District d : s.getDistrictSet()) {
+        for(District d : state.getDistrictSet()) {
             for(MeasureType m : MeasureType.values()) {
                 objFunOutput += m.calculateMeasure(d) * pref.getWeight(m);
             }
         }
         return objFunOutput;
+    }
+
+    /**
+     * this is a placeholder
+     * TODO
+     */
+    private void doGraphPartitioning() {
+//        pref.getNumDistricts()
     }
 }
