@@ -54,8 +54,6 @@ public class State {
     /**
      * Combines two clusters for graph partitioning. The first cluster absorbs the second and the
      * second cluster is removed.
-     * @param c1
-     * @param c2
      */
     public void combinePair(Cluster c1, Cluster c2) {
         clusters.remove(c2);
@@ -64,7 +62,6 @@ public class State {
 
     /**
      * Activates the move. A 'move' moves a precinct from one district to another.
-     * @param m
      */
     public void doMove(Move m) {
         recentMove = m;
@@ -92,19 +89,19 @@ public class State {
      */
     public Move findCandidateMove() {
         //get a random district
-        Random r = new Random();
-        int index = r.nextInt(districtSet.size());
+        final Random r = new Random();
+        final int index = r.nextInt(districtSet.size());
 
         Iterator<District> iter = districtSet.iterator();
         for(int i = 0; i < index; i++) {
             iter.next();
         }
-        District district = iter.next();
+        final District district = iter.next();
 
         for(Precinct precinct : district.getPrecinctSet()) {
             for(Edge edge : precinct.getNeighborEdges()) {
                 if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD) {
-                    Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC1() : edge.getC2());
+                    final Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC1() : edge.getC2());
 
                     //if the neighbor is in another district
                     if(!neighbor.getDistrict().equals(district)) {
