@@ -1,11 +1,9 @@
-package cse308.server;
+package cse308.server.restControllers;
 
+import cse308.server.services.UserService;
+import cse308.server.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.Email;
 
 /**
  * This class specifies the endpoints and behavior used to handle users logging in, logging out, and registering.

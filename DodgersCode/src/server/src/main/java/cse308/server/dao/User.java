@@ -1,4 +1,4 @@
-package cse308.server;
+package cse308.server.dao;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

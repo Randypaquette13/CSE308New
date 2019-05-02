@@ -1,5 +1,6 @@
-package cse308.server;
+package cse308.server.repository;
 
+import cse308.server.dao.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

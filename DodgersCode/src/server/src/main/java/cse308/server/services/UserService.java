@@ -1,4 +1,4 @@
-package cse308.server;
+package cse308.server.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package cse308.server;
+package cse308.server.restControllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

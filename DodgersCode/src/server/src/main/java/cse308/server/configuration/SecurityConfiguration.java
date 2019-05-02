@@ -1,6 +1,5 @@
 package cse308.server.configuration;
 
-import cse308.server.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
