@@ -13,8 +13,8 @@ public class Cluster {
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
         precinctSet.add(p);
-        edgeSet = p.neighborEdges;
-        population = p.population;
+        edgeSet = p.getNeighborEdges();
+        population = p.getPopulation();
     }
 
     public Cluster(Cluster c) {
