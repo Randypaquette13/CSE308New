@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration; 
 /**
  * The class containing the main method used to start the server.
  */
-@SpringBootApplication(/*exclude={DataSourceAutoConfiguration.class}*/) //remove the exclude when the DB is configured
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class}) //remove the exclude when the DB is configured
 public class ServerApplication {
 
     /**
