@@ -3,11 +3,16 @@ package cse308.server.restControllers;
 import controller.Algorithm;
 import model.Preference;
 import model.State;
+import model.Summary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class specifies the endpoints and behavior used to run the algorithm.
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlgorithmController {
 
     private State state;
+    private Algorithm algorithm;
 
     /**
      * This method handles running the graph partitioning portion of the algorithm.
@@ -23,7 +29,8 @@ public class AlgorithmController {
      */
     @RequestMapping("/runGraphPartitioning")
     public String doGraphPartitioning(@RequestBody Preference preference) {
-        Algorithm a = new Algorithm(preference, null); //TODO: Go to stateRepository to get state.
+        algorithm = new Algorithm(preference, null); //TODO: Go to stateRepository to get state.
+        algorithm.doGraphPartitioning();
         return "Do Graph Partitioning Here.";
     }
 
@@ -33,6 +40,7 @@ public class AlgorithmController {
      */
     @RequestMapping("/runSimulatedAnnealing")
     public String doSimulatedAnnealing() {
+        algorithm.doSimulatedAnnealing();
         return "Do Simulated Annealing Here.";
     }
 
@@ -41,8 +49,12 @@ public class AlgorithmController {
      * @return  unknown
      */
     @RequestMapping("/runBatchProcessing")
-    public String doBatchProcessing() {
-        return "Do batch Processing here";
-        //will likely send messages to both "/runGraphPartitioning" and "/runSimulatedAnnealing"
+    public List<Summary> doBatchProcessing(@RequestBody List<Preference> preferences) {
+        final List<Summary> summaryBatch = new LinkedList<>();
+        for(Preference preference : preferences) {
+            final Algorithm algorithm = new Algorithm(preference, null);
+            summaryBatch.add(algorithm.doJob());
+        }
+        return summaryBatch;
     }
 }
