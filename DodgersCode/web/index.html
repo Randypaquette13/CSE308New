@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
           crossorigin=""/>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <style>
         body, wrapper {
             height: 100%;
@@ -52,6 +53,10 @@
                     <a class="dropdown-item" id="maryland" latitude="39.063946" longitude="-76.802101" state="ML" href="#">Maryland</a>
                     <a class="dropdown-item" id="nhampshire" latitude="43.452492" longitude="-71.563896" state="NH" href="#">New Hampshire</a>
                 </div>
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="compactness">Districts : </label>
+                <input type="checkbox" id="toggleDistrict" data-toggle="toggle" data-size="sm">
             </div>
             <div class="form-group">
                 <input type="text" class="form-control form-control-sm rounded-pill" id="search"
@@ -136,15 +141,42 @@
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 
 <script src="./state.js"></script>
 
 <script>
     $(document).ready(function () {
 
+        //Generating Random color function
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // style function
+
+        function style(feature) {
+            var color = getRandomColor();
+            return {
+                fillColor:color,
+                weight: 3,
+                opacity: 1,
+                color: color,
+                fillOpacity: 0.3
+            };
+        }
+
         // load state...
 
         function loadState(latitude , longitude , fileName){
+
+            var districToggleStatus = $("#toggleDistrict").prop('checked');
 
             document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
 
@@ -158,42 +190,64 @@
 
 
             if(fileName == "AZ"){
-                $.getJSON('./ArizonaData/Arizona.json', function (data) {
-                    L.geoJson(data).addTo(map);
-                    L.geoJSON(data).bindTooltip("test").addTo(map);
-                });
 
                 L.geoJSON(states, {
-                    style: function(feature) {
-                        return {color: "#3388ff"};
-                    },
                     onEachFeature: onEachFeature
                 }).addTo(map);
+
+
+                if(districToggleStatus){
+                    $.getJSON('./AZ-FULL.geojson', function (data) {
+                        L.geoJson(data,{
+                            style: style
+                        }).bindTooltip("districts").addTo(map);
+                    });
+                }else{
+                    $.getJSON('./ArizonaData/Arizona.json', function (data) {
+                        L.geoJSON(data).bindTooltip("precincts").addTo(map);
+                    });
+                }
+
             }
             if (fileName == "ML"){
-                $.getJSON('./MarylandData/Maryland.json', function (data) {
-                    L.geoJson(data).addTo(map);
-                    L.geoJSON(data).bindTooltip("test").addTo(map);
-                });
+
                 L.geoJSON(states, {
-                    style: function(feature) {
-                        return {color: "#3388ff"};
-                    },
                     onEachFeature: onEachFeature
                 }).addTo(map);
+
+                if(districToggleStatus){
+                    $.getJSON('./MD-FULL.geojson', function (data) {
+                        L.geoJson(data,{
+                            style: style
+                        }).bindTooltip("districts").addTo(map);
+                    });
+                }else{
+                    $.getJSON('./MarylandData/Maryland.json', function (data) {
+                        L.geoJson(data).bindTooltip("test").addTo(map);
+                    });
+                }
+
             }
             if (fileName == "NH"){
-                $.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
-                    L.geoJson(data).addTo(map);
-                    L.geoJSON(data).bindTooltip("test").addTo(map);
-                });
                 L.geoJSON(states, {
-                    style: function(feature) {
-                        return {color: "#3388ff"};
-                    },
                     onEachFeature: onEachFeature
                 }).addTo(map);
+
+                if(districToggleStatus){
+                    $.getJSON('./NH-FULL.geojson', function (data) {
+                        L.geoJson(data,{
+                            style: style
+                        }).bindTooltip("districts").addTo(map);
+                    });
+                }else{
+                    $.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
+                        L.geoJson(data).bindTooltip("test").addTo(map);
+                    });
+                }
+
             }
+
+
         }
 
         //  onEachFeature function...
@@ -228,9 +282,6 @@
         }).addTo(map);
 
         L.geoJSON(states, {
-            style: function(feature) {
-                return {color: "#3388ff"};
-            },
             onEachFeature: onEachFeature
         }).addTo(map);
 
@@ -240,11 +291,6 @@
             loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
         });
 
-        // Redirect Login Page when clicks logout button....
-
-        $("#logOut").click(function(){
-            window.location.href="login.html";
-        });
     });
 
 </script>

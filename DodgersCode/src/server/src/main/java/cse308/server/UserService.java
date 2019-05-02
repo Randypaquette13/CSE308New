@@ -7,19 +7,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Service
 public class UserService {
 
-    //@Autowired
-    //private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public boolean registerNewUser(User newUser){
-
-    return false;
-
-
+    public void registerNewUser(User newUser) throws EmailAlreadyRegisteredException{
+        User user = userRepository.findByEmail(newUser.getEmail());
+        if(user == null){
+            throw new EmailAlreadyRegisteredException();
+        }
+        userRepository.save(newUser);
     }
 
-    /*public boolean verifyUser(User potentialUser){
+    public boolean verifyUser(User potentialUser){
         User user = userRepository.findByEmail(potentialUser.getEmail());
         if(user == null){
             return false;
@@ -30,7 +31,7 @@ public class UserService {
         else{
             return false;
         }
-    }*/
+    }
 
 
 }
