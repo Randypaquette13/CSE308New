@@ -12,7 +12,7 @@ public class Algorithm {
     }
 
     /**
-     * This is just an example of
+     * This is just an example of how to run the algorithm
      * @return
      */
     public Summary doJob() {
