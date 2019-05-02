@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -60,29 +60,38 @@
 
 <script>
     $(document).ready(function(){
-        $("#submit").click(function(){
+        $("#submit").click(function(event){
             // Prevent default posting of form - put here to work in case of errors
             //event.preventDefault();
 
             // setup some local variables
-            var $form = $('#form');
+            //var $form = $('#form');
 
             var email = $('#email').val();
             var password = $('#password').val();
 
             // Serialize the data in the form
-            var serializedData = $form.serialize();
+            //var serializedData = $form.serialize();
+            //console.log(serializedData);
+            var data = {email : email, password : password};
+            console.log(data);
 
-            $.post("/needaurlhere.url",
-                {
-                    email: email,
-                    password: password
-                },
-
-                function(data, status){
-                    alert("Data: " + data + "\nStatus: " + status);
-                    window.location.href = './index.html';
-                });
+            $.ajax({
+                url: "http://localhost:8080/login",
+                type: "POST",
+                data: JSON.stringify(
+                    {
+                        email: email,
+                        password: password
+                    })
+                ,
+                contentType: "application/json",
+                complete: function(data, status) {
+                            alert("Data: " + data.responseText + "\nStatus: " + status);
+                            //window.location.href = './index.html';
+                }
+            });
+            event.preventDefault();
         });
     });
 </script>
