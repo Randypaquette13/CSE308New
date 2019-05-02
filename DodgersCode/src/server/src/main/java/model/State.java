@@ -104,7 +104,7 @@ public class State {
         for(Precinct precinct : district.getPrecinctSet()) {
             for(Edge edge : precinct.getNeighborEdges()) {
                 if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD) {
-                    Precinct neighbor = (Precinct)(edge.c1.equals(precinct) ? edge.c1 : edge.c2);
+                    Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC1() : edge.getC2());
 
                     //if the neighbor is in another district
                     if(!neighbor.getDistrict().equals(district)) {

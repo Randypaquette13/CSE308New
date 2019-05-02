@@ -62,30 +62,8 @@
     $(document).ready(function(){
         $("#submit").click(function(){
             debugger;
-            // setup some local variables
-            //var $form = $('#form');
-
             var email = $('#email').val();
             var password = $('#password').val();
-
-            // Serialize the data in the form
-            //var serializedData = $form.serialize();
-
-            // $.post("http://localhost:8080/login",
-            //     {
-            //         "email": email,
-            //         "password": password
-            //     },
-            //     function(data, status){
-            //         alert("Data: " + data + "\nStatus: " + status);
-            //         window.location.href = './index.html';
-            //     });
-
-            // $.post("http://localhost:8080/login",
-            //     function(result){
-            //        console.log("result",result);
-            //     });
-
             $.ajax({
                 type: 'POST',
                 url: "http://localhost:8080/login",
@@ -105,7 +83,5 @@
         });
     });
 </script>
-
-
 </body>
 </html>
