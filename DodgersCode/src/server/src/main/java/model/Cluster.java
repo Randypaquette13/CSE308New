@@ -54,8 +54,12 @@ public class Cluster {
         }
     }
 
+    /**
+     * a certain minority has a majority vote in the district
+     * @return
+     */
     public boolean isMajorityMinorityDistrict() {
-        return Arrays.stream(demographicPercentages).noneMatch(dp -> dp > 0.5);
+        return Arrays.stream(demographicPercentages).noneMatch(dp -> dp > 0.5);//TODO this is wrong
     }
 }
 

@@ -49,10 +49,6 @@ public class Algorithm {
         return measureScores;
     }
 
-    /**
-     * this is a placeholder
-     * TODO
-     */
     public void doGraphPartitioning() {
         //you must reset the state so we dont have to make database calls
         state.reset(pref);
@@ -77,6 +73,8 @@ public class Algorithm {
                 } else {
                     state.undoMove();
                 }
+            } else {
+                break;
             }
             //TODO send update steps to client if it is just one batch job
             annealingSteps++;

@@ -4,5 +4,6 @@ public enum DemographicType {
     HISPANIC,
     ASIAN,
     AFRICAN_AMERICAN,
-    WHITE
+    WHITE,
+    OTHER
 }

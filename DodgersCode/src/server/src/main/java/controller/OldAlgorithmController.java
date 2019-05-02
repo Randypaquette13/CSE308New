@@ -22,7 +22,6 @@ public class OldAlgorithmController {
         Collection<Summary> summaryBatch = new LinkedList<>();
 
         for(Preference p : prefs) {
-            s.reset(p);
             summaryBatch.add(new Algorithm(p,s).doJob());//TODO is this all we need algorithm for?
         }
         return summaryBatch;

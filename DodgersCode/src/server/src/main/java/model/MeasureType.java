@@ -49,13 +49,13 @@ public enum MeasureType {
             return 1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation());
         }
     },
-    PARTISAIN_FAIRNESS {
+    PARTISAN_FAIRNESS {//TODO too general when boundarys collide
         @Override
         public double calculateMeasure(District d) {
-            return 0.0;//TODO
+            return 0.0;//TODO is this the same as efficiency gap
         }
     },
-    RACIAL_FAIRNESS {
+    RACIAL_FAIRNESS {//TODO take this out
         @Override
         public double calculateMeasure(District d) {
             return 0.0;//TODO
