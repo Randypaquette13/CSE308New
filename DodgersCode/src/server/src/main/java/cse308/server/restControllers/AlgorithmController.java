@@ -2,6 +2,7 @@ package cse308.server.restControllers;
 
 import controller.Algorithm;
 import model.Preference;
+import model.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AlgorithmController {
 
-    //@Autowired
-    //private
+    private State state;
 
     /**
      * This method handles running the graph partitioning portion of the algorithm.
@@ -23,7 +23,7 @@ public class AlgorithmController {
      */
     @RequestMapping("/runGraphPartitioning")
     public String doGraphPartitioning(@RequestBody Preference preference) {
-        //Algorithm a = new Algorithm(preference);TODO: How to get the state?
+        Algorithm a = new Algorithm(preference, null); //TODO: Go to stateRepository to get state.
         return "Do Graph Partitioning Here.";
     }
 

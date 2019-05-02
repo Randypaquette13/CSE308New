@@ -16,7 +16,6 @@ public class Algorithm {
      */
     public Summary doJob() {
         doGraphPartitioning();
-
         return doSimulatedAnnealing();
     }
 

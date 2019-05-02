@@ -84,7 +84,7 @@ public class State {
     }
 
     /**
-     * Finds a random candidate move for simulated annealing. May return null if there is no valid move see TODO on the bottom
+     * Finds a random candidate move for simulated annealing. May return null if there is no valid move see
      * @return a move with a high joinability
      */
     public Move findCandidateMove() {
