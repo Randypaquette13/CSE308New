@@ -7,14 +7,14 @@ import java.util.Set;
 public class Cluster {
     private Set<Precinct> precinctSet;
     private Set<Edge> edgeSet;
-    int population;
-    double[] demographicPercentages = new double[DemographicType.values().length];
+    private int population;
+    private double[] demographicPercentages = new double[DemographicType.values().length];
 
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
         precinctSet.add(p);
-        edgeSet = p.neighborEdges;
-        population = p.population;
+        edgeSet = p.getNeighborEdges();
+        population = p.getPopulation();
     }
 
     public Cluster(Cluster c) {
@@ -40,22 +40,26 @@ public class Cluster {
         return demographicPercentages;
     }
 
-    public void absorbCluster(Cluster c) {//TODO every time you add a new member to Cluster you need to add it here
+    public void absorbCluster(Cluster c) {
         precinctSet.addAll(c.getPrecinctSet());
-        edgeSet.addAll(c.getEdgeSet());//TODO maybe do something special with edge
+        edgeSet.addAll(c.getEdgeSet());
 
-        long otherPopulation = c.getPopulation();
-        long total = population + otherPopulation;
+        final int absorbedPopulation = c.getPopulation();
+        final int total = population + absorbedPopulation;
 
         //set demographic percentages to combined value
         for(int ii = 0; ii < demographicPercentages.length; ii++) {
             demographicPercentages[ii] = (demographicPercentages[ii] * (double)(population/total)) +
-                                         (c.getDemographicPercentages()[ii] * (double)(otherPopulation/total));
+                                         (c.getDemographicPercentages()[ii] * (double)(absorbedPopulation/total));
         }
     }
 
+    /**
+     * a certain minority has a majority vote in the district
+     * @return
+     */
     public boolean isMajorityMinorityDistrict() {
-        return Arrays.stream(demographicPercentages).noneMatch(dp -> dp > 0.5);
+        return Arrays.stream(demographicPercentages).noneMatch(dp -> dp > 0.5);//TODO this is wrong
     }
 }
 

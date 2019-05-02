@@ -5,9 +5,9 @@ import model.Precinct;
 
 public class Move {
 
-    private District from;
-    private District to;
-    private Precinct precinct;
+    private final District from;
+    private final District to;
+    private final Precinct precinct;
 
     public Move(District initFrom, District  initTo, Precinct initPrecinct){
         from = initFrom;

@@ -3,17 +3,19 @@ package controller;
 import model.*;
 
 public class Algorithm {
-    Preference pref;
-    State state;
-
-    private double lastObjFunVal = 0;
+    private Preference pref;
+    private State state;
 
     public Algorithm(Preference pref, State state) {
         this.pref = pref;
         this.state = state;
     }
 
-    public Summary doJob() {//TODO maybe make static
+    /**
+     * This is just an example of how to run the algorithm
+     * @return
+     */
+    public Summary doJob() {
         doGraphPartitioning();
 
         return doSimulatedAnnealing();
@@ -49,10 +51,6 @@ public class Algorithm {
         return measureScores;
     }
 
-    /**
-     * this is a placeholder
-     * TODO
-     */
     public void doGraphPartitioning() {
         //you must reset the state so we dont have to make database calls
         state.reset(pref);
@@ -61,7 +59,9 @@ public class Algorithm {
             state.combinePair(clusterPair.getC1(), clusterPair.getC2());
         }
     }
+
     public Summary doSimulatedAnnealing() {
+        double lastObjFunVal = 0;
         int annealingSteps = 0;
         Move candidateMove;
         //anneal until the objective function output is acceptable or the max steps is reached
@@ -77,8 +77,10 @@ public class Algorithm {
                 } else {
                     state.undoMove();
                 }
+            } else {
+                break;
             }
-            //TODO send update steps to client if it is just one batch job
+            //TODO send update steps to client here if it is just one batch job
             annealingSteps++;
         }
         return new Summary(state,lastObjFunVal,calculateTotalMeasuresScores());
