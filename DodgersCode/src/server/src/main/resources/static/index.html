@@ -1,10 +1,111 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <head>
-    <title>Replace me</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
-<p>Replace server/src/main/resources/static/index.html with the index page for our project</p>
+<div class="container border">
+    <nav class="navbar navbar-light navbar-expand-lg">
+        <a class="navbar-brand" >Districts</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="login.html">Login <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="signup.html">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="container mt-5 border">
+    <h3 class="form-title p-3">Login</h3>
+    <div class="pt-1 pl-3 pr-3" id="form">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" name="email" required id="email"
+                   aria-describedby="emailHelp" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <label for="Password">Password</label>
+            <input type="password" class="form-control" required name="password" id="password"
+                   placeholder="Password">
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" class="form-check-input" name="remember" id="remember">
+            <label class="form-check-label" for="remember">Remember me</label>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary mt-1" id = "submit">
+                Login
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#submit").click(function(){
+            debugger;
+            // setup some local variables
+            //var $form = $('#form');
+
+            var email = $('#email').val();
+            var password = $('#password').val();
+
+            // Serialize the data in the form
+            //var serializedData = $form.serialize();
+
+            // $.post("http://localhost:8080/login",
+            //     {
+            //         "email": email,
+            //         "password": password
+            //     },
+            //     function(data, status){
+            //         alert("Data: " + data + "\nStatus: " + status);
+            //         window.location.href = './index.html';
+            //     });
+
+            // $.post("http://localhost:8080/login",
+            //     function(result){
+            //        console.log("result",result);
+            //     });
+
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/login",
+                data: JSON.stringify({
+                    "email": email,
+                    "password": password
+                }),
+                error: function(e) {
+                    if(e.status == 200){
+                        debugger;
+                        window.location.href = './main.html';
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
+    });
+</script>
+
+
 </body>
 </html>

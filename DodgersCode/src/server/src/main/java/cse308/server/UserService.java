@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UserService {
-
+/*
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -33,5 +33,5 @@ public class UserService {
         }
     }
 
-
+*/
 }

@@ -43,7 +43,7 @@ public class UserAccountController {
      * Proper security will have this method receive password hashes instead of plaintext passwords.
      * @return  Success or Failure, depending on if the user was registered successfully or not.
      */
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+  /*  @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody User user){
         try {
             userService.registerNewUser(user);
@@ -53,4 +53,6 @@ public class UserAccountController {
         }
         return new ResponseEntity((HttpStatus.CREATED));    //201 Response
     }
+
+   */
 }

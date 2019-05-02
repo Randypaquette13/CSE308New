@@ -1,0 +1,270 @@
+<html>
+<head>
+    <title>Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <style>
+        body, wrapper {
+            height: 100%;
+            min-height: 100%;
+            width: 100%;
+        }
+        #map {
+            z-index: 1
+        }
+    </style>
+</head>
+<body>
+<wrapper class="d-flex flex-column" style="overflow-y: hidden;">
+    <div class="flex-grow-1 bg-dark p-2">
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            File
+        </button>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Open</a>
+            <a class="dropdown-item" href="#">Save</a>
+            <a class="dropdown-item" href="#">Save As...</a>
+        </div>
+        <button class="btn btn-secondary btn-sm"  onClick="window.location.href='login.html'" type="button">
+            Log Out
+        </button>
+    </div>
+    <div class="d-flex flex-row h-100" style="overflow-y: hidden;">
+        <div class="d-flex flex-column h-100 w-100">
+            <div class="h-100 w-100" id="map"></div>
+        </div>
+        <div class="flex-grow-1 p-2" style="overflow-y: auto;">
+            <div class="form-group dropdown show">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Select State
+                </button>
+                <div class="dropdown-menu" id="stateDropdown" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" id="arizona" latitude="33.729759" longitude="-111.431221" state="AZ" href="#">Arizona</a>
+                    <a class="dropdown-item" id="maryland" latitude="39.063946" longitude="-76.802101" state="ML" href="#">Maryland</a>
+                    <a class="dropdown-item" id="nhampshire" latitude="43.452492" longitude="-71.563896" state="NH" href="#">New Hampshire</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="compactness">Districts : </label>
+                <input type="checkbox" id="toggleDistrict" data-toggle="toggle" data-size="sm">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm rounded-pill" id="search"
+                       placeholder="Map Search">
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="compactness">Compactness</label>
+                <input type="range" class="custom-range" id="compactness">
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="contiguity">Contiguity</label>
+                <input type="range" class="custom-range" id="contiguity">
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
+                <input type="range" class="custom-range" id="population-equality">
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
+                <input type="range" class="custom-range" id="partisan-fairness">
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
+                <input type="range" class="custom-range" id="racial">
+            </div>
+            <div class="form-group">
+                <div class="form-check-inline">
+                    <label class="form-check-label" for="single">
+                        <input type="radio" class="form-single" id="single" name="optradio" value="single" checked>Single
+                    </label>
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label" for="batch">
+                        <input type="radio" class="form-batch" id="batch" name="optradio" value="batch">Batch
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Select Algorithm
+                </button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Select Precinct
+                </button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Load Saved Map
+                </button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-sm">Stop</button>
+                <button type="button" class="btn btn-primary btn-sm">Pause</button>
+            </div>
+            <div class="form-group">
+
+                <button type="button" class="btn btn-primary btn-sm">Run</button>
+                <button type="button" class="btn btn-primary btn-sm">Save Map</button>
+            </div>
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm" for="console">Console</label>
+                <textarea class="form-control bg-dark" id="console" rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+</wrapper>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-VoPFvGr9GxhDT3n8vqqZ46twP5lgex+raTCfICQy73NLhN7ZqSfCtfSn4mLA2EFA"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+
+<script src="./state.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //Generating Random color function
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        // style function
+        function style(feature) {
+            var color = getRandomColor();
+            return {
+                fillColor:color,
+                weight: 3,
+                opacity: 1,
+                color: color,
+                fillOpacity: 0.3
+            };
+        }
+        // load state...
+        function loadState(latitude , longitude , fileName){
+            var districToggleStatus = $("#toggleDistrict").prop('checked');
+            document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
+            var map = L.map('mapContainer').setView([latitude, longitude], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+                maxZoom: 17,
+                minZoom: 2
+            }).addTo(map);
+
+            if(fileName == "AZ"){
+                L.geoJSON(states, {
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+                if(districToggleStatus){
+                    $.getJSON('./AZ-FULL.geojson', function (data) {
+                        L.geoJson(data,{
+                            style: style
+                        }).bindTooltip("districts").addTo(map);
+                    });
+                }else{
+                    $.getJSON('./ArizonaData/Arizona.json', function (data) {
+                        L.geoJSON(data).bindTooltip("precincts").addTo(map);
+                    });
+                }
+            }
+
+            if (fileName == "ML"){
+                L.geoJSON(states, {
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+                if(districToggleStatus){
+                    $.getJSON('./MD-FULL.geojson', function (data) {
+                        L.geoJson(data,{
+                            style: style
+                        }).bindTooltip("districts").addTo(map);
+                    });
+                }else{
+                    $.getJSON('./MarylandData/Maryland.json', function (data) {
+                        L.geoJson(data).bindTooltip("test").addTo(map);
+                    });
+                }
+            }
+
+            if (fileName == "NH"){
+                L.geoJSON(states, {
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+                if(districToggleStatus){
+                    $.getJSON('./NH-FULL.geojson', function (data) {
+                        L.geoJson(data,{
+                            style: style
+                        }).bindTooltip("districts").addTo(map);
+                    });
+                }else{
+                    $.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
+                        L.geoJson(data).bindTooltip("test").addTo(map);
+                    });
+                }
+            }
+        }
+        //  onEachFeature function...
+        function onEachFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    var state = e.target.feature.geometry.state;
+                    if(state == "Arizona"){
+                        loadState(33.729759,-111.431221,"AZ");
+                        $("#arizona").parent().prev().text($("#arizona").text());
+                    }else if(state == "Maryland"){
+                        loadState(39.063946,-76.802101,"ML");
+                        $("#maryland").parent().prev().text($("#maryland").text());
+                    }else{
+                        loadState(43.452492,-71.563896,"NH");
+                        $("#nhampshire").parent().prev().text($("#nhampshire").text());
+                    }
+                }
+            });
+        }
+        // Load map first time...
+        document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
+        var map = L.map('mapContainer').setView([39.8870, -97.9803], 5);
+        var layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+            maxZoom: 17,
+            minZoom: 2
+        }).addTo(map);
+
+        L.geoJSON(states, {
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+        // Change state, change in dropdown as well
+        $("#stateDropdown a").click(function(){
+            $(this).parent().prev().text($(this).text());
+            loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
+        });
+    });
+</script>
+</body>
+</html>
