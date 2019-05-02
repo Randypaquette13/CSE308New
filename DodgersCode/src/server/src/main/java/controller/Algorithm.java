@@ -13,7 +13,6 @@ public class Algorithm {
 
     /**
      * This is just an example of how to run the algorithm
-     * @return
      */
     public Summary doJob() {
         doGraphPartitioning();
@@ -52,10 +51,10 @@ public class Algorithm {
     }
 
     public void doGraphPartitioning() {
-        //you must reset the state so we dont have to make database calls
+        //you must reset the state so we dont have to make extra database calls
         state.reset(pref);
         while(state.getClusters().size() != pref.getNumDistricts()) {
-            final ClusterPair clusterPair = state.findCandidatePair();
+            final ClusterPair clusterPair = state.findCandidateClusterPair();
             state.combinePair(clusterPair.getC1(), clusterPair.getC2());
         }
     }

@@ -120,7 +120,7 @@ public class State {
     /**
      * Get a new candidate pair for graph partitioning
      */
-    public ClusterPair findCandidatePair() {
+    public ClusterPair findCandidateClusterPair() {
         //TODO find candidate cluster pair for graph parittioning
         return new ClusterPair(null,null);//TODO output
     }
