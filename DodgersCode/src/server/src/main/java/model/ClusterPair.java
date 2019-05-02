@@ -1,8 +1,8 @@
 package model;
 
 public class ClusterPair {
-    Cluster c1;
-    Cluster c2;
+    private final Cluster c1;
+    private final Cluster c2;
 
     public ClusterPair(Cluster c1, Cluster c2) {
         this.c1 = c1;

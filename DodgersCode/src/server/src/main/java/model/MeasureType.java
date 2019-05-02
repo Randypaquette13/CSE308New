@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * TODO there are more measures we need to add
+ */
 public enum MeasureType {
 
     SCHWARTZBERG_COMPACTNESS {
@@ -39,7 +42,6 @@ public enum MeasureType {
             return d.getArea()/d.getConvexHull();
         }
     },
-
     EFFICIENCY_GAP {
         /**
          * the difference in the wasted votes of the two parties divided by the total population
@@ -47,18 +49,6 @@ public enum MeasureType {
         @Override
         public double calculateMeasure(District d) {
             return 1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation());
-        }
-    },
-    PARTISAN_FAIRNESS {//TODO too general when boundarys collide
-        @Override
-        public double calculateMeasure(District d) {
-            return 0.0;//TODO is this the same as efficiency gap
-        }
-    },
-    RACIAL_FAIRNESS {//TODO take this out
-        @Override
-        public double calculateMeasure(District d) {
-            return 0.0;//TODO
         }
     };
 

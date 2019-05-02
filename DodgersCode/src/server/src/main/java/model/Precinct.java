@@ -3,10 +3,10 @@ package model;
 import java.util.Set;
 
 public class Precinct extends Cluster {
-    long id;
-    int population;
-    Set<Edge> neighborEdges;
-    District district;
+    private final long id;
+    private final int population;
+    private final Set<Edge> neighborEdges;
+    private District district;
 
     public Precinct(long id, int population, Set<Edge> neighborEdges) {
         super(new Precinct(id,population,neighborEdges));//TODO

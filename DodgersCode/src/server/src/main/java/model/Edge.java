@@ -1,8 +1,8 @@
 package model;
 
 public class Edge {
-    Cluster c1;
-    Cluster c2;
+    private Cluster c1;
+    private Cluster c2;
     private double joinability = -1;
 
     public Edge(Cluster c1, Cluster c2, double joinability) {
@@ -13,7 +13,6 @@ public class Edge {
 
     /**
      * Joinability is calculated based on the difference in the demographic percentages of the two clusters
-     * @return joinability
      */
     public double getJoinability() {
         if(joinability != -1) {

@@ -2,10 +2,9 @@ package model;
 
 public class Summary {
 
-    State state;
-    double objectiveFunctionScore; //The total function score
-    double[] measureScores; //individual scores
-    //TODO other summary info?
+    private final State state;
+    private final double objectiveFunctionScore; //The total function score
+    private final double[] measureScores; //individual scores
 
     public Summary(State state, double objectiveFunctionScore, double[] measureScores) {
         this.state = state;

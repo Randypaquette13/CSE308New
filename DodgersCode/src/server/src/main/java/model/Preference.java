@@ -1,11 +1,11 @@
 package model;
 
 public class Preference {
-    private double[] weights;//TODO use a datatyppe that maps weights to measure skrrrrr
-    private int numMaxMinDistricts;
-    private int numDistricts;
+    private final double[] weights;
+    private final int numMaxMinDistricts;
+    private final int numDistricts;
 
-    public Preference(double[] weights, int numMaxMinDistricts, int numDistricts) {//TODO this class is maybe unecessary
+    public Preference(double[] weights, int numMaxMinDistricts, int numDistricts) {
         this.weights = weights;
         this.numMaxMinDistricts = numMaxMinDistricts;
         this.numDistricts = numDistricts;
