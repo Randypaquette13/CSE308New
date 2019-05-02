@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 public class AlgorithmController {
 
-    private State state;
+    private State state;//TODO: Go to stateRepository to get state.
     private Algorithm algorithm;
 
     /**
@@ -29,7 +29,8 @@ public class AlgorithmController {
      */
     @RequestMapping("/runGraphPartitioning")
     public String doGraphPartitioning(@RequestBody Preference preference) {
-        algorithm = new Algorithm(preference, null); //TODO: Go to stateRepository to get state.
+
+        algorithm = new Algorithm(preference, state);
         algorithm.doGraphPartitioning();
         return "Do Graph Partitioning Here.";
     }
@@ -52,7 +53,7 @@ public class AlgorithmController {
     public List<Summary> doBatchProcessing(@RequestBody List<Preference> preferences) {
         final List<Summary> summaryBatch = new LinkedList<>();
         for(Preference preference : preferences) {
-            final Algorithm algorithm = new Algorithm(preference, null);
+            final Algorithm algorithm = new Algorithm(preference, state);
             summaryBatch.add(algorithm.doJob());
         }
         return summaryBatch;
