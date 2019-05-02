@@ -1,0 +1,11 @@
+GEO.id,GEO.id2,GEO.display-label,HD01_VD01,HD02_VD01,HD01_VD02,HD02_VD02,HD01_VD03,HD02_VD03,HD01_VD04,HD02_VD04,HD01_VD05,HD02_VD05,HD01_VD06,HD02_VD06,HD01_VD07,HD02_VD07,HD01_VD08,HD02_VD08
+Id,Id2,Geography,Estimate; Total:,Margin of Error; Total:,Estimate; Total: - White alone,Margin of Error; Total: - White alone,Estimate; Total: - Black or African American alone,Margin of Error; Total: - Black or African American alone,Estimate; Total: - American Indian and Alaska Native alone,Margin of Error; Total: - American Indian and Alaska Native alone,Estimate; Total: - Asian alone,Margin of Error; Total: - Asian alone,Estimate; Total: - Native Hawaiian and Other Pacific Islander alone,Margin of Error; Total: - Native Hawaiian and Other Pacific Islander alone,Estimate; Total: - Some other race alone,Margin of Error; Total: - Some other race alone,Estimate; Total: - Two or more races:,Margin of Error; Total: - Two or more races:
+5001500US0401,0401,"Congressional District 1 (115th Congress), Arizona",741377,3265,483668,3665,16854,1235,173024,1838,11912,835,1421,237,28140,1649,26358,1723
+5001500US0402,0402,"Congressional District 2 (115th Congress), Arizona",717718,3469,582174,3490,28583,1322,10418,1076,21725,965,1762,314,41357,2430,31699,1639
+5001500US0403,0403,"Congressional District 3 (115th Congress), Arizona",751029,4279,531445,5438,34796,2036,32280,1822,13150,1156,910,333,111101,4270,27347,1787
+5001500US0404,0404,"Congressional District 4 (115th Congress), Arizona",749187,3596,662111,3844,14070,1215,13786,1235,9482,788,1173,300,29532,2631,19033,1501
+5001500US0405,0405,"Congressional District 5 (115th Congress), Arizona",782680,3552,666049,4552,24127,1605,8526,1138,36219,1869,1892,456,21295,1944,24572,1567
+5001500US0406,0406,"Congressional District 6 (115th Congress), Arizona",762220,4608,649001,4617,20173,1435,12186,1147,36078,1813,664,238,21644,1817,22474,1653
+5001500US0407,0407,"Congressional District 7 (115th Congress), Arizona",782330,4990,488628,6687,77730,2353,22060,1893,19391,1664,1830,402,142901,4534,29790,2019
+5001500US0408,0408,"Congressional District 8 (115th Congress), Arizona",761786,3612,642088,4501,33021,1888,6615,965,27372,1802,1264,328,25151,2548,26275,1624
+5001500US0409,0409,"Congressional District 9 (115th Congress), Arizona",761619,4790,572497,4990,43477,2109,21287,1758,38088,1569,2448,551,53462,2877,30360,1966
