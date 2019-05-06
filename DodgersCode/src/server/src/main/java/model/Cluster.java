@@ -4,24 +4,25 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cluster {
+public class Cluster implements MapVertex {
     private Set<Precinct> precinctSet;
     private Set<Edge> edgeSet;
     private int population;
-    private double[] demographicPercentages = new double[DemographicType.values().length];
+    private double[] demographicValues = new double[DemographicType.values().length];
 
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
         precinctSet.add(p);
         edgeSet = p.getNeighborEdges();
         population = p.getPopulation();
+        demographicValues = p.getDemographicValues();
     }
 
     public Cluster(Cluster c) {
         precinctSet = c.getPrecinctSet();
         edgeSet = c.getEdgeSet();
         population = c.getPopulation();
-        demographicPercentages = c.getDemographicPercentages();
+        demographicValues = c.getDemographicValues();
     }
 
     public Set<Precinct> getPrecinctSet() {
@@ -36,21 +37,18 @@ public class Cluster {
         return population;
     }
 
-    public double[] getDemographicPercentages() {
-        return demographicPercentages;
+    public double[] getDemographicValues() {
+        return demographicValues;
     }
 
     public void absorbCluster(Cluster c) {
         precinctSet.addAll(c.getPrecinctSet());
         edgeSet.addAll(c.getEdgeSet());
-
-        final int absorbedPopulation = c.getPopulation();
-        final int total = population + absorbedPopulation;
+        population += c.getPopulation();
 
         //set demographic percentages to combined value
-        for(int ii = 0; ii < demographicPercentages.length; ii++) {
-            demographicPercentages[ii] = (demographicPercentages[ii] * (double)(population/total)) +
-                                         (c.getDemographicPercentages()[ii] * (double)(absorbedPopulation/total));
+        for(int ii = 0; ii < demographicValues.length; ii++) {
+            demographicValues[ii] = (demographicValues[ii] + c.getDemographicValues()[ii]);
         }
     }
 
@@ -59,7 +57,7 @@ public class Cluster {
      * @return
      */
     public boolean isMajorityMinorityDistrict() {
-        return Arrays.stream(demographicPercentages).noneMatch(dp -> dp > 0.5);//TODO this is wrong
+        return Arrays.stream(demographicValues).noneMatch(dp -> dp > 0.5);//TODO this is wrong
     }
 }
 

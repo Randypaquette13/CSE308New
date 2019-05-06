@@ -2,17 +2,18 @@ package model;
 
 import java.util.Set;
 
-public class Precinct extends Cluster {
+public class Precinct implements MapVertex {
     private final long id;
     private final int population;
     private final Set<Edge> neighborEdges;
     private District district;
+    private double[] demographicValues = new double[DemographicType.values().length];
 
-    public Precinct(long id, int population, Set<Edge> neighborEdges) {
-        super(new Precinct(id,population,neighborEdges));//TODO
+    public Precinct(long id, int population, Set<Edge> neighborEdges, double[] demographicValues) {
         this.id = id;
         this.population = population;
         this.neighborEdges = neighborEdges;
+        this.demographicValues = demographicValues;
     }
 
     public long getId() {
@@ -29,6 +30,11 @@ public class Precinct extends Cluster {
 
     public District getDistrict() {
         return district;
+    }
+
+    @Override
+    public double[] getDemographicValues() {
+        return demographicValues;
     }
 
     public void setDistrict(District district) {
