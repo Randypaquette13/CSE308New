@@ -1,69 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+<html lang="en"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+
+        .flex{
+            display: flex;
+        }
+        .w-100-vh{
+            height: 100vh;
+        }
+        #form-container{
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+            max-height: 600px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
-<div class="container border">
-    <nav class="navbar navbar-light navbar-expand-lg">
-        <a class="navbar-brand" >Districts</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="login.html">Login <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="signup.html">Register</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</div>
-<div class="container mt-5 border">
-    <h3 class="form-title p-3">Login</h3>
-    <div class="pt-1 pl-3 pr-3" id="form">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control" name="email" required id="email"
-                   aria-describedby="emailHelp" placeholder="Email">
-        </div>
-        <div class="form-group">
-            <label for="Password">Password</label>
-            <input type="password" class="form-control" required name="password" id="password"
-                   placeholder="Password">
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="checkbox" class="form-check-input" name="remember" id="remember">
-            <label class="form-check-label" for="remember">Remember me</label>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary mt-1" id = "submit">
-                Login
-            </button>
+<div class="container-fluid flex w-100-vh bg-dark">
+    <div id="form-container" class="bg-light rounded">
+        <ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active rounded-0 bg-secondary text-white" id="login" data-toggle="pill" href="#loginForm">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-0 bg-secondary text-white" id="guestLoginTab" data-toggle="pill" href="#guestLogin">Guest Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-0 bg-secondary text-white" id="signUpTab" data-toggle="pill" href="#signUp">Sign Up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-0 bg-secondary text-white" id="adminLoginTab" data-toggle="pill" href="#adminLogin">Admin Login</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <!-- Login Form -->
+            <div class="tab-pane fade show active" id="loginForm">
+                <div class="container mt-5">
+                    <h3 class="form-title p-3">Login</h3>
+                    <div class="pt-1 pl-3 pr-3" id="loginForm1">
+                        <div class="form-group">
+                            <label for="loinEmail">Email</label>
+                            <input type="text" class="form-control" name="email" required id="loinEmail"
+                                   aria-describedby="emailHelp" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="loingPassword">Password</label>
+                            <input type="password" class="form-control" required name="password" id="loingPassword"
+                                   placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-1" id = "login_submit">
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Guest Login Form -->
+            <div class="tab-pane fade" id="guestLogin">
+                <div class="container mt-5">
+                    <h3 class="form-title p-3">Guest Login</h3>
+                    <div class="pt-1 pl-3 pr-3" id="guestLoginForm">
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-1" id = "guest_submit">
+                                Guest Login
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Guest SignUp Form -->
+            <div class="tab-pane fade" id="signUp">
+                <div class="container mt-5">
+                    <h3 class="form-title p-3">Register</h3>
+                    <div class="pt-1 pl-3 pr-3">
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-user"></i></div>
+                            </div>
+                            <input type="text" name="name" id="registerName" required class="form-control" placeholder="Name">
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-envelope"></i></div>
+                            </div>
+                            <input type="confirm_password" name="email" id="registerEmail" required class="form-control" placeholder="Email">
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-unlock-alt"></i></div>
+                            </div>
+                            <input type="password" name="password" id="registerPassword" required class="form-control" placeholder="Password">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary mt-1" id = "register_submit">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Admin Login -->
+            <div class="tab-pane fade" id="adminLogin">
+                <div class="container mt-5">
+                    <h3 class="form-title p-3">Admin Login</h3>
+                    <div class="pt-1 pl-3 pr-3" id="adminLoginForm">
+                        <div class="form-group">
+                            <label for="adminEmail">Email</label>
+                            <input type="text" class="form-control" name="email" required id="adminEmail"
+                                   aria-describedby="emailHelp" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="adminPassword">Password</label>
+                            <input type="password" class="form-control" required name="password" id="adminPassword"
+                                   placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary mt-1" id = "admin_submit">
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
 
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function(){
-        $("#submit").click(function(){
+        // login form
+        $("#login_submit").click(function(){
             debugger;
-            var email = $('#email').val();
-            var password = $('#password').val();
+            var email = $('#loginEmail').val();
+            var password = $('#loginPassword').val();
             $.ajax({
                 type: 'POST',
                 url: "http://localhost:8080/login",
@@ -75,13 +155,70 @@
                     if(e.status == 200){
                         debugger;
                         window.location.href = './main.html';
+                    }else{
+                        console.log("error!");
                     }
                 },
                 dataType: "json",
                 contentType: "application/json"
             });
         });
+
+        // register form
+
+        $("#register_submit").click(function(){
+            debugger;
+            var email = $('#registerEmail').val();
+            var password = $('#registerPassword').val();
+            var name = $('#registerName').val();
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/login",
+                data: JSON.stringify({
+                    "email": email,
+                    "password": password,
+                    "name": name
+                }),
+                error: function(e) {
+                    if(e.status == 200){
+                        debugger;
+                        window.location.href = '/';
+                    }else{
+                        console.log("error!");
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
+
+        // Admin Login form
+
+        $("#admin_submit").click(function(){
+            debugger;
+            var email = $('#adminEmail').val();
+            var password = $('#adminPassword').val();
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/login",
+                data: JSON.stringify({
+                    "email": email,
+                    "password": password
+                }),
+                error: function(e) {
+                    if(e.status == 200){
+                        debugger;
+                        window.location.href = './main.html';
+                    }else{
+                        console.log("error!");
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
+
+
     });
 </script>
-</body>
 </html>
