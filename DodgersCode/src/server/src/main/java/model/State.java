@@ -42,6 +42,10 @@ public class State {
         return population;
     }
 
+    public void setClusters(Collection<Cluster> newClusters){
+        clusters = newClusters;
+    }
+
     /**
      * Used to reset the state before every call to Algorithm.doJob() in AlgorithmController
      */
@@ -53,12 +57,14 @@ public class State {
     }
 
     /**
-     * Combines two clusters for graph partitioning. The first cluster absorbs the second and the
-     * second cluster is removed.
+     * Combines two clusters for graph partitioning. The first cluster absorbs the second and both the
+     * first and second cluster is removed. Returns the combined cluster.
      */
-    public void combinePair(Cluster c1, Cluster c2) {
+    public Cluster combinePair(Cluster c1, Cluster c2) {
         c1.absorbCluster(c2);
         clusters.remove(c2);
+        clusters.remove(c1);
+        return c1;
     }
 
     /**
@@ -116,11 +122,11 @@ public class State {
     }
 
     /**
-     * Get a new candidate pair for graph partitioning
+     * Get a new candidate pair for graph partitioning. Returns null if no candidate pair is found
      */
     public ClusterPair findCandidateClusterPair() {
         //TODO find candidate cluster pair for graph parittioning
-
+        //TODO: Return null if no candidate pair is found
         return new ClusterPair(null,null);//TODO output
     }
 
