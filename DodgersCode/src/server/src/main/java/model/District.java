@@ -34,4 +34,16 @@ public class District extends Cluster {
         return -1;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("District: ");
+        for(Precinct p : getPrecinctSet()) {
+            sb.append(p);
+            sb.append(",");
+        }
+
+        return sb.toString();
+    }
 }

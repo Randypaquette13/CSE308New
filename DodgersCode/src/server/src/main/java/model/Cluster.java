@@ -1,8 +1,6 @@
 package model;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Cluster implements MapVertex {
     private Set<Precinct> precinctSet;
@@ -13,14 +11,14 @@ public class Cluster implements MapVertex {
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
         precinctSet.add(p);
-        edgeSet = p.getNeighborEdges();
+        edgeSet = p.getEdges();
         population = p.getPopulation();
         demographicValues = p.getDemographicValues();
     }
 
     public Cluster(Cluster c) {
         precinctSet = c.getPrecinctSet();
-        edgeSet = c.getEdgeSet();
+        edgeSet = c.getEdges();
         population = c.getPopulation();
         demographicValues = c.getDemographicValues();
     }
@@ -29,7 +27,7 @@ public class Cluster implements MapVertex {
         return precinctSet;
     }
 
-    public Set<Edge> getEdgeSet() {
+    public Set<Edge> getEdges() {
         return edgeSet;
     }
 
@@ -43,8 +41,19 @@ public class Cluster implements MapVertex {
 
     public void absorbCluster(Cluster c) {
         precinctSet.addAll(c.getPrecinctSet());
-        edgeSet.addAll(c.getEdgeSet());
+        for(Edge e : c.getEdges()) {
+            if(!edgeSet.add(e)) {
+                edgeSet.remove(e);
+            }
+        }
         population += c.getPopulation();
+
+        getNeighbors().forEach(neighbor -> {
+            if(c.getNeighbors().contains(neighbor)) {
+                //TODO adjust the edge that contains this cluster
+            }
+        });
+
 
         //set demographic percentages to combined value
         for(int ii = 0; ii < demographicValues.length; ii++) {
@@ -58,6 +67,28 @@ public class Cluster implements MapVertex {
      */
     public boolean isMajorityMinorityDistrict() {
         return Arrays.stream(demographicValues).noneMatch(dp -> dp > 0.5);//TODO this is wrong
+    }
+
+    @Override
+    public List<MapVertex> getNeighbors() {
+        LinkedList<MapVertex> neighbors = new LinkedList<>();
+        for(Edge e : edgeSet) {
+            neighbors.add(e.getNeighbor(this));
+        }
+        return neighbors;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Cluster: ");
+        for(Precinct p : precinctSet) {
+            sb.append(p);
+            sb.append(",");
+        }
+
+        return sb.toString();
     }
 }
 

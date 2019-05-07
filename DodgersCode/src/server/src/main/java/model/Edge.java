@@ -19,7 +19,7 @@ public class Edge {
         return c2;
     }
     /**
-     * Joinability is calculated based on the difference in the demographic percentages of the two clusters
+     * Joinability is calculated based on the difference in the demographic values of the two clusters
      */
     public double getJoinability() {
         if(joinability != -1) {
@@ -32,5 +32,13 @@ public class Edge {
         joinability = 1.0 / totalDemographicDifference;
 
         return joinability;
+    }
+
+    public MapVertex getNeighbor(MapVertex mv) {
+        if(mv.equals(c1)) {
+            return c2;
+        } else {
+            return c1;
+        }
     }
 }

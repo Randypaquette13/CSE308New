@@ -1,18 +1,21 @@
 package model;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Precinct implements MapVertex {
     private final long id;
     private final int population;
-    private final Set<Edge> neighborEdges;
+    private final Set<Edge> edgeSet;
     private District district;
     private double[] demographicValues = new double[DemographicType.values().length];
+    private static long numPrecincts = 0;
 
-    public Precinct(long id, int population, Set<Edge> neighborEdges, double[] demographicValues) {
-        this.id = id;
+    public Precinct(int population, Set<Edge> edgeSet, double[] demographicValues) {
+        this.id = numPrecincts++;
         this.population = population;
-        this.neighborEdges = neighborEdges;
+        this.edgeSet = edgeSet;
         this.demographicValues = demographicValues;
     }
 
@@ -24,8 +27,8 @@ public class Precinct implements MapVertex {
         return population;
     }
 
-    public Set<Edge> getNeighborEdges() {
-        return neighborEdges;
+    public Set<Edge> getEdges() {
+        return edgeSet;
     }
 
     public District getDistrict() {
@@ -43,5 +46,19 @@ public class Precinct implements MapVertex {
 
     public double getArea() {
         return -1.0;//TODO
+    }
+
+    @Override
+    public List<MapVertex> getNeighbors() {
+        LinkedList<MapVertex> neighbors = new LinkedList<>();
+        for(Edge e : edgeSet) {
+            neighbors.add(e.getNeighbor(this));
+        }
+        return neighbors;
+    }
+
+    @Override
+    public String toString() {
+        return "P" + id + " population:" + population;
     }
 }

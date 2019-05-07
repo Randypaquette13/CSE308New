@@ -100,7 +100,7 @@ public class State {
         final District district = iter.next();
 
         for(Precinct precinct : district.getPrecinctSet()) {
-            for(Edge edge : precinct.getNeighborEdges()) {
+            for(Edge edge : precinct.getEdges()) {
                 if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD) {
                     final Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC1() : edge.getC2());
 
