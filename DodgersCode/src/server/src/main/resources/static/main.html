@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>Map</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" charset="utf-8">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
@@ -9,7 +9,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
           crossorigin=""/>
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css" rel="stylesheet"/>
+
+
+
     <style>
         body, wrapper {
             height: 100%;
@@ -18,6 +23,15 @@
         }
         #map {
             z-index: 1
+        }
+        .hide{
+            display: none;
+        }
+        .block{
+            display: block;
+        }
+        #b_compactness, #b_contiguity,#b_population-equality,#b_partisan-fairness,#b_racial{
+            background: yellow;
         }
     </style>
 </head>
@@ -41,96 +55,242 @@
         <div class="d-flex flex-column h-100 w-100">
             <div class="h-100 w-100" id="map"></div>
         </div>
-        <div class="flex-grow-1 p-2" style="overflow-y: auto;">
-            <div class="form-group dropdown show">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    Select State
-                </button>
-                <div class="dropdown-menu" id="stateDropdown" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" id="arizona" latitude="33.729759" longitude="-111.431221" state="AZ" href="#">Arizona</a>
-                    <a class="dropdown-item" id="maryland" latitude="39.063946" longitude="-76.802101" state="ML" href="#">Maryland</a>
-                    <a class="dropdown-item" id="nhampshire" latitude="43.452492" longitude="-71.563896" state="NH" href="#">New Hampshire</a>
+        <div class="flex-grow-1 p-3" style="overflow-y: auto; max-width: 370px; width: 100%;">
+            <div class="section">
+                <div class="form-group dropdown show ">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Select State
+                    </button>
+                    <div class="dropdown-menu" id="stateDropdown" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" id="arizona" latitude="33.729759" longitude="-111.431221" state="AZ" href="#">Arizona</a>
+                        <a class="dropdown-item" id="maryland" latitude="39.063946" longitude="-76.802101" state="ML" href="#">Maryland</a>
+                        <a class="dropdown-item" id="nhampshire" latitude="43.452492" longitude="-71.563896" state="NH" href="#">New Hampshire</a>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm" for="compactness">Districts : </label>
-                <input type="checkbox" id="toggleDistrict" data-toggle="toggle" data-size="sm">
-            </div>
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm" for="compactness">Compactness</label>
-                <input type="range" class="custom-range" id="compactness">
-            </div>
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm" for="contiguity">Contiguity</label>
-                <input type="range" class="custom-range" id="contiguity">
-            </div>
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
-                <input type="range" class="custom-range" id="population-equality">
-            </div>
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
-                <input type="range" class="custom-range" id="partisan-fairness">
-            </div>
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
-                <input type="range" class="custom-range" id="racial">
-            </div>
-            <div class="form-group">
-                <div class="form-check-inline">
-                    <label class="form-check-label" for="single">
-                        <input type="radio" class="form-single" id="single" name="optradio" value="single" checked>Single
-                    </label>
-                </div>
-                <div class="form-check-inline">
-                    <label class="form-check-label" for="batch">
-                        <input type="radio" class="form-batch" id="batch" name="optradio" value="batch">Batch
-                    </label>
+            <div class="section">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="compactness">Districts : </label>
+                    <input type="checkbox" id="toggleDistrict" data-toggle="toggle" data-size="sm">
                 </div>
             </div>
-            <div class="form-group">
-                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    Select Algorithm
-                </button>
+            <div class="section p-3" id="singleRangeSlider">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="compactness">Compactness</label>
+                    <div class="flex-row">
+                        <input type="text" id="compactness">
+                        <span id="v_compactness" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="contiguity">Contiguity</label>
+                    <div class="flex-row">
+                        <input type="text" id="contiguity">
+                        <span id="v_contiguity" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
+                    <div class="flex-row">
+                        <input type="text" id="population-equality">
+                        <span id="v_population-equality" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
+                    <div class="flex-row">
+                        <input type="text" id="partisan-fairness">
+                        <span id="v_partisan-fairness" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
+                    <div class="flex-row">
+                        <input type="text" id="racial">
+                        <span id="v_racial" class="ml-3">0</span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    Select Precinct
-                </button>
+            <div class="section p-3 hide" id="batchRangeSlider">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="b_compactness">Compactness</label>
+                    <div class="flex-row">
+                        <span id="bs_b_compactness" class="mr-3">0</span>
+                        <input type="text" id="b_compactness">
+                        <span id="be_b_compactness" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="b_contiguity">Contiguity</label>
+                    <div class="flex-row">
+                        <span id="bs_b_contiguity" class="mr-3">0</span>
+                        <input type="text" id="b_contiguity">
+                        <span id="be_b_contiguity" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
+                    <div class="flex-row">
+                        <span id="bs_b_population-equality" class="mr-3">0 </span>
+                        <input type="text" id="b_population-equality">
+                        <span id="be_b_population-equality" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
+                    <div class="flex-row">
+                        <span id="bs_b_partisan-fairness" class="mr-3">0</span>
+                        <input type="text" id="b_partisan-fairness">
+                        <span id="be_b_partisan-fairness" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
+                    <div class="flex-row">
+                        <span id="bs_b_racial" class="mr-3">0</span>
+                        <input type="text" id="b_racial">
+                        <span id="be_b_racial" class="ml-3">100</span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary btn-sm">Stop</button>
-                <button type="button" class="btn btn-primary btn-sm">Pause</button>
+            <div class="section">
+                <div class="form-group">
+                    <div class="form-check-inline">
+                        <label class="form-check-label" for="single">
+                            <input type="radio" class="form-single" id="single" name="optradio" value="single" checked>
+                            Single
+                        </label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label" for="batch">
+                            <input type="radio" class="form-batch" id="batch" name="optradio" value="batch">
+                            Batch
+                        </label>
+                    </div>
+                    <div class="form-group hide mt-3" id="batch-hide-section">
+                        <input type="text" class="form-control" value="" placeholder="Number of Runs">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
+            <div class="section">
+                <div class="form-group">
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Select Algorithm
+                    </button>
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Select Precinct
+                    </button>
+                </div>
+                <div class="form-group">
 
-                <button type="button" class="btn btn-primary btn-sm">Run</button>
+                </div>
+            </div>
+            <div class="section">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="racial">Number of Majority / Minority Districts</label>
+                    <div class="flex-row">
+                        <span id="s_nom_md" class="mr-3">0</span>
+                        <input type="text" id="nom_md">
+                        <span id="e_nom_md" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="racial">Number of Districts for graph partitioning</label>
+                    <input type="text" class="form-control" value="">
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-sm">Stop</button>
+                    <button type="button" class="btn btn-primary btn-sm">Pause</button>
+                    <button type="button" class="btn btn-primary btn-sm">Run</button>
+                </div>
             </div>
         </div>
     </div>
 </wrapper>
-<script
-        src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.bundle.min.js"
-        integrity="sha384-VoPFvGr9GxhDT3n8vqqZ46twP5lgex+raTCfICQy73NLhN7ZqSfCtfSn4mLA2EFA"
-        crossorigin="anonymous"></script>
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-        crossorigin=""></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js" crossorigin="anonymous"></script>
 
 <script src="./state.js"></script>
 
 <script>
     $(document).ready(function () {
+
+        //=====================================  Right Side Panel  =====================================//
+
+        // when selected batch radio select option
+        $("#batch").click(function(){
+            var checked = $("#batch").prop('checked');
+            if(checked){
+                $("#batchRangeSlider").addClass('block');
+                $("#batchRangeSlider").removeClass('hide');
+                $("#singleRangeSlider").addClass("hide");
+                $("#singleRangeSlider").removeClass("block");
+                if($("#batch-hide-section").hasClass("hide")){
+                    $("#batch-hide-section").addClass('block');
+                    $("#batch-hide-section").removeClass('hide');
+                }
+            }
+        });
+
+
+        // when selected batch radio select option
+        $("#single").click(function(){
+            var checked = $("#single").prop('checked');
+            if(checked){
+                $("#batchRangeSlider").addClass('hide');
+                $("#batchRangeSlider").removeClass('block');
+                $("#singleRangeSlider").addClass("block");
+                $("#singleRangeSlider").removeClass("hide");
+                if(!$("#batch-hide-section").hasClass("hide")){
+                    $("#batch-hide-section").addClass('hide');
+                    $("#batch-hide-section").removeClass('block');
+                }
+            }
+        });
+
+
+        // slider generation when batch
+        function loadBatchRangeSlider() {
+            var batchSlider = ["b_compactness","b_contiguity","b_population-equality","b_partisan-fairness","b_racial"];
+            batchSlider.map(x=>{
+                $(`#${x}`).slider({ id: `batch_${x}`, min: 0, max: 100, range: true, value: [0, 100]});
+            $(`#${x}`).on("slide", function(slideEvt) {
+                console.log(slideEvt.value[0]);
+                $(`#bs_${x}`).text(slideEvt.value[0]);
+                $(`#be_${x}`).text(slideEvt.value[1]);
+            });
+        });
+        }
+
+        function loadSingleRangeSlider() {
+            var batchSlider = ["compactness","contiguity","population-equality","partisan-fairness","racial"];
+            batchSlider.map(x=>{
+                $(`#${x}`).slider({id: `single_${x}`, min: 0, max: 100, value: 0  });
+            $(`#${x}`).on("slide", function(slideEvt) {
+                $(`#v_${x}`).text(slideEvt.value);
+            });
+        });
+        }
+
+        loadBatchRangeSlider();
+        loadSingleRangeSlider();
+        $("#nom_md").slider({
+            id:"input_nom_md",min: 0, max: 100, range: true, value: [0, 100]
+        });
+        $("#nom_md").on("slide",function(slideEvt){
+            console.log(slideEvt.value);
+            $("#s_nom_md").text(slideEvt.value[0]);
+            $("#e_nom_md").text(slideEvt.value[1]);
+        });
+        //==================================  Map  =============================================//
+
         //Generating Random color function
         function getRandomColor() {
             var letters = '0123456789ABCDEF';
