@@ -10,12 +10,22 @@ public class ModelTests {
     @Test
     public void combineClusterPairTest() {
         System.out.println("COMBINE CLUSTER TEST");
-        double[] d1 = {0,2,2,2,2};
-        Precinct p1 = new Precinct(10,new HashSet<>(), d1);
-        double[] d2 = {2,2,2,3,2};
-        Precinct p2 = new Precinct(11,new HashSet<>(), d2);
 
-        Edge e1 = new Edge(p1,p2, 0);
+        HashMap<DemographicType, Integer> populations = new HashMap<>();
+        HashMap<DemographicType, int[]> voting = new HashMap<>();
+        int[] vote = {5,3,2};
+        for(DemographicType type : DemographicType.values()) {
+            populations.put(type, 10);
+            voting.put(type, vote);
+        }
+        Demographics d1 = new Demographics(populations, voting);
+
+//        double[] d1 = {0,2,2,2,2};
+        Precinct p1 = new Precinct(10,new HashSet<>(), d1);
+//        double[] d2 = {2,2,2,3,2};
+        Precinct p2 = new Precinct(11,new HashSet<>(), d1);
+
+        Edge e1 = new Edge(p1,p2);
         p1.getEdges().add(e1);
         p2.getEdges().add(e1);
 
@@ -34,27 +44,36 @@ public class ModelTests {
 
         assertEquals( 1, s.getClusters().size());
         Cluster c = s.getClusters().iterator().next();
-        double[] demo = {2,4,4,5,4};
-        for(int i = 0; i < demo.length; i++) {
-            assertEquals(demo[i], c.getDemographicValues()[i], 0.001);
+
+        for(DemographicType type : DemographicType.values()) {
+            assertEquals(20, c.getDemographics().getDemographicPopulation().get(type).intValue());
         }
         assertEquals(0, c.getEdges().size());
         assertEquals(21, c.getPopulation());
         assertEquals(2, c.getPrecinctSet().size());
 
-        s.reset();
+        System.out.println(c.getDemographics());
 
     }
 
     @Test
     public void testReset() {
         System.out.println("TEST RESET");
-        double[] d1 = {0,2,2,2,2};
-        Precinct p1 = new Precinct(10,new HashSet<>(), d1);
-        double[] d2 = {2,2,2,3,2};
-        Precinct p2 = new Precinct(11,new HashSet<>(), d2);
+        HashMap<DemographicType, Integer> populations = new HashMap<>();
+        HashMap<DemographicType, int[]> voting = new HashMap<>();
+        int[] vote = {5,3,2};
+        for(DemographicType type : DemographicType.values()) {
+            populations.put(type, 10);
+            voting.put(type, vote);
+        }
+        Demographics d1 = new Demographics(populations, voting);
 
-        Edge e1 = new Edge(p1,p2, 0);
+//        double[] d1 = {0,2,2,2,2};
+        Precinct p1 = new Precinct(10,new HashSet<>(), d1);
+//        double[] d2 = {2,2,2,3,2};
+        Precinct p2 = new Precinct(11,new HashSet<>(), d1);
+
+        Edge e1 = new Edge(p1,p2);
         p1.getEdges().add(e1);
         p2.getEdges().add(e1);
 
@@ -63,8 +82,6 @@ public class ModelTests {
         hsp.add(p2);
 
         State s = new State(new HashSet<>(), hsp);
-
-
 
         ArrayList<Cluster> clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());

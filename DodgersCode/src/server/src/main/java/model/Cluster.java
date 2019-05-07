@@ -6,21 +6,21 @@ public class Cluster implements MapVertex {
     private Set<Precinct> precinctSet;
     private Set<Edge> edgeSet;
     private int population;
-    private double[] demographicValues = new double[DemographicType.values().length];
+    private Demographics demographics;
 
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
         precinctSet.add(p);
         edgeSet = p.getEdges();
         population = p.getPopulation();
-        demographicValues = p.getDemographicValues();
+        demographics = p.getDemographics();
     }
 
     public Cluster(Cluster c) {
         precinctSet = c.getPrecinctSet();
         edgeSet = c.getEdges();
         population = c.getPopulation();
-        demographicValues = c.getDemographicValues();
+        demographics = c.getDemographics();
     }
 
     public Set<Precinct> getPrecinctSet() {
@@ -35,8 +35,9 @@ public class Cluster implements MapVertex {
         return population;
     }
 
-    public double[] getDemographicValues() {
-        return demographicValues;
+    @Override
+    public Demographics getDemographics() {
+        return demographics;
     }
 
     public void absorbCluster(Cluster c) {
@@ -54,11 +55,8 @@ public class Cluster implements MapVertex {
             }
         });
 
-
-        //set demographic percentages to combined value
-        for(int ii = 0; ii < demographicValues.length; ii++) {
-            demographicValues[ii] = (demographicValues[ii] + c.getDemographicValues()[ii]);
-        }
+        //set demographics to combined value
+        demographics.add(c.getDemographics());
     }
 
     /**
@@ -66,7 +64,8 @@ public class Cluster implements MapVertex {
      * @return
      */
     public boolean isMajorityMinorityDistrict() {
-        return Arrays.stream(demographicValues).noneMatch(dp -> dp > 0.5);//TODO this is wrong
+//        return Arrays.stream(demographicValues).noneMatch(dp -> dp > 0.5);//TODO this is wrong
+        return false;
     }
 
     @Override

@@ -4,12 +4,11 @@ public class Edge {
 
     private MapVertex c1;
     private MapVertex c2;
-    private double joinability = -1;
+    private double joinability = 0;
 
-    public Edge(MapVertex c1, MapVertex c2, double joinability) {
+    public Edge(MapVertex c1, MapVertex c2) {
         this.c1 = c1;
         this.c2 = c2;
-        this.joinability = joinability;
     }
     public MapVertex getC1() {
         return c1;
@@ -20,14 +19,13 @@ public class Edge {
     }
     /**
      * Joinability is calculated based on the difference in the demographic values of the two clusters
+     * 0 means not joinable
      */
     public double getJoinability() {
-        if(joinability != -1) {
-            return joinability;
-        }
         double totalDemographicDifference = 0;
-        for(int ii = 0; ii < DemographicType.values().length; ii++) {
-            totalDemographicDifference += Math.abs(c1.getDemographicValues()[ii] - c2.getDemographicValues()[ii]);
+        for(DemographicType demoType : DemographicType.values()) {
+            //compare demographic populations
+            totalDemographicDifference += Math.abs(c1.getDemographics().getDemographicPopulation().get(demoType) - c2.getDemographics().getDemographicPopulation().get(demoType));
         }
         joinability = 1.0 / totalDemographicDifference;
 

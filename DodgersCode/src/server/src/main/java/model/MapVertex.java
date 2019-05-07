@@ -1,10 +1,11 @@
 package model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 public interface MapVertex {
-    double[] getDemographicValues();
+    Demographics getDemographics();
     Set<Edge> getEdges();
     List<MapVertex> getNeighbors();
 }

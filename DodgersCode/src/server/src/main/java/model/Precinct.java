@@ -9,14 +9,14 @@ public class Precinct implements MapVertex {
     private final int population;
     private final Set<Edge> edgeSet;
     private District district;
-    private double[] demographicValues = new double[DemographicType.values().length];
+    private Demographics demographics;
     private static long numPrecincts = 0;
 
-    public Precinct(int population, Set<Edge> edgeSet, double[] demographicValues) {
+    public Precinct(int population, Set<Edge> edgeSet, Demographics demographics) {
         this.id = numPrecincts++;
         this.population = population;
         this.edgeSet = edgeSet;
-        this.demographicValues = demographicValues;
+        this.demographics = demographics;
     }
 
     public long getId() {
@@ -36,8 +36,8 @@ public class Precinct implements MapVertex {
     }
 
     @Override
-    public double[] getDemographicValues() {
-        return demographicValues;
+    public Demographics getDemographics() {
+        return demographics;
     }
 
     public void setDistrict(District district) {

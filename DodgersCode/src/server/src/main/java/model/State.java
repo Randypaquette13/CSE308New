@@ -12,7 +12,7 @@ import java.util.*;
 public class State {
     private Set<District> districtSet;
     private Set<Precinct> precinctSet;
-    private Collection<Cluster>  clusters;
+    private Collection<Cluster> clusters;
     private Move recentMove;
     private int population = 0;
 
