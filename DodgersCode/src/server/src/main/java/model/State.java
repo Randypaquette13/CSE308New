@@ -13,15 +13,13 @@ public class State {
     private Set<District> districtSet;
     private Set<Precinct> precinctSet;
     private Collection<Cluster>  clusters;
-    private int targetNumMaxMinDistricts;//TODO this should be a range
     private Move recentMove;
 
-    public State(Set<District> districtSet, Set<Precinct> precinctSet, int targetNumMaxMinDistricts) {
+    public State(Set<District> districtSet, Set<Precinct> precinctSet) {
         this.districtSet = districtSet;
         this.precinctSet = precinctSet;
         this.clusters = new LinkedList<>();
         precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
-        this.targetNumMaxMinDistricts = targetNumMaxMinDistricts;
     }
 
     public Set<District> getDistrictSet() {
@@ -36,20 +34,14 @@ public class State {
         return clusters;
     }
 
-    public int getTargetNumMaxMinDistricts() {
-        return targetNumMaxMinDistricts;
-    }
-
     /**
      * Used to reset the state before every call to Algorithm.doJob() in AlgorithmController
-     * @param p the preference used to set the numMaxMinDistricts
      */
-    public void reset(Preference p) {
+    public void reset() {
         districtSet = new HashSet<>();
         //precinctSet stays the same
         clusters = new LinkedList<>();
         precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
-        targetNumMaxMinDistricts = p.getNumMaxMinDistricts();
     }
 
     /**

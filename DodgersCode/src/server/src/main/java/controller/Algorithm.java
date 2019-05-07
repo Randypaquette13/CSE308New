@@ -51,7 +51,7 @@ public class Algorithm {
 
     public void doGraphPartitioning() {
         //you must reset the state so we dont have to make extra database calls
-        state.reset(pref);
+        state.reset();
         while(state.getClusters().size() != pref.getNumDistricts()) {
             final ClusterPair clusterPair = state.findCandidateClusterPair();
             state.combinePair(clusterPair.getC1(), clusterPair.getC2());

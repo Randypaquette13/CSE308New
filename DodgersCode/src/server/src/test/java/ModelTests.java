@@ -23,7 +23,7 @@ public class ModelTests {
         hsp.add(p1);
         hsp.add(p2);
 
-        State s = new State(new HashSet<>(), hsp, 0);
+        State s = new State(new HashSet<>(), hsp);
 
         ArrayList<Cluster> clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());
@@ -42,7 +42,7 @@ public class ModelTests {
         assertEquals(21, c.getPopulation());
         assertEquals(2, c.getPrecinctSet().size());
 
-        s.reset(new Preference(new double[0],10,10));
+        s.reset();
 
     }
 
@@ -62,24 +62,24 @@ public class ModelTests {
         hsp.add(p1);
         hsp.add(p2);
 
-        State s = new State(new HashSet<>(), hsp, 0);
+        State s = new State(new HashSet<>(), hsp);
 
 
 
         ArrayList<Cluster> clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());
 
-        System.out.println(s);
+//        System.out.println(s);
         s.combinePair(clusters.get(0),clusters.get(1));
-        System.out.println(s);
-        s.reset(new Preference(null, 0,0));
-        System.out.println(s);
+//        System.out.println(s);
+        s.reset();
+//        System.out.println(s);
 
         clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());
 
-        System.out.println(clusters.get(0));
-        System.out.println(clusters.get(1));
+//        System.out.println(clusters.get(0));
+//        System.out.println(clusters.get(1));
 
         assertEquals(1, clusters.get(0).getPrecinctSet().size());
         assertEquals(1, clusters.get(1).getPrecinctSet().size());
