@@ -1,17 +1,21 @@
 package model;
 
+import java.util.HashMap;
+
 public class Preference {
-    private final double[] weights;
-    private final int numMaxMinDistricts;
+    private final HashMap<MeasureType, Double> weights;
+    private final int maxMajMinDistricts;
+    private final int minMajMinDistricts;
     private final int numDistricts;
 
-    public Preference(double[] weights, int numMaxMinDistricts, int numDistricts) {
+    public Preference(HashMap<MeasureType, Double> weights, int maxMajMinDistricts, int minMajMinDistricts, int numDistricts) {
         this.weights = weights;
-        this.numMaxMinDistricts = numMaxMinDistricts;
+        this.maxMajMinDistricts = maxMajMinDistricts;
+        this.minMajMinDistricts = minMajMinDistricts;
         this.numDistricts = numDistricts;
     }
 
-    public double[] getWeights() {
+    public HashMap<MeasureType, Double> getWeights() {
         return weights;
     }
 
@@ -19,8 +23,12 @@ public class Preference {
         return -1;
     }
 
-    public int getNumMaxMinDistricts() {
-        return numMaxMinDistricts;
+    public int getMaxMajMinDistricts() {
+        return maxMajMinDistricts;
+    }
+
+    public int getMinMajMinDistricts() {
+        return minMajMinDistricts;
     }
 
     public double getNumDistricts() {
