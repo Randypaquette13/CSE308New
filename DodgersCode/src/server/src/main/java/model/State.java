@@ -14,12 +14,16 @@ public class State {
     private Set<Precinct> precinctSet;
     private Collection<Cluster>  clusters;
     private Move recentMove;
+    private int population = 0;
 
     public State(Set<District> districtSet, Set<Precinct> precinctSet) {
         this.districtSet = districtSet;
         this.precinctSet = precinctSet;
         this.clusters = new LinkedList<>();
-        precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
+        precinctSet.forEach(precinct -> {
+            clusters.add(new Cluster(precinct));
+            population+= precinct.getPopulation();
+        });
     }
 
     public Set<District> getDistrictSet() {
@@ -32,6 +36,10 @@ public class State {
 
     public Collection<Cluster> getClusters() {
         return clusters;
+    }
+
+    public int getPopulation() {
+        return population;
     }
 
     /**
