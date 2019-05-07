@@ -6,10 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.Entity;
 import model.State;
 
-@Entity
+//@Entity
 public class StateDao {
 
-    @Id
+  /*  @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private State state;
@@ -44,6 +44,6 @@ public class StateDao {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
+    }*/
 }
 

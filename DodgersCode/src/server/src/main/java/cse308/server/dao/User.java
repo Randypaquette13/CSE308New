@@ -1,31 +1,29 @@
 package cse308.server.dao;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "USER")
 public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    @Column(name = "EMAIL")
     private String email;
+    @Column(name = "PASSWORDHASH")
     private String password;    //actually hashed and salted
-    private String sessionCookie;
     private String firstName;
     private String lastName;
     private boolean admin;
 
     protected User(){ }
 
-    public User(String initEmail, String initPassword, String initSessionCookie,
-                String initFirstName, String initLastName, boolean initAdmin){
+    public User(String initEmail, String initPassword, String initFirstName,
+                String initLastName, boolean initAdmin){
 
         email = initEmail;
         password = initPassword;
-        sessionCookie = initSessionCookie;
         firstName = initFirstName;
         lastName = initLastName;
         admin = initAdmin;
@@ -41,10 +39,6 @@ public class User {
 
     public String getPassword(){
         return password;
-    }
-
-    public String getSessionCookie(){
-        return sessionCookie;
     }
 
     public String getFirstName(){
@@ -71,10 +65,6 @@ public class User {
         password = newPassword;
     }
 
-    public void setSessionCookie(String newSessionCookie){
-        sessionCookie = newSessionCookie;
-    }
-
     public void setFirstName(String newFirstName){
         firstName = newFirstName;
     }
@@ -89,8 +79,8 @@ public class User {
 
     @Override
     public String toString(){
-        return String.format("User[email='%s', password='%s', sessionCookie='%s', " +
+        return String.format("User[email='%s', password='%s', " +
                 "firstName='%s', lastName='%s', admin='%b']",
-                email, password, sessionCookie, firstName, lastName, admin);
+                email, password, firstName, lastName, admin);
     }
 }

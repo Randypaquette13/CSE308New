@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -16,14 +18,17 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public void registerNewUser(User newUser) throws EmailAlreadyRegisteredException {
+        System.out.println("Attempting to register " + newUser);
         User user = userRepository.findByEmail(newUser.getEmail());
-        if(user == null){
+        if(user != null){
             throw new EmailAlreadyRegisteredException();
         }
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
     }
 
     public boolean verifyUser(User potentialUser){
+        System.out.println("Attempting to verify " + potentialUser);
         User user = userRepository.findByEmail(potentialUser.getEmail());
         if(user == null){
             return false;
@@ -34,6 +39,11 @@ public class UserService {
         else{
             return false;
         }
+    }
+
+    public List<User> getAllUsers(){
+        System.out.println("Searching for all users.");
+        return userRepository.findAll();
     }
 
 

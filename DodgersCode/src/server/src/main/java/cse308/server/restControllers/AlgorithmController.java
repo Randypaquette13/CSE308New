@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 public class AlgorithmController {
 
-    private State state;//TODO: Go to stateRepository to get state.
+    private State state;
     private Algorithm algorithm;
 
     /**
@@ -29,7 +29,7 @@ public class AlgorithmController {
      */
     @RequestMapping("/runGraphPartitioning")
     public String doGraphPartitioning(@RequestBody Preference preference) {
-
+        //TODO: Load state object from DB and set it to the private state obj
         algorithm = new Algorithm(preference, state);
         algorithm.doGraphPartitioning();
         return "Do Graph Partitioning Here.";
