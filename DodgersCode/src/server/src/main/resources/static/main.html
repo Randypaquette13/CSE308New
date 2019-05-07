@@ -198,13 +198,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="racial">Number of Districts for graph partitioning</label>
-                    <input type="text" class="form-control" value="">
+                    <label class="col-form-label col-form-label-sm" for="nod_gp">Number of Districts for graph partitioning</label>
+                    <input type="text" class="form-control" value="" id="nod_gp">
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary btn-sm">Stop</button>
                     <button type="button" class="btn btn-primary btn-sm">Pause</button>
-                    <button type="button" class="btn btn-primary btn-sm">Run</button>
+                    <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
                 </div>
             </div>
         </div>
@@ -256,27 +256,28 @@
         });
 
 
+
         // slider generation when batch
         function loadBatchRangeSlider() {
             var batchSlider = ["b_compactness","b_contiguity","b_population-equality","b_partisan-fairness","b_racial"];
             batchSlider.map(x=>{
                 $(`#${x}`).slider({ id: `batch_${x}`, min: 0, max: 100, range: true, value: [0, 100]});
-            $(`#${x}`).on("slide", function(slideEvt) {
-                console.log(slideEvt.value[0]);
-                $(`#bs_${x}`).text(slideEvt.value[0]);
-                $(`#be_${x}`).text(slideEvt.value[1]);
+                $(`#${x}`).on("slide", function(slideEvt) {
+                    console.log(slideEvt.value[0]);
+                    $(`#bs_${x}`).text(slideEvt.value[0]);
+                    $(`#be_${x}`).text(slideEvt.value[1]);
+                });
             });
-        });
         }
 
         function loadSingleRangeSlider() {
             var batchSlider = ["compactness","contiguity","population-equality","partisan-fairness","racial"];
             batchSlider.map(x=>{
                 $(`#${x}`).slider({id: `single_${x}`, min: 0, max: 100, value: 0  });
-            $(`#${x}`).on("slide", function(slideEvt) {
-                $(`#v_${x}`).text(slideEvt.value);
+                $(`#${x}`).on("slide", function(slideEvt) {
+                    $(`#v_${x}`).text(slideEvt.value);
+                });
             });
-        });
         }
 
         loadBatchRangeSlider();
@@ -289,6 +290,52 @@
             $("#s_nom_md").text(slideEvt.value[0]);
             $("#e_nom_md").text(slideEvt.value[1]);
         });
+
+        // send data to server when click run button
+
+        $("#btnRun").click(function(){
+
+            var data = null;
+
+            if($("#single").prop('checked')){
+                data = {
+                    "type": "single",
+                    "compactness": $("#compactness").val(),
+                    "contiguity": $("#contiguity").val(),
+                    "population-equality": $("#population-equality").val(),
+                    "contiguity": $("#partisan-fairness").val(),
+                    "contiguity": $("#racial").val(),
+                    "numberOfMajority": $("#nom_md").val(),
+                    "numberOfDistrict":$("#nod_gp").val()
+                }
+            }else{
+                data = {
+                    "type": "batch",
+                    "compactness": $("#b_compactness").val(),
+                    "contiguity": $("#b_contiguity").val(),
+                    "population-equality": $("#b_population-equality").val(),
+                    "contiguity": $("#b_partisan-fairness").val(),
+                    "contiguity": $("#b_racial").val(),
+                    "numberOfMajority": $("#nom_md").val(),
+                    "numberOfDistrict":$("#nod_gp").val()
+                }
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/run",
+                data: JSON.stringify(data),
+                error: function(e) {
+                    if(e.status == 201){
+                        debugger;
+                        window.location.href = './index.html';
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
+
         //==================================  Map  =============================================//
 
         //Generating Random color function

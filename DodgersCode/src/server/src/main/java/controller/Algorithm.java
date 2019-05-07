@@ -2,6 +2,11 @@ package controller;
 
 import model.*;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Algorithm {
     private Preference pref;
     private State state;
@@ -52,9 +57,22 @@ public class Algorithm {
     public void doGraphPartitioning() {
         //you must reset the state so we dont have to make extra database calls
         state.reset();
+        ClusterComparator comparator = new ClusterComparator();
         while(state.getClusters().size() != pref.getNumDistricts()) {
-            final ClusterPair clusterPair = state.findCandidateClusterPair();
-            state.combinePair(clusterPair.getC1(), clusterPair.getC2());
+            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
+            int maxTargetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
+            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
+            Collections.sort((List)state.getClusters(), comparator);
+            Collection<Cluster> mergedClusters = new LinkedList<Cluster>();
+            while(!state.getClusters().isEmpty()) {
+                final ClusterPair clusterPair = state.findCandidateClusterPair();
+                if(clusterPair == null){
+                    break;
+                }
+                Cluster c = state.combinePair(clusterPair.getC1(), clusterPair.getC2());
+                mergedClusters.add(c);
+            }
+            (state.getClusters()).addAll(mergedClusters);
         }
     }
 
