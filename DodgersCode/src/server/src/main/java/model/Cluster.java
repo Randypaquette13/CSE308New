@@ -1,34 +1,33 @@
 package model;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-public class Cluster {
+public class Cluster implements MapVertex {
     private Set<Precinct> precinctSet;
     private Set<Edge> edgeSet;
     private int population;
-    private double[] demographicPercentages = new double[DemographicType.values().length];
+    private double[] demographicValues = new double[DemographicType.values().length];
 
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
         precinctSet.add(p);
-        edgeSet = p.getNeighborEdges();
+        edgeSet = p.getEdges();
         population = p.getPopulation();
+        demographicValues = p.getDemographicValues();
     }
 
     public Cluster(Cluster c) {
         precinctSet = c.getPrecinctSet();
-        edgeSet = c.getEdgeSet();
+        edgeSet = c.getEdges();
         population = c.getPopulation();
-        demographicPercentages = c.getDemographicPercentages();
+        demographicValues = c.getDemographicValues();
     }
 
     public Set<Precinct> getPrecinctSet() {
         return precinctSet;
     }
 
-    public Set<Edge> getEdgeSet() {
+    public Set<Edge> getEdges() {
         return edgeSet;
     }
 
@@ -36,21 +35,29 @@ public class Cluster {
         return population;
     }
 
-    public double[] getDemographicPercentages() {
-        return demographicPercentages;
+    public double[] getDemographicValues() {
+        return demographicValues;
     }
 
     public void absorbCluster(Cluster c) {
         precinctSet.addAll(c.getPrecinctSet());
-        edgeSet.addAll(c.getEdgeSet());
+        for(Edge e : c.getEdges()) {
+            if(!edgeSet.add(e)) {
+                edgeSet.remove(e);
+            }
+        }
+        population += c.getPopulation();
 
-        final int absorbedPopulation = c.getPopulation();
-        final int total = population + absorbedPopulation;
+        getNeighbors().forEach(neighbor -> {
+            if(c.getNeighbors().contains(neighbor)) {
+                //TODO adjust the edge that contains this cluster
+            }
+        });
+
 
         //set demographic percentages to combined value
-        for(int ii = 0; ii < demographicPercentages.length; ii++) {
-            demographicPercentages[ii] = (demographicPercentages[ii] * (double)(population/total)) +
-                                         (c.getDemographicPercentages()[ii] * (double)(absorbedPopulation/total));
+        for(int ii = 0; ii < demographicValues.length; ii++) {
+            demographicValues[ii] = (demographicValues[ii] + c.getDemographicValues()[ii]);
         }
     }
 
@@ -59,7 +66,29 @@ public class Cluster {
      * @return
      */
     public boolean isMajorityMinorityDistrict() {
-        return Arrays.stream(demographicPercentages).noneMatch(dp -> dp > 0.5);//TODO this is wrong
+        return Arrays.stream(demographicValues).noneMatch(dp -> dp > 0.5);//TODO this is wrong
+    }
+
+    @Override
+    public List<MapVertex> getNeighbors() {
+        LinkedList<MapVertex> neighbors = new LinkedList<>();
+        for(Edge e : edgeSet) {
+            neighbors.add(e.getNeighbor(this));
+        }
+        return neighbors;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Cluster: ");
+        for(Precinct p : precinctSet) {
+            sb.append(p);
+            sb.append(",");
+        }
+
+        return sb.toString();
     }
 }
 

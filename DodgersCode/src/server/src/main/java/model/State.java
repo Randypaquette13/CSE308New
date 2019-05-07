@@ -16,10 +16,11 @@ public class State {
     private int targetNumMaxMinDistricts;//TODO this should be a range
     private Move recentMove;
 
-    public State(Set<District> districtSet, Set<Precinct> precinctSet, Collection<Cluster> clusters, int targetNumMaxMinDistricts) {
+    public State(Set<District> districtSet, Set<Precinct> precinctSet, int targetNumMaxMinDistricts) {
         this.districtSet = districtSet;
         this.precinctSet = precinctSet;
-        this.clusters = clusters;
+        this.clusters = new LinkedList<>();
+        precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
         this.targetNumMaxMinDistricts = targetNumMaxMinDistricts;
     }
 
@@ -56,8 +57,8 @@ public class State {
      * second cluster is removed.
      */
     public void combinePair(Cluster c1, Cluster c2) {
-        clusters.remove(c2);
         c1.absorbCluster(c2);
+        clusters.remove(c2);
     }
 
     /**
@@ -99,7 +100,7 @@ public class State {
         final District district = iter.next();
 
         for(Precinct precinct : district.getPrecinctSet()) {
-            for(Edge edge : precinct.getNeighborEdges()) {
+            for(Edge edge : precinct.getEdges()) {
                 if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD) {
                     final Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC1() : edge.getC2());
 
@@ -119,6 +120,7 @@ public class State {
      */
     public ClusterPair findCandidateClusterPair() {
         //TODO find candidate cluster pair for graph parittioning
+
         return new ClusterPair(null,null);//TODO output
     }
 }
