@@ -53,6 +53,9 @@ public class Algorithm {
         //you must reset the state so we dont have to make extra database calls
         state.reset(pref);
         while(state.getClusters().size() != pref.getNumDistricts()) {
+            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
+            int maxTargetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
+            int minTargetPop = 0;   //TODO: load percentage to be within for 
             final ClusterPair clusterPair = state.findCandidateClusterPair();
             state.combinePair(clusterPair.getC1(), clusterPair.getC2());
         }
