@@ -123,4 +123,20 @@ public class State {
 
         return new ClusterPair(null,null);//TODO output
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("State:\n\t");
+        districtSet.forEach(sb::append);
+        sb.append("\n\t");
+        clusters.forEach(sb::append);
+        sb.append("\n\t");
+        precinctSet.forEach(sb::append);
+        sb.append("\n");
+
+        sb.append("Districts:" + districtSet.size() + " Clusters:" + clusters.size() + " Precincts:" + precinctSet.size());
+        sb.append("\n");
+        return sb.toString();
+    }
 }

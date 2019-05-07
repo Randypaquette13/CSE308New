@@ -9,6 +9,7 @@ public class ModelTests {
 
     @Test
     public void combineClusterPairTest() {
+        System.out.println("COMBINE CLUSTER TEST");
         double[] d1 = {0,2,2,2,2};
         Precinct p1 = new Precinct(10,new HashSet<>(), d1);
         double[] d2 = {2,2,2,3,2};
@@ -47,6 +48,7 @@ public class ModelTests {
 
     @Test
     public void testReset() {
+        System.out.println("TEST RESET");
         double[] d1 = {0,2,2,2,2};
         Precinct p1 = new Precinct(10,new HashSet<>(), d1);
         double[] d2 = {2,2,2,3,2};
@@ -67,8 +69,11 @@ public class ModelTests {
         ArrayList<Cluster> clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());
 
+        System.out.println(s);
         s.combinePair(clusters.get(0),clusters.get(1));
+        System.out.println(s);
         s.reset(new Preference(null, 0,0));
+        System.out.println(s);
 
         clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());

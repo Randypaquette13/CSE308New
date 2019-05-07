@@ -59,6 +59,6 @@ public class Precinct implements MapVertex {
 
     @Override
     public String toString() {
-        return "P" + id + " population:" + population;
+        return "P" + id + " ";// + " population:" + population;
     }
 }
