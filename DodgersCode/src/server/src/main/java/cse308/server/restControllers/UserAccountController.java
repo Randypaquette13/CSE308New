@@ -45,7 +45,7 @@ public class UserAccountController {
      * INVALID ON SUCCESS.
      * @return  Success or Failure, depending on if the user was properly logged out.
      */
-    @RequestMapping("/logout")
+    @RequestMapping(value = "/loguserout", method = RequestMethod.POST)
     public ResponseEntity logout(@RequestBody User user){
         System.out.println("New request to log " + user + " out.");
         if(userService.verifyUser(user)){
