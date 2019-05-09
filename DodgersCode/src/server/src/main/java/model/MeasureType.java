@@ -50,6 +50,15 @@ public enum MeasureType {
         public double calculateMeasure(District d) {
             return 1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation());
         }
+    },
+    POPULATION_EQUALITY {
+        /**
+         * TODO
+         */
+        @Override
+        public double calculateMeasure(District d) {
+            return 0;
+        }
     };
 
     /**

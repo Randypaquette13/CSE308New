@@ -57,8 +57,14 @@ public class Precinct implements MapVertex {
         return neighbors;
     }
 
+    public void addEdgeTo(Precinct p) {
+        Edge e1 = new Edge(this,p);
+        getEdges().add(e1);
+        p.getEdges().add(e1);
+    }
+
     @Override
     public String toString() {
-        return "P" + id + " ";// + " population:" + population;
+        return "P" + id;// + " population:" + population;
     }
 }

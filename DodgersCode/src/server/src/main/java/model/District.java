@@ -38,7 +38,7 @@ public class District extends Cluster {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("District: ");
+        sb.append("District#" + super.id + " ");
         for(Precinct p : getPrecinctSet()) {
             sb.append(p);
             sb.append(",");

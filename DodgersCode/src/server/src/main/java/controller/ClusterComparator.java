@@ -4,6 +4,7 @@ import model.Cluster;
 
 import java.util.Comparator;
 
+@Deprecated
 public class ClusterComparator implements Comparator {
 
     @Override
