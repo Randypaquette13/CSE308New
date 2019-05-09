@@ -4,10 +4,13 @@ import cse308.server.EmailAlreadyRegisteredException;
 import cse308.server.services.UserService;
 import cse308.server.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -27,11 +30,14 @@ public class UserAccountController {
      * @return  Success or Failure, depending on if the username and password exist in the DB or not.
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody User user){
+    public ResponseEntity login(@RequestBody User user, HttpServletRequest req){
+        req.getSession().invalidate();
         System.out.println("New request to log " + user + " in.");
         if(userService.verifyUser(user)){
-            //TODO: set session.
             System.out.println(user + " verified.");
+            HttpSession session = req.getSession();
+            session.setAttribute("email", user.getEmail());
+            session.setAttribute("admin", user.isAdmin());
             return new ResponseEntity(HttpStatus.OK);           //200 Response
         }
         else{
@@ -45,10 +51,16 @@ public class UserAccountController {
      * INVALID ON SUCCESS.
      * @return  Success or Failure, depending on if the user was properly logged out.
      */
-    @RequestMapping("/logout")
-    public ResponseEntity logout(@RequestBody User user){
+    @RequestMapping(value = "/loguserout", method = RequestMethod.POST)
+    public ResponseEntity logout(/*@RequestBody User u,*/ HttpServletRequest req){
+        HttpSession session = req.getSession(false);
+        if(session == null){
+            return new ResponseEntity(HttpStatus.NO_CONTENT);   //204 Response
+        }
+        User user = new User((String)session.getAttribute("email"), null, null ,null, false);
         System.out.println("New request to log " + user + " out.");
-        if(userService.verifyUser(user)){
+        if(userService.exists(user)){
+            session.invalidate();
             System.out.println(user + " logout successful.");
             return new ResponseEntity(HttpStatus.OK);           //200 Response
         }
