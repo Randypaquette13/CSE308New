@@ -59,8 +59,8 @@
             <a class="dropdown-item" href="#">Save</a>
             <a class="dropdown-item" href="#">Save As...</a>
         </div>
-        <button class="btn btn-secondary btn-sm" id="logOut"  onClick="window.location.href='login.html'" type="button">
-            Log Out
+        <button class="btn btn-secondary btn-sm" id="logIn" onClick="window.location.href='index.html'" type="button">
+            Login
         </button>
     </div>
     <div class="d-flex flex-row h-100" style="overflow-y: hidden;">
@@ -240,23 +240,6 @@
 
         $("#btnSummary").click(function(){
             alert("State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2");
-        });
-
-        //Log Out
-        $("#logOut").click(function(){
-            $.ajax({
-                type: 'POST',
-                url: "http://localhost:8080/loguserout",
-                error: function(e) {
-                    if(e.status == 200){
-                        window.location.href = './index.html';
-                    }else{
-                        console.log("error!");
-                    }
-                },
-                dataType: "json",
-                contentType: "application/json"
-            });
         });
 
         //=====================================  Right Side Panel  =====================================//

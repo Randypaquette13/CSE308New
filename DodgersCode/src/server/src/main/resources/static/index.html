@@ -86,7 +86,13 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fa fa-user"></i></div>
                             </div>
-                            <input type="text" name="name" id="registerName" required class="form-control" placeholder="Name">
+                            <input type="text" name="firstName" id="registerFirstName" required class="form-control" placeholder="First Name">
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-user"></i></div>
+                            </div>
+                            <input type="text" name="lastName" id="registerLastName" required class="form-control" placeholder="Last Name">
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -170,19 +176,22 @@
             debugger;
             var email = $('#registerEmail').val();
             var password = $('#registerPassword').val();
-            var name = $('#registerName').val();
+            var firstName = $('#registerFirstName').val();
+            var lastName = $('#registerLastName').val();
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/login",
+                url: "http://localhost:8080/register",
                 data: JSON.stringify({
                     "email": email,
                     "password": password,
-                    "name": name
+                    "firstName": firstName,
+                    "lastName": lastName
                 }),
                 error: function(e) {
-                    if(e.status == 200){
+                    if(e.status == 201){
                         debugger;
-                        window.location.href = '/';
+                        alert ("Successfully Registered!");
+                        window.location.href = './index.html';
                     }else{
                         console.log("error!");
                     }
@@ -218,7 +227,7 @@
             });
         });
 
-        $("#register_submit").click(function(){
+        $("#guest_submit").click(function(){
             debugger;
             $.ajax({
                 type: 'POST',
@@ -226,7 +235,7 @@
                 error: function(e) {
                     if(e.status == 200){
                         debugger;
-                        window.location.href = './guestlogin.html';
+                        window.location.href = 'guestlogin.html';
                     }else{
                         console.log("error!");
                     }
