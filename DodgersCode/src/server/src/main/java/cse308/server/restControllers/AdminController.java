@@ -1,8 +1,15 @@
 package cse308.server.restControllers;
 
+import cse308.server.dao.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * This class specifies the endpoints and behavior used by an admin user to manage other user accounts.
@@ -15,7 +22,12 @@ public class AdminController {
      * @return  Success or Failure, depending on if the user was updated successfully or not.
      */
     @RequestMapping("/updateUser")
-    public String updateUser(){
+    public ResponseEntity updateUser(@RequestBody User userToUpdate, HttpServletRequest req){
+        HttpSession session = req.getSession(false);
+        if(session == null || !session.getAttribute("isAdmin").equals("true")){
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+
         return "Admin updating a user goes here.";
     }
 

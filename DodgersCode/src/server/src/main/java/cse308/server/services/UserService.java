@@ -58,5 +58,20 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public boolean updateUser(User updatedUser, String email){
+        System.out.print("Updating user with email: " + email);
+        User originalUser = userRepository.findByEmail(email);
+        if(originalUser == null){
+            return false;
+        }
+        originalUser.setEmail(updatedUser.getEmail());
+        originalUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        originalUser.setFirstName(updatedUser.getFirstName());
+        originalUser.setLastName(updatedUser.getLastName());
+        originalUser.setAdmin(updatedUser.isAdmin());
+        userRepository.save(originalUser);
+        return true;
+    }
+
 
 }

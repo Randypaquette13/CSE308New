@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -30,7 +32,8 @@ public class UserAccountController {
      * @return  Success or Failure, depending on if the username and password exist in the DB or not.
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody User user, HttpServletRequest req){
+    public ResponseEntity login(@RequestBody User user, HttpServletRequest req,
+                                HttpServletResponse response){
         if(req.getSession(false) != null){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);  //400 Response
         }
@@ -41,7 +44,8 @@ public class UserAccountController {
             HttpSession session = req.getSession();
             session.setAttribute("email", verifiedUser.getEmail());
             session.setAttribute("name", verifiedUser.getFirstName());
-            session.setAttribute("admin", false);
+            session.setAttribute("isAdmin", verifiedUser.isAdmin());
+            response.addCookie(new Cookie("name", verifiedUser.getFirstName()));
             return new ResponseEntity(HttpStatus.OK);           //200 Response
         }
         else{
@@ -62,10 +66,16 @@ public class UserAccountController {
             System.out.println("No session found, returning 204");
             return new ResponseEntity(HttpStatus.NO_CONTENT);   //204 Response
         }
-        User user = new User((String)session.getAttribute("email"), null, null ,null, false);
+        User user = new User((String)session.getAttribute("email"),
+                null, null ,null, false);
         System.out.println("New request to log " + user + " out.");
         if(userService.exists(user)){
             session.invalidate();
+            Cookie[] cookies = req.getCookies();
+            for(Cookie c : cookies){
+                System.out.println("Invalidating a cookie with value "+ c.getValue());
+                c.setMaxAge(0);
+            }
             System.out.println(user + " logout successful.");
             return new ResponseEntity(HttpStatus.OK);           //200 Response
         }
