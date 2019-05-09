@@ -16,8 +16,8 @@ public class State {
     private Move recentMove;
     private int population = 0;
 
-    public State(Set<District> districtSet, Set<Precinct> precinctSet) {
-        this.districtSet = districtSet;
+    public State(Set<Precinct> precinctSet) {
+        this.districtSet = new HashSet<>();
         this.precinctSet = precinctSet;
         this.clusters = new LinkedList<>();
         precinctSet.forEach(precinct -> {
@@ -130,8 +130,30 @@ public class State {
         return new ClusterPair(null,null);//TODO output
     }
 
+    public void convertClustersToDistricts() {
+        for(Cluster c : clusters) {
+            districtSet.add(new District(c));
+        }
+    }
+
     @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("State:");
+        districtSet.forEach(sb::append);
+        sb.append(" ");
+        clusters.forEach(sb::append);
+        sb.append(" Precinct: ");
+        precinctSet.forEach(e -> {
+            sb.append(e);
+            sb.append(",");
+        });
+        sb.append(" ");
+        sb.append("Districts:" + districtSet.size() + " Clusters:" + clusters.size() + " Precincts:" + precinctSet.size());
+        return sb.toString();
+    }
+
+    public String toFancyString() {
         StringBuilder sb = new StringBuilder();
         sb.append("State:\n\t");
         districtSet.forEach(sb::append);

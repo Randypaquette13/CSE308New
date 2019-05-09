@@ -31,13 +31,17 @@ public class UserAccountController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody User user, HttpServletRequest req){
-        req.getSession().invalidate();
+        if(req.getSession(false) != null){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);  //400 Response
+        }
         System.out.println("New request to log " + user + " in.");
-        if(userService.verifyUser(user)){
+        if(userService.validateUser(user)){
             System.out.println(user + " verified.");
+            User verifiedUser = userService.getUser(user.getEmail());
             HttpSession session = req.getSession();
-            session.setAttribute("email", user.getEmail());
-            session.setAttribute("admin", user.isAdmin());
+            session.setAttribute("email", verifiedUser.getEmail());
+            session.setAttribute("name", verifiedUser.getFirstName());
+            session.setAttribute("admin", false);
             return new ResponseEntity(HttpStatus.OK);           //200 Response
         }
         else{
@@ -55,6 +59,7 @@ public class UserAccountController {
     public ResponseEntity logout(/*@RequestBody User u,*/ HttpServletRequest req){
         HttpSession session = req.getSession(false);
         if(session == null){
+            System.out.println("No session found, returning 204");
             return new ResponseEntity(HttpStatus.NO_CONTENT);   //204 Response
         }
         User user = new User((String)session.getAttribute("email"), null, null ,null, false);

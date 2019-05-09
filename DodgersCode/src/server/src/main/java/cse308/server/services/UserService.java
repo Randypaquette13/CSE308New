@@ -27,7 +27,7 @@ public class UserService {
         userRepository.save(newUser);
     }
 
-    public boolean verifyUser(User potentialUser){
+    public boolean validateUser(User potentialUser){
         System.out.println("Attempting to verify " + potentialUser);
         User user = userRepository.findByEmail(potentialUser.getEmail());
         if(user == null){
@@ -52,6 +52,10 @@ public class UserService {
             return false;
         }
         else return true;
+    }
+
+    public User getUser(String email){
+        return userRepository.findByEmail(email);
     }
 
 

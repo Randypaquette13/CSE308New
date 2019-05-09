@@ -1,3 +1,4 @@
+import controller.Move;
 import model.*;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class ModelTests {
 
     @Test
     public void combineClusterPairTest() {
-        System.out.println("COMBINE CLUSTER TEST");
+//        System.out.println("COMBINE CLUSTER TEST");
 
         HashMap<DemographicType, Integer> populations = new HashMap<>();
         HashMap<DemographicType, int[]> voting = new HashMap<>();
@@ -33,17 +34,17 @@ public class ModelTests {
         hsp.add(p1);
         hsp.add(p2);
 
-        State s = new State(new HashSet<>(), hsp);
+        State s = new State(hsp);
 
         ArrayList<Cluster> clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());
 
         assertEquals(1, clusters.get(0).getPrecinctSet().size());
         assertEquals(1, clusters.get(1).getPrecinctSet().size());
-        s.combinePair(clusters.get(0),clusters.get(1));
+        Cluster c = s.combinePair(clusters.get(0),clusters.get(1));
 
-        assertEquals( 1, s.getClusters().size());
-        Cluster c = s.getClusters().iterator().next();
+//        assertEquals( 1, s.getClusters().size());
+//        Cluster c = s.getClusters().iterator().next();
 
         for(DemographicType type : DemographicType.values()) {
             assertEquals(20, c.getDemographics().getDemographicPopulation().get(type).intValue());
@@ -52,13 +53,13 @@ public class ModelTests {
         assertEquals(21, c.getPopulation());
         assertEquals(2, c.getPrecinctSet().size());
 
-        System.out.println(c.getDemographics());
+//        System.out.println(c.getDemographics());
 
     }
 
     @Test
     public void testReset() {
-        System.out.println("TEST RESET");
+//        System.out.println("TEST RESET");
         HashMap<DemographicType, Integer> populations = new HashMap<>();
         HashMap<DemographicType, int[]> voting = new HashMap<>();
         int[] vote = {5,3,2};
@@ -81,7 +82,7 @@ public class ModelTests {
         hsp.add(p1);
         hsp.add(p2);
 
-        State s = new State(new HashSet<>(), hsp);
+        State s = new State(hsp);
 
         ArrayList<Cluster> clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());
@@ -100,6 +101,50 @@ public class ModelTests {
 
         assertEquals(1, clusters.get(0).getPrecinctSet().size());
         assertEquals(1, clusters.get(1).getPrecinctSet().size());
+    }
 
+    @Test
+    public void testDoMove() {
+        HashMap<DemographicType, Integer> populations = new HashMap<>();
+        HashMap<DemographicType, int[]> voting = new HashMap<>();
+        int[] vote = {5,3,2};
+        for(DemographicType type : DemographicType.values()) {
+            populations.put(type, 10);
+            voting.put(type, vote);
+        }
+        Demographics d1 = new Demographics(populations, voting);
+
+        Precinct p1 = new Precinct(10,new HashSet<>(), d1);
+        Precinct p2 = new Precinct(10,new HashSet<>(), d1);
+        Precinct p3 = new Precinct(10,new HashSet<>(), d1);
+        Precinct p4 = new Precinct(10,new HashSet<>(), d1);
+        Precinct p5 = new Precinct(10,new HashSet<>(), d1);
+        Precinct p6 = new Precinct(10,new HashSet<>(), d1);
+
+        p1.addEdgeTo(p2);
+        p1.addEdgeTo(p3);
+        p1.addEdgeTo(p4);
+
+        p2.addEdgeTo(p5);
+        p2.addEdgeTo(p6);
+
+        HashSet<Precinct> hsp = new HashSet<>();
+        hsp.add(p1);
+        hsp.add(p2);
+
+        State s = new State(hsp);
+        ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
+        clusters.get(0).absorbCluster(new Cluster(p3));
+        clusters.get(0).absorbCluster(new Cluster(p4));
+
+        clusters.get(1).absorbCluster(new Cluster(p5));
+        clusters.get(1).absorbCluster(new Cluster(p6));
+        s.setClusters(clusters);
+        s.convertClustersToDistricts();
+        assertEquals(2, s.getClusters().size());
+
+        double[] darr = {1.2,1.0,3.2};
+        Summary summary = new Summary(s,0.11, darr);
+        System.out.println(summary);
     }
 }

@@ -7,6 +7,7 @@ public class Cluster implements MapVertex {
     private Set<Edge> edgeSet;
     private int population;
     private Demographics demographics;
+    public long id;
 
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
@@ -14,6 +15,7 @@ public class Cluster implements MapVertex {
         edgeSet = p.getEdges();
         population = p.getPopulation();
         demographics = p.getDemographics();
+        id = p.getId();
     }
 
     public Cluster(Cluster c) {
@@ -21,6 +23,7 @@ public class Cluster implements MapVertex {
         edgeSet = c.getEdges();
         population = c.getPopulation();
         demographics = c.getDemographics();
+        id = c.id;
     }
 
     public Set<Precinct> getPrecinctSet() {
@@ -81,7 +84,7 @@ public class Cluster implements MapVertex {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Cluster: ");
+        sb.append("Cluster#" + id + " ");
         for(Precinct p : precinctSet) {
             sb.append(p);
             sb.append(",");
