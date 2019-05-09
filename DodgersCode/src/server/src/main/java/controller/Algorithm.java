@@ -61,7 +61,7 @@ public class Algorithm {
 
             ((List<Cluster>) state.getClusters()).sort(Comparator.comparingInt(Cluster::getPopulation));
 
-            Collection<Cluster> mergedClusters = new LinkedList<Cluster>();
+            Collection<Cluster> mergedClusters = new LinkedList<>();
             while(!state.getClusters().isEmpty()) {
                 final ClusterPair clusterPair = state.findCandidateClusterPair();
                 if(clusterPair == null){
