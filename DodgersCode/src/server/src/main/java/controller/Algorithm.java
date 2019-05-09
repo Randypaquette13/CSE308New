@@ -7,6 +7,8 @@ import java.util.*;
 public class Algorithm {
     private Preference pref;
     private State state;
+    private int annealingSteps = 0;
+    private double lastObjFunVal = 0;
 
     public Algorithm(Preference pref, State state) {
         this.pref = pref;
@@ -75,11 +77,9 @@ public class Algorithm {
     }
 
     public Summary doSimulatedAnnealing() {
-        double lastObjFunVal = 0;
-        int annealingSteps = 0;
-        Move candidateMove;
+        Move candidateMove = null;
         //anneal until the objective function output is acceptable or the max steps is reached
-        while(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
+        if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
             candidateMove = state.findCandidateMove();
 
             if(candidateMove != null) {
@@ -91,13 +91,10 @@ public class Algorithm {
                 } else {
                     state.undoMove();
                 }
-            } else {
-                break;
             }
-            //TODO send update steps to client here if it is just one batch job
             annealingSteps++;
         }
-        return new Summary(state,lastObjFunVal,calculateTotalMeasuresScores());
+        return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove);
     }
 
 }

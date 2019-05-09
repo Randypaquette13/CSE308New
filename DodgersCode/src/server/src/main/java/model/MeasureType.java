@@ -53,11 +53,11 @@ public enum MeasureType {
     },
     POPULATION_EQUALITY {
         /**
-         * TODO
+         * Racial equality by population
          */
         @Override
         public double calculateMeasure(District d) {
-            return 0;
+            return Math.abs((d.getPopulation() / DemographicType.values().length) - d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE));
         }
     };
 

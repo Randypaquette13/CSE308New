@@ -143,8 +143,8 @@ public class ModelTests {
         s.convertClustersToDistricts();
         assertEquals(2, s.getClusters().size());
 
-        double[] darr = {1.2,1.0,3.2};
-        Summary summary = new Summary(s,0.11, darr);
+        double[] darr = {1.2,1.0,3.2,12,2,1.1};
+        Summary summary = new Summary(0.11, darr);
         System.out.println(summary);
     }
 }

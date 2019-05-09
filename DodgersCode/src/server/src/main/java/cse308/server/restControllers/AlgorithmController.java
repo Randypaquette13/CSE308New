@@ -41,8 +41,7 @@ public class AlgorithmController {
      */
     @RequestMapping("/runSimulatedAnnealing")
     public String doSimulatedAnnealing() {
-        algorithm.doSimulatedAnnealing();
-        return "Do Simulated Annealing Here.";
+        return algorithm.doSimulatedAnnealing().toString();
     }
 
     /**
