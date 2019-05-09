@@ -42,6 +42,7 @@ public class UserAccountController {
             System.out.println(user + " verified.");
             User verifiedUser = userService.getUser(user.getEmail());
             HttpSession session = req.getSession();
+            session.setAttribute("id", verifiedUser.getId());
             session.setAttribute("email", verifiedUser.getEmail());
             session.setAttribute("name", verifiedUser.getFirstName());
             session.setAttribute("isAdmin", verifiedUser.isAdmin());
@@ -104,6 +105,8 @@ public class UserAccountController {
         System.out.println(user + " registered successfully.");
         return new ResponseEntity(HttpStatus.CREATED);    //201 Response
     }
+
+    //TODO: ADMIN LOGIN
 
     @RequestMapping(value = "guestlogin", method = RequestMethod.POST)
     public ResponseEntity guestLogin(){
