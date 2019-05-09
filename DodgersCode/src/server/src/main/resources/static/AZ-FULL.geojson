@@ -3,7 +3,9 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+         "color": "#e83e8c"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -19760,7 +19762,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#dc3545"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -21261,7 +21265,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+         "color": "#28a745"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -24278,7 +24284,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#007bff"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -49211,7 +49219,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+       "color": "#343a40"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -49608,7 +49618,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+       "color": "#20c997"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -51073,7 +51085,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#dc3545"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -51614,7 +51628,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+         "color" : "#007bff"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -53055,7 +53071,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+         "color": "#ffc107"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [

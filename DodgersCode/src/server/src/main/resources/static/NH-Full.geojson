@@ -3,7 +3,9 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+         "color": "#e91e63"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -4320,7 +4322,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+         "color": "#007bff"
+      },
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [

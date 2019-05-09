@@ -380,7 +380,6 @@
         var azFlag = false;
         var mlFlag = false;
         var nhFlag = false;
-        var infoProps = null;
         var map = null;
 
         var info = L.control();
@@ -397,17 +396,12 @@
 
 
         //Generating Random color function
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
+        function getRandomColor(feature) {
+            return feature.properties.color;
         }
         // style function
         function style(feature) {
-            var color = getRandomColor();
+            var color = getRandomColor(feature);
             return {
                 fillColor:color,
                 weight: 0.5,
@@ -419,7 +413,7 @@
 
         // hover style
         function hooverStyle(feature) {
-            var color = getRandomColor();
+            var color = getRandomColor(feature);
             return {
                 fillColor:color,
                 weight: 3,
