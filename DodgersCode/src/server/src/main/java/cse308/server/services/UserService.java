@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -58,19 +59,30 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public boolean updateUser(User updatedUser, String email){
-        System.out.print("Updating user with email: " + email);
-        User originalUser = userRepository.findByEmail(email);
-        if(originalUser == null){
-            return false;
-        }
-        originalUser.setEmail(updatedUser.getEmail());
-        originalUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        originalUser.setFirstName(updatedUser.getFirstName());
-        originalUser.setLastName(updatedUser.getLastName());
-        originalUser.setAdmin(updatedUser.isAdmin());
-        userRepository.save(originalUser);
+    /**
+     * Takes a reference to a user that was found in the database and updates it.
+     * @param updatedUser A User object that has the updated information from the user.
+     * @param oldUserInfo A User object that was found from the database. Contains the
+     *                    old information. MUST HAVE THE ID.
+     * @return
+     */
+    public boolean updateUser(User updatedUser, User oldUserInfo){
+        System.out.print("Updating " + oldUserInfo);
+        oldUserInfo.setEmail(updatedUser.getEmail());
+        oldUserInfo.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        oldUserInfo.setFirstName(updatedUser.getFirstName());
+        oldUserInfo.setLastName(updatedUser.getLastName());
+        oldUserInfo.setAdmin(updatedUser.isAdmin());
+        userRepository.save(oldUserInfo);
         return true;
+    }
+
+    public User findById(Long id){
+        Optional<User> option = userRepository.findById(id);
+        if(option.isPresent()){
+            return option.get();
+        }
+        return null;
     }
 
 
