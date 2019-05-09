@@ -33,6 +33,18 @@
         #b_compactness, #b_contiguity,#b_population-equality,#b_partisan-fairness,#b_racial{
             background: yellow;
         }
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -47,7 +59,7 @@
             <a class="dropdown-item" href="#">Save</a>
             <a class="dropdown-item" href="#">Save As...</a>
         </div>
-        <button class="btn btn-secondary btn-sm"  onClick="window.location.href='login.html'" type="button">
+        <button class="btn btn-secondary btn-sm" id="logOut"  onClick="window.location.href='login.html'" type="button">
             Log Out
         </button>
     </div>
@@ -59,20 +71,14 @@
             <div class="section">
                 <div class="form-group dropdown show ">
                     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
+                            aria-haspopup="true" aria-expanded="false" style="width: 150px">
                         Select State
                     </button>
-                    <div class="dropdown-menu" id="stateDropdown" aria-labelledby="dropdownMenuLink">
+                    <div class="dropdown-menu" id="stateDropdown" aria-labelledby="dropdownMenuLink" style="width: 150px">
                         <a class="dropdown-item" id="arizona" latitude="33.729759" longitude="-111.431221" state="AZ" href="#">Arizona</a>
                         <a class="dropdown-item" id="maryland" latitude="39.063946" longitude="-76.802101" state="ML" href="#">Maryland</a>
                         <a class="dropdown-item" id="nhampshire" latitude="43.452492" longitude="-71.563896" state="NH" href="#">New Hampshire</a>
                     </div>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="compactness">Districts : </label>
-                    <input type="checkbox" id="toggleDistrict" data-toggle="toggle" data-size="sm">
                 </div>
             </div>
             <div class="section p-3" id="singleRangeSlider">
@@ -175,6 +181,17 @@
             </div>
             <div class="section">
                 <div class="form-group">
+                    <div class="form-group dropdown show ">
+                        <button class="btn btn-secondary btn-sm" type="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" style="width: 150px" id="btnSummary">
+                            Summaries
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="form-group">
                     <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                         Select Algorithm
@@ -183,9 +200,6 @@
                             aria-haspopup="true" aria-expanded="false">
                         Select Precinct
                     </button>
-                </div>
-                <div class="form-group">
-
                 </div>
             </div>
             <div class="section">
@@ -221,6 +235,29 @@
 
 <script>
     $(document).ready(function () {
+
+        //Summary
+
+        $("#btnSummary").click(function(){
+            alert("State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2");
+        });
+
+        //Log Out
+        $("#logOut").click(function(){
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/loguserout",
+                error: function(e) {
+                    if(e.status == 200){
+                        window.location.href = './index.html';
+                    }else{
+                        console.log("error!");
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
 
         //=====================================  Right Side Panel  =====================================//
 
@@ -282,6 +319,7 @@
 
         loadBatchRangeSlider();
         loadSingleRangeSlider();
+
         $("#nom_md").slider({
             id:"input_nom_md",min: 0, max: 100, range: true, value: [0, 100]
         });
@@ -338,6 +376,26 @@
 
         //==================================  Map  =============================================//
 
+        // Variable
+        var azFlag = false;
+        var mlFlag = false;
+        var nhFlag = false;
+        var infoProps = null;
+        var map = null;
+
+        var info = L.control();
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        info.update = function (infoProps) {
+            console.log("props=",infoProps);
+            this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: </b>0.00000000000<br /><b>longitude: </b>0.00000000000<br />';
+        };
+
+
         //Generating Random color function
         function getRandomColor() {
             var letters = '0123456789ABCDEF';
@@ -352,36 +410,52 @@
             var color = getRandomColor();
             return {
                 fillColor:color,
+                weight: 0.5,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0
+            };
+        }
+
+        // hover style
+        function hooverStyle(feature) {
+            var color = getRandomColor();
+            return {
+                fillColor:color,
                 weight: 3,
                 opacity: 1,
                 color: color,
-                fillOpacity: 0.3
+                fillOpacity: 0.5
             };
         }
+
+        //
         // load state...
         function loadState(latitude , longitude , fileName){
-            var districToggleStatus = $("#toggleDistrict").prop('checked');
             document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
-            var map = L.map('mapContainer').setView([latitude, longitude], 7);
+            map = L.map('mapContainer').setView([latitude, longitude], 7);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
                 maxZoom: 17,
                 minZoom: 2
             }).addTo(map);
-
+            info.addTo(map);
             if(fileName == "AZ"){
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                if(districToggleStatus){
-                    $.getJSON('./AZ-FULL.geojson', function (data) {
-                        L.geoJson(data,{
-                            style: style
-                        }).bindTooltip("districts").addTo(map);
-                    });
-                }else{
+                $.getJSON('./AZ-FULL.geojson', function (data) {
+                    L.geoJson(data,{
+                        style: hooverStyle,
+                        onEachFeature: onEachAzFeature
+                    }).bindTooltip("districts").addTo(map);
+                });
+                if(azFlag){
                     $.getJSON('./ArizonaData/Arizona.json', function (data) {
-                        L.geoJSON(data).bindTooltip("precincts").addTo(map);
+                        L.geoJSON(data,{
+                            style:style,
+                           // onEachFeature: onEachAzDetailFeature
+                        }).bindTooltip("precinct").addTo(map);
                     });
                 }
             }
@@ -390,16 +464,21 @@
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                if(districToggleStatus){
-                    $.getJSON('./MD-FULL.geojson', function (data) {
-                        L.geoJson(data,{
-                            style: style
-                        }).bindTooltip("districts").addTo(map);
-                    });
-                }else{
-                    $.getJSON('./MarylandData/Maryland.json', function (data) {
-                        L.geoJson(data).bindTooltip("test").addTo(map);
-                    });
+                $.getJSON('./MD-FULL.geojson', function (data) {
+                    L.geoJson(data,{
+                        style: hooverStyle,
+                        onEachFeature: onEachMlFeature
+                    }).bindTooltip("districts").addTo(map);
+                });
+                if(mlFlag){
+                    setTimeout(function(){
+                        $.getJSON('./MarylandData/Maryland.json', function (data) {
+                            L.geoJSON(data,{
+                                style:style,
+                                // onEachFeature: onEachMlDetailFeature
+                            }).bindTooltip("precinct").addTo(map);
+                        });
+                    }, 500);
                 }
             }
 
@@ -407,15 +486,18 @@
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                if(districToggleStatus){
-                    $.getJSON('./NH-FULL.geojson', function (data) {
-                        L.geoJson(data,{
-                            style: style
-                        }).bindTooltip("districts").addTo(map);
-                    });
-                }else{
+                $.getJSON('./NH-FULL.geojson', function (data) {
+                    L.geoJson(data,{
+                        style: hooverStyle,
+                        onEachFeature: onEachNhFeature
+                    }).bindTooltip("districts").addTo(map);
+                });
+                if(nhFlag){
                     $.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
-                        L.geoJson(data).bindTooltip("test").addTo(map);
+                        L.geoJSON(data,{
+                            style:style,
+                            // onEachFeature: onEachNhDetailFeature
+                        }).bindTooltip("precinct").addTo(map);
                     });
                 }
             }
@@ -438,9 +520,91 @@
                 }
             });
         }
+
+        // AZ click Event
+        function onEachAzFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    azFlag = true;
+                    mlFlag = false;
+                    nhFlag = false;
+                    loadState(33.729759,-111.431221,"AZ");
+                },
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+        // AZ detail Event
+        function onEachAzDetailFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+
+        // ML click Event
+        function onEachMlFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    azFlag = false;
+                    mlFlag = true;
+                    nhFlag = false;
+                    loadState(39.063946,-76.802101,"ML");
+                },
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+        // ML detail click Event
+        function onEachMlDetailFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+
+        // NH click Event
+        function onEachNhFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    azFlag = false;
+                    mlFlag = false;
+                    nhFlag = true;
+                    loadState(43.452492,-71.563896,"NH");
+                },
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+        // NH detail Event
+        function onEachNhDetailFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+
+        function highlightFeature(e) {
+            // method that we will use to update the control based on feature properties passed
+            var event = e;
+            info.update = function (e) {
+                this._div.innerHTML = '<h4>Lat-Lng of Districts</h4>' +  (event ?
+                    '<b>latitude: </b>' + event.latlng.lat +'<br /><b>longitude: </b>'+ event.latlng.lng
+                    : '<b>latitude: 0.00000000000</b><br /><b>longitude: 0.00000000000</b><br />');
+            };
+            info.addTo(map);
+        }
+
+        function resetHighlight(e) {
+            info.update = function (e) {
+                this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: 0.00000000000</b><br /><b>longitude: 0.00000000000</b><br />';
+            };
+            info.addTo(map);
+        }
+
         // Load map first time...
         document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
-        var map = L.map('mapContainer').setView([39.8870, -97.9803], 5);
+        map = L.map('mapContainer').setView([39.8870, -97.9803], 5);
         var layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
             maxZoom: 17,
@@ -450,6 +614,8 @@
         L.geoJSON(states, {
             onEachFeature: onEachFeature
         }).addTo(map);
+
+        info.addTo(map);
 
         // Change state, change in dropdown as well
         $("#stateDropdown a").click(function(){
