@@ -218,7 +218,23 @@
             });
         });
 
-
+        $("#register_submit").click(function(){
+            debugger;
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/guestlogin",
+                error: function(e) {
+                    if(e.status == 200){
+                        debugger;
+                        window.location.href = './guestlogin.html';
+                    }else{
+                        console.log("error!");
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
     });
 </script>
 </html>

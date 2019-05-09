@@ -1,0 +1,590 @@
+<html>
+<head>
+    <title>Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" charset="utf-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css" rel="stylesheet"/>
+
+
+
+    <style>
+        body, wrapper {
+            height: 100%;
+            min-height: 100%;
+            width: 100%;
+        }
+        #map {
+            z-index: 1
+        }
+        .hide{
+            display: none;
+        }
+        .block{
+            display: block;
+        }
+        #b_compactness, #b_contiguity,#b_population-equality,#b_partisan-fairness,#b_racial{
+            background: yellow;
+        }
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<wrapper class="d-flex flex-column" style="overflow-y: hidden;">
+    <div class="flex-grow-1 bg-dark p-2">
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            File
+        </button>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Open</a>
+            <a class="dropdown-item" href="#">Save</a>
+            <a class="dropdown-item" href="#">Save As...</a>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="logOut"  onClick="window.location.href='login.html'" type="button">
+            Log Out
+        </button>
+    </div>
+    <div class="d-flex flex-row h-100" style="overflow-y: hidden;">
+        <div class="d-flex flex-column h-100 w-100">
+            <div class="h-100 w-100" id="map"></div>
+        </div>
+        <div class="flex-grow-1 p-3" style="overflow-y: auto; max-width: 370px; width: 100%;">
+            <div class="section">
+                <div class="form-group dropdown show ">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" style="width: 150px">
+                        Select State
+                    </button>
+                    <div class="dropdown-menu" id="stateDropdown" aria-labelledby="dropdownMenuLink" style="width: 150px">
+                        <a class="dropdown-item" id="arizona" latitude="33.729759" longitude="-111.431221" state="AZ" href="#">Arizona</a>
+                        <a class="dropdown-item" id="maryland" latitude="39.063946" longitude="-76.802101" state="ML" href="#">Maryland</a>
+                        <a class="dropdown-item" id="nhampshire" latitude="43.452492" longitude="-71.563896" state="NH" href="#">New Hampshire</a>
+                    </div>
+                </div>
+            </div>
+            <div class="section p-3" id="singleRangeSlider">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="compactness">Compactness</label>
+                    <div class="flex-row">
+                        <input type="text" id="compactness">
+                        <span id="v_compactness" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="contiguity">Contiguity</label>
+                    <div class="flex-row">
+                        <input type="text" id="contiguity">
+                        <span id="v_contiguity" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
+                    <div class="flex-row">
+                        <input type="text" id="population-equality">
+                        <span id="v_population-equality" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
+                    <div class="flex-row">
+                        <input type="text" id="partisan-fairness">
+                        <span id="v_partisan-fairness" class="ml-3">0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
+                    <div class="flex-row">
+                        <input type="text" id="racial">
+                        <span id="v_racial" class="ml-3">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section p-3 hide" id="batchRangeSlider">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="b_compactness">Compactness</label>
+                    <div class="flex-row">
+                        <span id="bs_b_compactness" class="mr-3">0</span>
+                        <input type="text" id="b_compactness">
+                        <span id="be_b_compactness" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="b_contiguity">Contiguity</label>
+                    <div class="flex-row">
+                        <span id="bs_b_contiguity" class="mr-3">0</span>
+                        <input type="text" id="b_contiguity">
+                        <span id="be_b_contiguity" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
+                    <div class="flex-row">
+                        <span id="bs_b_population-equality" class="mr-3">0 </span>
+                        <input type="text" id="b_population-equality">
+                        <span id="be_b_population-equality" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
+                    <div class="flex-row">
+                        <span id="bs_b_partisan-fairness" class="mr-3">0</span>
+                        <input type="text" id="b_partisan-fairness">
+                        <span id="be_b_partisan-fairness" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
+                    <div class="flex-row">
+                        <span id="bs_b_racial" class="mr-3">0</span>
+                        <input type="text" id="b_racial">
+                        <span id="be_b_racial" class="ml-3">100</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="form-group">
+                    <div class="form-check-inline">
+                        <label class="form-check-label" for="single">
+                            <input type="radio" class="form-single" id="single" name="optradio" value="single" checked>
+                            Single
+                        </label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label" for="batch">
+                            <input type="radio" class="form-batch" id="batch" name="optradio" value="batch">
+                            Batch
+                        </label>
+                    </div>
+                    <div class="form-group hide mt-3" id="batch-hide-section">
+                        <input type="text" class="form-control" value="" placeholder="Number of Runs">
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="form-group">
+                    <div class="form-group dropdown show ">
+                        <button class="btn btn-secondary btn-sm" type="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" style="width: 150px" id="btnSummary">
+                            Summaries
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="form-group">
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Select Algorithm
+                    </button>
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Select Precinct
+                    </button>
+                </div>
+            </div>
+            <div class="section">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="racial">Number of Majority / Minority Districts</label>
+                    <div class="flex-row">
+                        <span id="s_nom_md" class="mr-3">0</span>
+                        <input type="text" id="nom_md">
+                        <span id="e_nom_md" class="ml-3">100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="nod_gp">Number of Districts for graph partitioning</label>
+                    <input type="text" class="form-control" value="" id="nod_gp">
+                </div>
+                <div class="form-group">
+                    <button type="button" id="btnStop" class="btn btn-primary btn-sm">Stop</button>
+                    <button type="button" id="btnPause"class="btn btn-primary btn-sm">Pause</button>
+                    <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</wrapper>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js" crossorigin="anonymous"></script>
+
+<script src="./state.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        //Summary
+
+        $("#btnSummary").click(function(){
+            alert("State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2");
+        });
+
+        //Log Out
+        $("#logOut").click(function(){
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/loguserout",
+                error: function(e) {
+                    if(e.status == 200){
+                        window.location.href = './index.html';
+                    }else{
+                        console.log("error!");
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
+
+        //=====================================  Right Side Panel  =====================================//
+
+        // when selected batch radio select option
+        $("#batch").click(function(){
+            var checked = $("#batch").prop('checked');
+            if(checked){
+                $("#batchRangeSlider").addClass('block');
+                $("#batchRangeSlider").removeClass('hide');
+                $("#singleRangeSlider").addClass("hide");
+                $("#singleRangeSlider").removeClass("block");
+                if($("#batch-hide-section").hasClass("hide")){
+                    $("#batch-hide-section").addClass('block');
+                    $("#batch-hide-section").removeClass('hide');
+                }
+            }
+        });
+
+
+        // when selected batch radio select option
+        $("#single").click(function(){
+            var checked = $("#single").prop('checked');
+            if(checked){
+                $("#batchRangeSlider").addClass('hide');
+                $("#batchRangeSlider").removeClass('block');
+                $("#singleRangeSlider").addClass("block");
+                $("#singleRangeSlider").removeClass("hide");
+                if(!$("#batch-hide-section").hasClass("hide")){
+                    $("#batch-hide-section").addClass('hide');
+                    $("#batch-hide-section").removeClass('block');
+                }
+            }
+        });
+
+
+
+        // slider generation when batch
+        function loadBatchRangeSlider() {
+            var batchSlider = ["b_compactness","b_contiguity","b_population-equality","b_partisan-fairness","b_racial"];
+            batchSlider.map(x=>{
+                $(`#${x}`).slider({ id: `batch_${x}`, min: 0, max: 100, range: true, value: [0, 100]});
+                $(`#${x}`).on("slide", function(slideEvt) {
+                    console.log(slideEvt.value[0]);
+                    $(`#bs_${x}`).text(slideEvt.value[0]);
+                    $(`#be_${x}`).text(slideEvt.value[1]);
+                });
+            });
+        }
+
+        function loadSingleRangeSlider() {
+            var batchSlider = ["compactness","contiguity","population-equality","partisan-fairness","racial"];
+            batchSlider.map(x=>{
+                $(`#${x}`).slider({id: `single_${x}`, min: 0, max: 100, value: 0  });
+                $(`#${x}`).on("slide", function(slideEvt) {
+                    $(`#v_${x}`).text(slideEvt.value);
+                });
+            });
+        }
+
+        loadBatchRangeSlider();
+        loadSingleRangeSlider();
+
+        $("#nom_md").slider({
+            id:"input_nom_md",min: 0, max: 100, range: true, value: [0, 100]
+        });
+        $("#nom_md").on("slide",function(slideEvt){
+            console.log(slideEvt.value);
+            $("#s_nom_md").text(slideEvt.value[0]);
+            $("#e_nom_md").text(slideEvt.value[1]);
+        });
+
+        // send data to server when click run button
+
+        $('#btnStop').prop('disabled', true);
+        $('#btnPause').prop('disabled', true);
+        $('#btnRun').prop('disabled', true);
+
+
+        //==================================  Map  =============================================//
+
+        // Variable
+        var azFlag = false;
+        var mlFlag = false;
+        var nhFlag = false;
+        var infoProps = null;
+        var map = null;
+
+        var info = L.control();
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        info.update = function (infoProps) {
+            console.log("props=",infoProps);
+            this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: </b>0.00000000000<br /><b>longitude: </b>0.00000000000<br />';
+        };
+
+
+        //Generating Random color function
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        // style function
+        function style(feature) {
+            var color = getRandomColor();
+            return {
+                fillColor:color,
+                weight: 0.5,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0
+            };
+        }
+
+        // hover style
+        function hooverStyle(feature) {
+            var color = getRandomColor();
+            return {
+                fillColor:color,
+                weight: 3,
+                opacity: 1,
+                color: color,
+                fillOpacity: 0.5
+            };
+        }
+
+        //
+        // load state...
+        function loadState(latitude , longitude , fileName){
+            document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
+            map = L.map('mapContainer').setView([latitude, longitude], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+                maxZoom: 17,
+                minZoom: 2
+            }).addTo(map);
+            info.addTo(map);
+            if(fileName == "AZ"){
+                L.geoJSON(states, {
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+                $.getJSON('./AZ-FULL.geojson', function (data) {
+                    L.geoJson(data,{
+                        style: hooverStyle,
+                        onEachFeature: onEachAzFeature
+                    }).bindTooltip("districts").addTo(map);
+                });
+                if(azFlag){
+                    $.getJSON('./ArizonaData/Arizona.json', function (data) {
+                        L.geoJSON(data,{
+                            style:style,
+                            // onEachFeature: onEachAzDetailFeature
+                        }).bindTooltip("precinct").addTo(map);
+                    });
+                }
+            }
+
+            if (fileName == "ML"){
+                L.geoJSON(states, {
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+                $.getJSON('./MD-FULL.geojson', function (data) {
+                    L.geoJson(data,{
+                        style: hooverStyle,
+                        onEachFeature: onEachMlFeature
+                    }).bindTooltip("districts").addTo(map);
+                });
+                if(mlFlag){
+                    setTimeout(function(){
+                        $.getJSON('./MarylandData/Maryland.json', function (data) {
+                            L.geoJSON(data,{
+                                style:style,
+                                // onEachFeature: onEachMlDetailFeature
+                            }).bindTooltip("precinct").addTo(map);
+                        });
+                    }, 500);
+                }
+            }
+
+            if (fileName == "NH"){
+                L.geoJSON(states, {
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+                $.getJSON('./NH-FULL.geojson', function (data) {
+                    L.geoJson(data,{
+                        style: hooverStyle,
+                        onEachFeature: onEachNhFeature
+                    }).bindTooltip("districts").addTo(map);
+                });
+                if(nhFlag){
+                    $.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
+                        L.geoJSON(data,{
+                            style:style,
+                            // onEachFeature: onEachNhDetailFeature
+                        }).bindTooltip("precinct").addTo(map);
+                    });
+                }
+            }
+        }
+        //  onEachFeature function. leaflet function. if click on state directly, update dropdown as well.
+        function onEachFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    var state = e.target.feature.geometry.state;
+                    if(state == "Arizona"){
+                        loadState(33.729759,-111.431221,"AZ");
+                        $("#arizona").parent().prev().text($("#arizona").text());
+                    }else if(state == "Maryland"){
+                        loadState(39.063946,-76.802101,"ML");
+                        $("#maryland").parent().prev().text($("#maryland").text());
+                    }else{
+                        loadState(43.452492,-71.563896,"NH");
+                        $("#nhampshire").parent().prev().text($("#nhampshire").text());
+                    }
+                }
+            });
+        }
+
+        // AZ click Event
+        function onEachAzFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    azFlag = true;
+                    mlFlag = false;
+                    nhFlag = false;
+                    loadState(33.729759,-111.431221,"AZ");
+                },
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+        // AZ detail Event
+        function onEachAzDetailFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+
+        // ML click Event
+        function onEachMlFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    azFlag = false;
+                    mlFlag = true;
+                    nhFlag = false;
+                    loadState(39.063946,-76.802101,"ML");
+                },
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+        // ML detail click Event
+        function onEachMlDetailFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+
+        // NH click Event
+        function onEachNhFeature(feature, layer) {
+            layer.on({
+                click: function(e){
+                    azFlag = false;
+                    mlFlag = false;
+                    nhFlag = true;
+                    loadState(43.452492,-71.563896,"NH");
+                },
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+        // NH detail Event
+        function onEachNhDetailFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+
+        function highlightFeature(e) {
+            // method that we will use to update the control based on feature properties passed
+            var event = e;
+            info.update = function (e) {
+                this._div.innerHTML = '<h4>Lat-Lng of Districts</h4>' +  (event ?
+                    '<b>latitude: </b>' + event.latlng.lat +'<br /><b>longitude: </b>'+ event.latlng.lng
+                    : '<b>latitude: 0.00000000000</b><br /><b>longitude: 0.00000000000</b><br />');
+            };
+            info.addTo(map);
+        }
+
+        function resetHighlight(e) {
+            info.update = function (e) {
+                this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: 0.00000000000</b><br /><b>longitude: 0.00000000000</b><br />';
+            };
+            info.addTo(map);
+        }
+
+        // Load map first time...
+        document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
+        map = L.map('mapContainer').setView([39.8870, -97.9803], 5);
+        var layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+            maxZoom: 17,
+            minZoom: 2
+        }).addTo(map);
+
+        L.geoJSON(states, {
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+        info.addTo(map);
+
+        // Change state, change in dropdown as well
+        $("#stateDropdown a").click(function(){
+            $(this).parent().prev().text($(this).text());
+            loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
+        });
+    });
+</script>
+</body>
+</html>

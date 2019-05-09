@@ -28,7 +28,7 @@ public class AdminController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
-        return "Admin updating a user goes here.";
+        return null;
     }
 
     /**
