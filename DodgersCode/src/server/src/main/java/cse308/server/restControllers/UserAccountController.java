@@ -105,6 +105,11 @@ public class UserAccountController {
         return new ResponseEntity(HttpStatus.CREATED);    //201 Response
     }
 
+    @RequestMapping(value = "guestlogin", method = RequestMethod.POST)
+    public ResponseEntity guestLogin(){
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/getAllUsers")
     public List<User> getAllUsers(){
         System.out.println("Listing all users.");
