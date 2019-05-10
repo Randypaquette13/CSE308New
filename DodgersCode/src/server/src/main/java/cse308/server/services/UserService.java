@@ -112,5 +112,9 @@ public class UserService {
         return null;
     }
 
+    public void deleteUser(User user){
+        userRepository.delete(user);
+    }
+
 
 }
