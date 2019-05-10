@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -42,13 +42,13 @@
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <!-- Login Form -->
-            <div class="tab-pane fade show active" id="loginForm">
+            <form class="tab-pane fade show active" id="loginForm">
                 <div class="container mt-5">
                     <h3 class="form-title p-3">Login</h3>
                     <div class="pt-1 pl-3 pr-3" id="loginForm1">
                         <div class="form-group">
                             <label for="loginEmail">Email</label>
-                            <input type="text" class="form-control" name="email" required id="loginEmail"
+                            <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="form-control" name="email" required id="loginEmail"
                                    aria-describedby="emailHelp" placeholder="Email">
                         </div>
                         <div class="form-group">
@@ -63,9 +63,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <!-- Guest Login Form -->
-            <div class="tab-pane fade" id="guestLogin">
+            <form class="tab-pane fade" id="guestLogin">
                 <div class="container mt-5">
                     <h3 class="form-title p-3">Guest Login</h3>
                     <div class="pt-1 pl-3 pr-3" id="guestLoginForm">
@@ -76,9 +76,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <!-- Guest SignUp Form -->
-            <div class="tab-pane fade" id="signUp">
+            <form class="tab-pane fade" id="signUp">
                 <div class="container mt-5">
                     <h3 class="form-title p-3">Register</h3>
                     <div class="pt-1 pl-3 pr-3">
@@ -98,7 +98,7 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fa fa-envelope"></i></div>
                             </div>
-                            <input type="confirm_password" name="email" id="registerEmail" required class="form-control" placeholder="Email">
+                            <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" id="registerEmail" required class="form-control" placeholder="Email">
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -112,15 +112,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <!-- Admin Login -->
-            <div class="tab-pane fade" id="adminLogin">
+            <form class="tab-pane fade" id="adminLogin">
                 <div class="container mt-5">
                     <h3 class="form-title p-3">Admin Login</h3>
                     <div class="pt-1 pl-3 pr-3" id="adminLoginForm">
                         <div class="form-group">
                             <label for="adminEmail">Email</label>
-                            <input type="text" class="form-control" name="email" required id="adminEmail"
+                            <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="form-control" name="email" required id="adminEmail"
                                    aria-describedby="emailHelp" placeholder="Email">
                         </div>
                         <div class="form-group">
@@ -135,19 +135,24 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 <script>
     $(document).ready(function(){
         // login form
-        $("#login_submit").click(function(){
-            debugger;
+        $('#loginForm').submit(function(e) {
+            e.preventDefault();
+            var $form = $(this);
+            if (!$form.valid()) return false;
             var email = $('#loginEmail').val();
             var password = $('#loginPassword').val();
             $.ajax({
@@ -162,7 +167,7 @@
                         debugger;
                         window.location.href = './main.html';
                     }else{
-                        console.log("error!");
+                        alert("Login failed!");
                     }
                 },
                 dataType: "json",
@@ -172,8 +177,10 @@
 
         // register form
 
-        $("#register_submit").click(function(){
-            debugger;
+        $('#signUp').submit(function(e) {
+            e.preventDefault();
+            var $form = $(this);
+            if (!$form.valid()) return false;
             var email = $('#registerEmail').val();
             var password = $('#registerPassword').val();
             var firstName = $('#registerFirstName').val();
@@ -193,7 +200,7 @@
                         alert ("Successfully Registered!");
                         window.location.href = './index.html';
                     }else{
-                        console.log("error!");
+                        alert("Register failed!");
                     }
                 },
                 dataType: "json",
@@ -203,8 +210,10 @@
 
         // Admin Login form
 
-        $("#admin_submit").click(function(){
-            debugger;
+        $('#adminLogin').submit(function(e) {
+            e.preventDefault();
+            var $form = $(this);
+            if (!$form.valid()) return false;
             var email = $('#adminEmail').val();
             var password = $('#adminPassword').val();
             $.ajax({
@@ -219,13 +228,15 @@
                         debugger;
                         window.location.href = './adminpanel.html';
                     }else{
-                        console.log("error!");
+                        alert("Login failed!");
                     }
                 },
                 dataType: "json",
                 contentType: "application/json"
             });
         });
+
+        // Guest Login
 
         $("#guest_submit").click(function(){
             debugger;
@@ -235,9 +246,9 @@
                 error: function(e) {
                     if(e.status == 200){
                         debugger;
-                        window.location.href = 'guestlogin.html';
+                        window.location.href = './guestlogin.html';
                     }else{
-                        console.log("error!");
+                        alert("Login failed!");
                     }
                 },
                 dataType: "json",
