@@ -107,7 +107,7 @@ public class UserAccountController {
         return new ResponseEntity(HttpStatus.CREATED);    //201 Response
     }
 
-    @RequestMapping(value = "guestlogin", method = RequestMethod.POST)
+    @RequestMapping(value = "/guestlogin", method = RequestMethod.POST)
     public ResponseEntity guestLogin(){
         return new ResponseEntity(HttpStatus.OK);
     }
