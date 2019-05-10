@@ -180,6 +180,11 @@
                 </div>
             </div>
             <div class="section">
+                <div class="form-check-inline">
+                    <input type="checkbox" name="graphPartUpdate">Update During Graph Partitioning
+                </div>
+            </div>
+            <div class="section">
                 <div class="form-group">
                     <div class="form-group dropdown show ">
                         <button data-toggle="modal" data-target="#myModal" class="btn btn-secondary btn-sm" type="button" data-toggle="dropdown"
@@ -351,9 +356,10 @@
                     "contiguity": $("#contiguity").val(),
                     "population-equality": $("#population-equality").val(),
                     "contiguity": $("#partisan-fairness").val(),
-                    "contiguity": $("#racial").val(),
+                    "contiguity": $("#racial").val(),//TODO should this be called contiguity or something else
                     "numberOfMajority": $("#nom_md").val(),
-                    "numberOfDistrict":$("#nod_gp").val()
+                    "numberOfDistrict":$("#nod_gp").val(),
+                    "graphPartUpdate":$("#graphPartUpdate").val()
                 }
             }else{
                 data = {
@@ -363,8 +369,10 @@
                     "population-equality": $("#b_population-equality").val(),
                     "contiguity": $("#b_partisan-fairness").val(),
                     "contiguity": $("#b_racial").val(),
-                    "numberOfMajority": $("#nom_md").val(),
-                    "numberOfDistrict":$("#nod_gp").val()
+                    "minNumberOfMajority": $("#e_nom_md").val(),
+                    "maxNumberOfMajority": $("#s_nom_md").val(),
+                    "numberOfDistrict":$("#nod_gp").val(),
+                    "graphPartUpdate":$("#graphPartUpdate").val()
                 }
             }
 

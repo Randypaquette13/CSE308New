@@ -31,7 +31,16 @@ public class AlgorithmController {
     public String doGraphPartitioning(@RequestBody Preference preference) {
         //TODO: Load state object from DB and set it to the private state obj
         algorithm = new Algorithm(preference, state);
-        return algorithm.doGraphPartitioning();
+
+        if (preference.isGraphPartUpdate()) {
+            return algorithm.doGraphPartitioning();
+        } else {
+            String gps = algorithm.doGraphPartitioning();
+            while(!"done".equals(gps)) {
+                gps = algorithm.doGraphPartitioning();
+            }
+            return gps;
+        }
     }
 
     /**
@@ -53,7 +62,6 @@ public class AlgorithmController {
         for(Preference preference : preferences) {
             final Algorithm algorithm = new Algorithm(preference, state);
             summaryBatch.add(algorithm.doJob());
-            //TODO how to set incremental updates
         }
         return summaryBatch;
     }

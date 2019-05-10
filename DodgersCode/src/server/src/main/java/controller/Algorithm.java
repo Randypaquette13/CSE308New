@@ -62,7 +62,7 @@ public class Algorithm {
     }
 
     public String doGraphPartitioning() {
-        String s = "";
+        String s;
         //you must reset the state so we dont have to make extra database calls
         state.reset();
         if(state.getClusters().size() != pref.getNumDistricts()) {
@@ -82,9 +82,9 @@ public class Algorithm {
                 mergedClusters.add(c);
             }
             (state.getClusters()).addAll(mergedClusters);
-            s += state.toString();
+            s = state.getClusters().toString();
         } else {
-            s += "done";
+            s = "done";
         }
         return s;
     }
@@ -95,12 +95,10 @@ public class Algorithm {
         //anneal until the objective function output is acceptable or the max steps is reached
         if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
             candidateMove = state.findCandidateMove();
-
             if(candidateMove != null) {
                 System.out.println(candidateMove);
                 state.doMove(candidateMove);
                 final double currObjFunVal = calculateObjectiveFunction();
-
                 if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
                     lastObjFunVal = currObjFunVal;
                 } else {

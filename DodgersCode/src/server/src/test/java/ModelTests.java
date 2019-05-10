@@ -192,22 +192,12 @@ public class ModelTests {
 
     @Test
     public void testSimulatedAnnealing() {
-
-        HashMap<DemographicType, Integer> populations = new HashMap<>();
-        HashMap<DemographicType, int[]> voting = new HashMap<>();
-        int[] vote = {5,3,2};
-        for(DemographicType type : DemographicType.values()) {
-            populations.put(type, 10);
-            voting.put(type, vote);
-        }
-        Demographics d1 = new Demographics(populations, voting);
-
-        Precinct p0 = new Precinct(60,new HashSet<>(), d1);
-        Precinct p1 = new Precinct(60,new HashSet<>(), d1);
-        Precinct p2 = new Precinct(60,new HashSet<>(), d1);
-        Precinct p3 = new Precinct(60,new HashSet<>(), d1);
-        Precinct p4 = new Precinct(60,new HashSet<>(), d1);
-        Precinct p5 = new Precinct(60,new HashSet<>(), d1);
+        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest());
+        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest());
+        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest());
+        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest());
+        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest());
+        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest());
 
         p0.addEdgeTo(p1);
 
@@ -245,13 +235,19 @@ public class ModelTests {
             weights.put(MeasureType.values()[i],1.0);
         }
 
-        Algorithm a = new Algorithm(new Preference(weights,2,0,2),s);
+        Algorithm a = new Algorithm(new Preference(weights,2,0,2,true),s);
         System.out.println(a.doSimulatedAnnealing());
+        System.out.println(a.doSimulatedAnnealing());
+        System.out.println(a.doSimulatedAnnealing());
+        System.out.println(a.doSimulatedAnnealing());
+//        System.out.println(a.doSimulatedAnnealing());
+//        System.out.println(a.doSimulatedAnnealing());
+//        System.out.println(a.doSimulatedAnnealing());
         System.out.println();
         System.out.println();
         System.out.println();
         System.out.println();
-        System.out.println(s);
+        System.out.println(s.getClusters());
 
     }
 }
