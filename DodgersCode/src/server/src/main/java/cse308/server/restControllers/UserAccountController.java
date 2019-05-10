@@ -31,6 +31,7 @@ public class UserAccountController {
      * COOKIE.
      * @return  Success or Failure, depending on if the username and password exist in the DB or not.
      */
+    @SuppressWarnings("Duplicates")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody User user, HttpServletRequest req,
                                 HttpServletResponse response){
@@ -39,8 +40,8 @@ public class UserAccountController {
         }
         System.out.println("New request to log " + user + " in.");
         if(userService.validateUser(user)){
-            System.out.println(user + " verified.");
             User verifiedUser = userService.getUser(user.getEmail());
+            System.out.println(verifiedUser + " verified.");
             HttpSession session = req.getSession();
             session.setAttribute("id", verifiedUser.getId());
             session.setAttribute("email", verifiedUser.getEmail());
@@ -106,14 +107,12 @@ public class UserAccountController {
         return new ResponseEntity(HttpStatus.CREATED);    //201 Response
     }
 
-    //TODO: ADMIN LOGIN
-
     @RequestMapping(value = "guestlogin", method = RequestMethod.POST)
     public ResponseEntity guestLogin(){
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getAllUsers")
+    @RequestMapping(value = "/getallusers")
     public List<User> getAllUsers(){
         System.out.println("Listing all users.");
         List<User> l = userService.getAllUsers();
