@@ -142,11 +142,12 @@ public class State {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("State:");
+        sb.append("S:");
+        sb.append(" D: ");
         districtSet.forEach(sb::append);
-        sb.append(" ");
+        sb.append(" C: ");
         clusters.forEach(sb::append);
-        sb.append(" Precinct: ");
+        sb.append(" P: ");
         precinctSet.forEach(e -> {
             sb.append(e);
             sb.append(",");

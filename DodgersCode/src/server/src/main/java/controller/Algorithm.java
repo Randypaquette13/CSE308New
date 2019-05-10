@@ -19,8 +19,16 @@ public class Algorithm {
      * This is just an example of how to run the algorithm
      */
     public Summary doJob() {
-        doGraphPartitioning();
-        return doSimulatedAnnealing();
+        String gps = doGraphPartitioning();
+        while(!"done".equals(gps)) {
+            gps = doGraphPartitioning();
+        }
+
+        Summary s = doSimulatedAnnealing();
+        while (s.getMove() != null) {
+            s = doSimulatedAnnealing();
+        }
+        return s;
     }
 
     /**
@@ -53,10 +61,11 @@ public class Algorithm {
         return measureScores;
     }
 
-    public void doGraphPartitioning() {
+    public String doGraphPartitioning() {
+        String s = "";
         //you must reset the state so we dont have to make extra database calls
         state.reset();
-        while(state.getClusters().size() != pref.getNumDistricts()) {
+        if(state.getClusters().size() != pref.getNumDistricts()) {
             int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
             int maxTargetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
             int minTargetPop = 0;   //TODO: load percentage to ignore from config file
@@ -73,7 +82,11 @@ public class Algorithm {
                 mergedClusters.add(c);
             }
             (state.getClusters()).addAll(mergedClusters);
+            s += state.toString();
+        } else {
+            s += "done";
         }
+        return s;
     }
 
     public Summary doSimulatedAnnealing() {

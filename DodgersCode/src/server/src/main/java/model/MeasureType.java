@@ -68,8 +68,8 @@ public enum MeasureType {
 //            System.out.println("num white people " + d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE));
 //
 //            System.out.println(Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length)));
-//            return Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length));
-            return 1;
+            return Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length));
+//            return 1;
         }
     };
 
