@@ -61,7 +61,6 @@ public class District extends Cluster {
 //            int oth = getDemographics().getDemographicVotingData().get(d)[2];
 //            System.out.println("\t" + oth);
 
-
             if(rep != Math.max(dem,rep)) {
                 total += rep;
             }
