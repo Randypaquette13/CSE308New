@@ -135,7 +135,7 @@
                 password: $('#password').val()
             };
 
-            $.ajax({ type: 'POST', url: '/updateuser', data: JSON.stringify(record), dataType: "json", contentType: "application/json" })
+            $.ajax({ type: 'POST', url: '/registeruser', data: JSON.stringify(record), dataType: "json", contentType: "application/json" })
                 .done(function () {
                     dialog.close();
                     grid.reload();
@@ -170,7 +170,7 @@
         });
         grid.on('rowRemoving', function (e, $row, id, record) {
             if (confirm('Are you sure?')) {
-                $.ajax({ url: '/Users/Delete', data: { id: id }, method: 'POST' })
+                $.ajax({ url: '/deleteuser', data: { id: id }, method: 'POST' })
                     .done(function () {
                         grid.reload();
                     })

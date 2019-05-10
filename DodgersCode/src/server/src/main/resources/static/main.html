@@ -182,7 +182,7 @@
             <div class="section">
                 <div class="form-group">
                     <div class="form-group dropdown show ">
-                        <button class="btn btn-secondary btn-sm" type="button" data-toggle="dropdown"
+                        <button data-toggle="modal" data-target="#myModal" class="btn btn-secondary btn-sm" type="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false" style="width: 150px" id="btnSummary">
                             Summaries
                         </button>
@@ -223,6 +223,21 @@
             </div>
         </div>
     </div>
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sumarry Data</h5>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body" id="summaryModalContent">
+                    No Data...
+                </div>
+            </div>
+        </div>
+    </div>
+
 </wrapper>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
@@ -235,12 +250,6 @@
 
 <script>
     $(document).ready(function () {
-
-        //Summary
-
-        $("#btnSummary").click(function(){
-            alert("State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2");
-        });
 
         //Log Out
         $("#logOut").click(function(){
@@ -364,14 +373,47 @@
                 url: "http://localhost:8080/run",
                 data: JSON.stringify(data),
                 error: function(e) {
-                    if(e.status == 201){
-                        debugger;
+                    if(e.status == 200){
+                        if(e.res.data !== null && e.res.data.length > 0){
+                            $("#summaryModalContent").empty();
+                            batchSummary.map((x,index)=>{
+                                $("#summaryModalContent").append(`<p><b>${index}. </b>${x}</p>`);
+                            });
+                        }
                         window.location.href = './index.html';
                     }
                 },
                 dataType: "json",
                 contentType: "application/json"
             });
+        });
+
+        // clickc summary button
+
+        //Summary
+
+        $("#btnSummary").click(function(){
+            var singleSummary = "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2";
+            var batchSummary = [
+                "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2",
+                "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2",
+                "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2"
+            ]
+
+
+            var checked = $("#single").prop('checked');
+            if(checked){
+                $("#summaryModalContent").empty();
+                $("#summaryModalContent").append(`<p>${singleSummary}<p>`);
+            }else{
+                if(batchSummary !== null && batchSummary.length > 0){
+                    $("#summaryModalContent").empty();
+                    batchSummary.map((x,index)=>{
+                        $("#summaryModalContent").append(`<p><b>${index}. </b>${x}</p>`);
+                    });
+                }
+
+            }
         });
 
         //==================================  Map  =============================================//
@@ -448,7 +490,7 @@
                     $.getJSON('./ArizonaData/Arizona.json', function (data) {
                         L.geoJSON(data,{
                             style:style,
-                           // onEachFeature: onEachAzDetailFeature
+                            // onEachFeature: onEachAzDetailFeature
                         }).bindTooltip("precinct").addTo(map);
                     });
                 }
