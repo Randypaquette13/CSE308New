@@ -54,8 +54,8 @@ public class District extends Cluster {
         int total = 0;
         for(DemographicType d : DemographicType.values()) {
 //            System.out.println(this.getPopulation());
-//            int dem = getDemographics().getDemographicVotingData().get(d)[0];
-            System.out.println("\t" + dem);
+            int dem = getDemographics().getDemographicVotingData().get(d)[0];
+//            System.out.println("\t" + dem);
             int rep = getDemographics().getDemographicVotingData().get(d)[1];
 //            System.out.println("\t" + rep);
 //            int oth = getDemographics().getDemographicVotingData().get(d)[2];
