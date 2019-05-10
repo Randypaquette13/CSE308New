@@ -71,22 +71,26 @@ public class UserService {
      */
     public void updateUser(User updatedUser, User oldUserInfo){
         System.out.println("Updating " + oldUserInfo);
-        if(!updatedUser.getEmail().equals("") &&
+        if(updatedUser.getEmail() != null &&
+                !updatedUser.getEmail().equals("") &&
                 !updatedUser.getEmail().equals(oldUserInfo.getEmail())) {
             System.out.println("updated email.");
             oldUserInfo.setEmail(updatedUser.getEmail());
         }
-        if(!updatedUser.getPassword().equals("") &&
+        if(updatedUser.getPassword() != null &&
+                !updatedUser.getPassword().equals("") &&
                 !passwordEncoder.matches(updatedUser.getPassword(), oldUserInfo.getPassword())) {
             System.out.println("updated password.");
             oldUserInfo.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
-        if(!updatedUser.getFirstName().equals("") &&
+        if(updatedUser.getFirstName() != null &&
+                updatedUser.getFirstName().equals("") &&
                 !updatedUser.getFirstName().equals(oldUserInfo.getFirstName())) {
             System.out.println("updated first name.");
             oldUserInfo.setFirstName(updatedUser.getFirstName());
         }
-        if(!updatedUser.getLastName().equals("") &&
+        if(updatedUser.getLastName() != null &&
+                !updatedUser.getLastName().equals("") &&
                 !updatedUser.getLastName().equals(oldUserInfo.getLastName())) {
             System.out.println("updated last name.");
             oldUserInfo.setLastName(updatedUser.getLastName());
@@ -110,6 +114,10 @@ public class UserService {
             return option.get();
         }
         return null;
+    }
+
+    public void deleteUser(User user){
+        userRepository.delete(user);
     }
 
 

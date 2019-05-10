@@ -238,8 +238,9 @@
 
         // Guest Login
 
-        $("#guest_submit").click(function(){
+        $("#guest_submit").click(function(e){
             debugger;
+            e.preventDefault();
             $.ajax({
                 type: 'POST',
                 url: "http://localhost:8080/guestlogin",
