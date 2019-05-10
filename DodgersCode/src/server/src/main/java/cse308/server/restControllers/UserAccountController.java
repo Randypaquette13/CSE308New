@@ -112,7 +112,7 @@ public class UserAccountController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getAllUsers")
+    @RequestMapping(value = "/getallusers")
     public List<User> getAllUsers(){
         System.out.println("Listing all users.");
         List<User> l = userService.getAllUsers();

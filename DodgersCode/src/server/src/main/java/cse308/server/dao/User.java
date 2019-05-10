@@ -1,5 +1,7 @@
 package cse308.server.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class User {
     private Long id;
     @Column(name = "EMAIL")
     private String email;
+    @JsonIgnore
     @Column(name = "PASSWORDHASH")
     private String password;    //actually hashed and salted
     private String firstName;
