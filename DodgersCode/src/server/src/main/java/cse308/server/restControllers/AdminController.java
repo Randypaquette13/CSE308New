@@ -146,7 +146,7 @@ public class AdminController {
         return true;
     }
 
-    public boolean validateUserInfo(User userToValidate){
+    private boolean validateUserInfo(User userToValidate){
         if(userToValidate.getEmail() == null || userToValidate.getEmail().equals("") ||
                 userToValidate.getPassword() == null || userToValidate.getPassword().equals("") ||
                 userToValidate.getFirstName() == null || userToValidate.getFirstName().equals("") ||
