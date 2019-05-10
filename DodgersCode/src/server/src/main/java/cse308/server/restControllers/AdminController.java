@@ -1,5 +1,6 @@
 package cse308.server.restControllers;
 
+import cse308.server.EmailAlreadyRegisteredException;
 import cse308.server.dao.User;
 import cse308.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +30,9 @@ public class AdminController {
     @RequestMapping(value = "/updateuser", method = RequestMethod.POST)
     public ResponseEntity updateUser(@RequestBody User updatedUserInfo, HttpServletRequest req){
         HttpSession session = req.getSession(false);
-        boolean isAdmin = (boolean)session.getAttribute("isAdmin");
-        if(session == null || !isAdmin){
-            if(session == null){
-                System.out.println("null session");
-            }
-            else{
-                System.out.println("isAdmin session is " + session.getAttribute("isAdmin"));
-            }
-            System.out.println("Not authorized.");
+        if(!verifyAdmin(req)){
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);     //401 Response, not admin
         }
-        System.out.println("isAdmin is " + session.getAttribute("isAdmin"));
         User oldUserInfo = userService.findById(updatedUserInfo.getId());
         if(oldUserInfo == null){
             System.out.println("User " + updatedUserInfo + " not found in DB.");
@@ -72,6 +64,12 @@ public class AdminController {
      */
     @RequestMapping(value = "/deleteuser", method = RequestMethod.POST)
     public String deleteUser() {
+
+
+
+
+
+
         return "Admin deleting a user goes here.";
     }
 
@@ -80,9 +78,24 @@ public class AdminController {
      * @return  Success or Failure, depending on if the user was registered successfully or not.
      */
     @RequestMapping(value = "/registeruser", method = RequestMethod.POST)
-    public String registerUser(){
-        return "Admin registering a user goes here.";
-        //will likely end up sending a POST request to /register
+    public ResponseEntity registerUser(@RequestBody User userToRegister, HttpServletRequest req){
+        if(!verifyAdmin(req)){
+            System.out.println("Submitting person isn't an admin.");
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);         //401 Response, user isn't an admin.
+        }
+        if(!validateUserInfo(userToRegister)){
+            System.out.println(userToRegister + " had bad or missing data.");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);          //400 Response, bad data sent
+        }
+        try{
+            userService.registerNewUser(userToRegister);
+        }
+        catch(EmailAlreadyRegisteredException e){
+            System.out.println(userToRegister + " uses email already found in system.");
+            return new ResponseEntity(HttpStatus.CONFLICT);             //409 Response, email already registered
+        }
+        System.out.println(userToRegister + " successfully registered.");
+        return new ResponseEntity(HttpStatus.CREATED);                  //201 Response
     }
 
     @RequestMapping(value = "/adminlogin", method = RequestMethod.POST)
@@ -111,6 +124,31 @@ public class AdminController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED); //401 Response
         }
 
+    }
+
+    public boolean verifyAdmin(HttpServletRequest req){
+        HttpSession session = req.getSession(false);
+        if(session == null){
+            System.out.println("No session.");
+            return false;
+        }
+        boolean isAdmin = (boolean)session.getAttribute("isAdmin");
+        if(!isAdmin){
+            System.out.println("Not an admin.");
+            return false;
+        }
+        System.out.println("Is an admin.");
+        return true;
+    }
+
+    public boolean validateUserInfo(User userToValidate){
+        if(userToValidate.getEmail() == null || userToValidate.getEmail().equals("") ||
+                userToValidate.getPassword() == null || userToValidate.getPassword().equals("") ||
+                userToValidate.getFirstName() == null || userToValidate.getFirstName().equals("") ||
+                userToValidate.getLastName() == null || userToValidate.getLastName().equals("")){
+            return false;
+        }
+        return true;
     }
 
 }
