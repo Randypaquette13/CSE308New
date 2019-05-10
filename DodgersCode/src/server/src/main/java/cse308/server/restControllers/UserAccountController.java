@@ -39,8 +39,8 @@ public class UserAccountController {
         }
         System.out.println("New request to log " + user + " in.");
         if(userService.validateUser(user)){
-            System.out.println(user + " verified.");
             User verifiedUser = userService.getUser(user.getEmail());
+            System.out.println(verifiedUser + " verified.");
             HttpSession session = req.getSession();
             session.setAttribute("id", verifiedUser.getId());
             session.setAttribute("email", verifiedUser.getEmail());
