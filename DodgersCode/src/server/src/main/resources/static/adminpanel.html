@@ -128,15 +128,13 @@
         var grid;
         function Save() {
             var record = {
-                firstname: $('#firstname').val(),
-                lastname: $("#lastname").val(),
+                firstName: $('#firstname').val(),
+                lastName: $("#lastname").val(),
                 email: $("#email").val(),
                 admin: $("#admin").prop("checked"),
                 password: $('#password').val()
             };
-            //updateuser
-            //deleteuser
-            //registeruser
+
             $.ajax({ url: '/Users/Save', data: { record: record }, method: 'POST' })
                 .done(function () {
                     dialog.close();
@@ -148,7 +146,7 @@
                 });
         }
         grid = $('#grid').grid({
-            dataSource: '/getallusers/Get',
+            dataSource: '/getallusers',
             //dataSource: gridData,// To get dummy data
             uiLibrary: 'bootstrap4',
             primaryKey: 'id',
@@ -157,15 +155,15 @@
                 { field: 'id',title:'ID', width: 44 },
                 { field: 'email',title:'Email',width: "15%", editor: true },
                 { field: 'password',title:'Password',width: "15%", editor: true },
-                { field: 'firstname',title:'First Name',width: "15%", editor: true },
-                { field: 'lastname',title:'Last Name',width: "20%", editor: true },
+                { field: 'firstName',title:'First Name',width: "15%", editor: true },
+                { field: 'lastName',title:'Last Name',width: "20%", editor: true },
                 { field: 'admin', title: 'Admin', type: 'checkbox', editor: true, width: 90, align: 'center' }
             ],
             pager: { limit: 5 }
         });
         grid.on('rowDataChanged', function (e, id, record) {
             var data = $.extend(true, {}, record);
-            $.ajax({ url: '/Users/Update', data: { record: data }, method: 'POST' })
+            $.ajax({ url: '/updateuser', data: data, method: 'POST' })
                 .fail(function () {
                     alert('Failed to update.');
                 });
@@ -188,8 +186,8 @@
             width: 360
         });
         $('#btnAdd').on('click', function () {
-            firstname: $('#firstname').val();
-            lastname: $("#lastname").val();
+            firstName: $('#firstname').val();
+            lastName: $("#lastname").val();
             email: $("#email").prop("unchecked");
             admin: $("#admin").prop("unchecked");
             password: $('#password').val()
