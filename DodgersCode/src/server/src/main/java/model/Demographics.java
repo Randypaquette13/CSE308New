@@ -28,6 +28,18 @@ public class Demographics {
                 demographicVotingData.get(demoType)[ii] += d.demographicVotingData.get(demoType)[ii];
             }
         }
+        System.out.println("\t\t" + this);
+    }
+
+    public void remove(Demographics d) {
+        for(DemographicType demoType : DemographicType.values()) {
+            //handle demographic population
+            demographicPopulation.put(demoType, demographicPopulation.get(demoType) - d.getDemographicPopulation().get(demoType));
+            //handle demovoting data
+            for(int ii = 0; ii < demographicVotingData.get(demoType).length; ii++) {
+                demographicVotingData.get(demoType)[ii] -= d.demographicVotingData.get(demoType)[ii];
+            }
+        }
     }
 
     @Override
@@ -46,4 +58,15 @@ public class Demographics {
         return sb.toString();
     }
 
+    public static Demographics getDemographicTest() {
+        HashMap<DemographicType, Integer> populations = new HashMap<>();
+        HashMap<DemographicType, int[]> voting = new HashMap<>();
+        int[] vote = {5,3,2};
+        for(DemographicType type : DemographicType.values()) {
+            populations.put(type, 10);
+            voting.put(type, vote.clone());
+        }
+        Demographics d1 = new Demographics(populations, voting);
+        return d1;
+    }
 }
