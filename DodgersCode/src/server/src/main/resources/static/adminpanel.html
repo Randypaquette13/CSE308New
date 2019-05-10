@@ -31,7 +31,7 @@
             <a class="dropdown-item" href="#">Save</a>
             <a class="dropdown-item" href="#">Save As...</a>
         </div>
-        <button class="btn btn-secondary btn-sm" id="logOut" onClick="window.location.href='index.html'" type="button">
+        <button class="btn btn-secondary btn-sm" id="logOut" type="button">
             Log Out
         </button>
     </div>
@@ -41,7 +41,7 @@
                 <div class="card-header">
                     <h4 class="text-xs-center">ADMIN DASHBOARD</h4>
                 </div>
-                <div class="card-block text-xs-center" style="height: 780px">
+                <div class="card-block text-xs-center">
                     <div class=container>
                         <div class="row">
                             <div class="col-md-12 flex-row " style="margin-top: 50px;height: 100%">
@@ -136,12 +136,13 @@
             };
 
             $.ajax({ type: 'POST', url: '/registeruser', data: JSON.stringify(record), dataType: "json", contentType: "application/json" })
-                .done(function () {
-                    dialog.close();
-                    grid.reload();
-                })
-                .fail(function () {
-                    alert('Failed to save.');
+                .fail(function (e) {
+                    console.log(e);
+                    if(e.status !== 201){
+                        alert('Failed to save.');
+                    }else{
+                        grid.reload();
+                    }
                     dialog.close();
                 });
         }
@@ -164,8 +165,13 @@
         grid.on('rowDataChanged', function (e, id, record) {
             var data = $.extend(true, {}, record);
             $.ajax({ type: 'POST', url: '/updateuser', data: JSON.stringify(record), dataType: "json", contentType: "application/json" })
-                .fail(function () {
-                    alert('Failed to update.');
+                .fail(function (e) {
+                    if(e.status === 200){
+
+                    }else{
+                        alert("update failed");
+                    }
+
                 });
         });
         grid.on('rowRemoving', function (e, $row, id, record) {
@@ -197,6 +203,23 @@
         $('#btnCancel').on('click', function () {
             dialog.close();
         });
+
+        $("#logOut").click(function(){
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/loguserout",
+                error: function(e) {
+                    if(e.status == 200){
+                        window.location.href = './index.html';
+                    }else{
+                        console.log("error!");
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
+
     });
 </script>
 </body>
