@@ -25,6 +25,10 @@ public class Summary {
         return measureScores;
     }
 
+    public Move getMove() {
+        return move;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -84,7 +84,7 @@ public class Cluster implements MapVertex {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Cluster#" + id + " ");
+        sb.append("C" + id + " ");
         for(Precinct p : precinctSet) {
             sb.append(p);
             sb.append(",");
