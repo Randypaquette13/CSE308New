@@ -370,7 +370,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/run",
+                url: "http://localhost:8080/runSimulatedAnnealing",
                 data: JSON.stringify(data),
                 error: function(e) {
                     if(e.status == 200){
