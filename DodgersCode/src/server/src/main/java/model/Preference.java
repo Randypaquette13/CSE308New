@@ -8,13 +8,15 @@ public class Preference {
     private final int minMajMinDistricts;
     private final int numDistricts;
     private final boolean graphPartUpdate;
+    private final String stateName;
 
-    public Preference(HashMap<MeasureType, Double> weights, int maxMajMinDistricts, int minMajMinDistricts, int numDistricts, boolean graphPartUpdate) {
+    public Preference(HashMap<MeasureType, Double> weights, int maxMajMinDistricts, int minMajMinDistricts, int numDistricts, boolean graphPartUpdate, String stateName) {
         this.weights = weights;
         this.maxMajMinDistricts = maxMajMinDistricts;
         this.minMajMinDistricts = minMajMinDistricts;
         this.numDistricts = numDistricts;
         this.graphPartUpdate = graphPartUpdate;
+        this.stateName = stateName;
     }
 
     public HashMap<MeasureType, Double> getWeights() {
