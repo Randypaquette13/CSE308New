@@ -135,7 +135,7 @@
                 password: $('#password').val()
             };
 
-            $.ajax({ url: '/Users/Save', data: { record: record }, method: 'POST' })
+            $.ajax({ type: 'POST', url: '/updateuser', data: JSON.stringify(record), dataType: "json", contentType: "application/json" })
                 .done(function () {
                     dialog.close();
                     grid.reload();
@@ -163,7 +163,7 @@
         });
         grid.on('rowDataChanged', function (e, id, record) {
             var data = $.extend(true, {}, record);
-            $.ajax({ url: '/updateuser', data: data, method: 'POST' })
+            $.ajax({ type: 'POST', url: '/updateuser', data: JSON.stringify(record), dataType: "json", contentType: "application/json" })
                 .fail(function () {
                     alert('Failed to update.');
                 });
