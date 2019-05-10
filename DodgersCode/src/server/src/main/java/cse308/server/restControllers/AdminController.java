@@ -63,14 +63,18 @@ public class AdminController {
      * @return  Success or Failure, depending on if the user was deleted successfully or not.
      */
     @RequestMapping(value = "/deleteuser", method = RequestMethod.POST)
-    public String deleteUser() {
-
-
-
-
-
-
-        return "Admin deleting a user goes here.";
+    public ResponseEntity deleteUser(@RequestBody User userToDelete, HttpServletRequest req) {
+        System.out.println("New request to delete " + userToDelete);
+        if(!verifyAdmin(req)){
+            System.out.println("Submitting person isn't an admin");
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);         //401 Response, user isn't an admin.
+        }
+        if(userToDelete.getId() == null || userToDelete.getId() <= 0){
+            System.out.println(userToDelete + " had bad id.");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);          //400 Response, bad data sent
+        }
+        userService.deleteUser(userToDelete);
+        return new ResponseEntity(HttpStatus.OK);                       //200 Response
     }
 
     /**
@@ -79,6 +83,7 @@ public class AdminController {
      */
     @RequestMapping(value = "/registeruser", method = RequestMethod.POST)
     public ResponseEntity registerUser(@RequestBody User userToRegister, HttpServletRequest req){
+        System.out.println("New request to register " + userToRegister);
         if(!verifyAdmin(req)){
             System.out.println("Submitting person isn't an admin.");
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);         //401 Response, user isn't an admin.
@@ -141,7 +146,7 @@ public class AdminController {
         return true;
     }
 
-    public boolean validateUserInfo(User userToValidate){
+    private boolean validateUserInfo(User userToValidate){
         if(userToValidate.getEmail() == null || userToValidate.getEmail().equals("") ||
                 userToValidate.getPassword() == null || userToValidate.getPassword().equals("") ||
                 userToValidate.getFirstName() == null || userToValidate.getFirstName().equals("") ||
