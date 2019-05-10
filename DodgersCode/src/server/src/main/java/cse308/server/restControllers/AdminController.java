@@ -30,10 +30,18 @@ public class AdminController {
     @RequestMapping("/updateUser")
     public ResponseEntity updateUser(@RequestBody User updatedUserInfo, HttpServletRequest req){
         HttpSession session = req.getSession(false);
-        if(session == null || !session.getAttribute("isAdmin").equals("true")){
+        boolean isAdmin = (boolean)session.getAttribute("isAdmin");
+        if(session == null || !isAdmin){
+            if(session == null){
+                System.out.println("null session");
+            }
+            else{
+                System.out.println("isAdmin session is " + session.getAttribute("isAdmin"));
+            }
             System.out.println("Not authorized.");
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);     //401 Response, not admin
         }
+        System.out.println("isAdmin is " + session.getAttribute("isAdmin"));
         User oldUserInfo = userService.findById(updatedUserInfo.getId());
         if(oldUserInfo == null){
             System.out.println("User " + updatedUserInfo + " not found in DB.");
