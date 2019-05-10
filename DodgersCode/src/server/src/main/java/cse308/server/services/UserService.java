@@ -31,13 +31,16 @@ public class UserService {
     public boolean validateUser(User potentialUser){
         System.out.println("Attempting to verify " + potentialUser);
         User user = userRepository.findByEmail(potentialUser.getEmail());
+        System.out.println("Found " + user);
         if(user == null){
             return false;
         }
         if(passwordEncoder.matches(potentialUser.getPassword(), user.getPassword())){
+            System.out.println("Password matches.");
             return true;
         }
         else{
+            System.out.println("Password doesn't match.");
             return false;
         }
     }
@@ -67,20 +70,29 @@ public class UserService {
      * @return
      */
     public void updateUser(User updatedUser, User oldUserInfo){
-        System.out.print("Updating " + oldUserInfo);
-        if(updatedUser.getEmail() != null) {
+        System.out.println("Updating " + oldUserInfo);
+        if(!updatedUser.getEmail().equals("") &&
+                !updatedUser.getEmail().equals(oldUserInfo.getEmail())) {
+            System.out.println("updated email.");
             oldUserInfo.setEmail(updatedUser.getEmail());
         }
-        if(updatedUser.getPassword() != null) {
+        if(!updatedUser.getPassword().equals("") &&
+                !passwordEncoder.matches(updatedUser.getPassword(), oldUserInfo.getPassword())) {
+            System.out.println("updated password.");
             oldUserInfo.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
-        if(updatedUser.getFirstName() != null) {
+        if(!updatedUser.getFirstName().equals("") &&
+                !updatedUser.getFirstName().equals(oldUserInfo.getFirstName())) {
+            System.out.println("updated first name.");
             oldUserInfo.setFirstName(updatedUser.getFirstName());
         }
-        if(updatedUser.getLastName() != null) {
+        if(!updatedUser.getLastName().equals("") &&
+                !updatedUser.getLastName().equals(oldUserInfo.getLastName())) {
+            System.out.println("updated last name.");
             oldUserInfo.setLastName(updatedUser.getLastName());
         }
         if(oldUserInfo.isAdmin() != updatedUser.isAdmin()){
+            System.out.println("updated admin.");
             oldUserInfo.setAdmin(updatedUser.isAdmin());
         }
         System.out.println("New info: " + oldUserInfo);
