@@ -94,7 +94,7 @@ public class AdminController {
         if(userService.validateUser(user)){
             User adminUser = userService.getUser(user.getEmail());
             System.out.println(user + " verified.");
-            if(!user.isAdmin()){
+            if(!adminUser.isAdmin()){
                 System.out.println(user + " was not an admin.");
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED); //401 Response
             }
