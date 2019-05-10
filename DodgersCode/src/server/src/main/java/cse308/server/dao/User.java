@@ -1,5 +1,8 @@
 package cse308.server.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -37,6 +40,7 @@ public class User {
         return email;
     }
 
+    @JsonIgnore
     public String getPassword(){
         return password;
     }
@@ -61,6 +65,7 @@ public class User {
         email = newEmail;
     }
 
+    @JsonProperty
     public void setPassword(String newPassword){
         password = newPassword;
     }

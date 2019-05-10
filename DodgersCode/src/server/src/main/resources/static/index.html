@@ -209,7 +209,7 @@
             var password = $('#adminPassword').val();
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/login",
+                url: "http://localhost:8080/adminlogin",
                 data: JSON.stringify({
                     "email": email,
                     "password": password
@@ -217,7 +217,7 @@
                 error: function(e) {
                     if(e.status == 200){
                         debugger;
-                        window.location.href = './main.html';
+                        window.location.href = './adminpanel.html';
                     }else{
                         console.log("error!");
                     }

@@ -66,17 +66,32 @@ public class UserService {
      *                    old information. MUST HAVE THE ID.
      * @return
      */
-    public boolean updateUser(User updatedUser, User oldUserInfo){
+    public void updateUser(User updatedUser, User oldUserInfo){
         System.out.print("Updating " + oldUserInfo);
-        oldUserInfo.setEmail(updatedUser.getEmail());
-        oldUserInfo.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        oldUserInfo.setFirstName(updatedUser.getFirstName());
-        oldUserInfo.setLastName(updatedUser.getLastName());
-        oldUserInfo.setAdmin(updatedUser.isAdmin());
+        if(updatedUser.getEmail() != null) {
+            oldUserInfo.setEmail(updatedUser.getEmail());
+        }
+        if(updatedUser.getPassword() != null) {
+            oldUserInfo.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+        if(updatedUser.getFirstName() != null) {
+            oldUserInfo.setFirstName(updatedUser.getFirstName());
+        }
+        if(updatedUser.getLastName() != null) {
+            oldUserInfo.setLastName(updatedUser.getLastName());
+        }
+        if(oldUserInfo.isAdmin() != updatedUser.isAdmin()){
+            oldUserInfo.setAdmin(updatedUser.isAdmin());
+        }
+        System.out.println("New info: " + oldUserInfo);
         userRepository.save(oldUserInfo);
-        return true;
     }
 
+    /**
+     * Searches for a user in the DB by their id
+     * @param id The id of the user we wish to find
+     * @return The User, if it exists in the DB, else null
+     */
     public User findById(Long id){
         Optional<User> option = userRepository.findById(id);
         if(option.isPresent()){
