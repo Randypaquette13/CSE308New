@@ -9,10 +9,10 @@ public class Move {
     private final District to;
     private final Precinct precinct;
 
-    public Move(District initFrom, District  initTo, Precinct initPrecinct){
-        from = initFrom;
-        to = initTo;
-        precinct = initPrecinct;
+    public Move(District from, District  to, Precinct precinct){
+        this.from = from;
+        this.to = to;
+        this.precinct = precinct;
 
     }
 
@@ -28,4 +28,8 @@ public class Move {
         return precinct;
     }
 
+    @Override
+    public String toString() {
+        return from + " " + to + " " + precinct;
+    }
 }

@@ -11,8 +11,9 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-            final double radius = Math.sqrt(d.getArea()/Math.PI);
-            return ((2.0*radius*Math.PI) / d.getPerimeter());
+//            final double radius = Math.sqrt(d.getArea()/Math.PI);
+//            return ((2.0*radius*Math.PI) / d.getPerimeter());
+            return 1;
         }
     },
     REOCK_COMPACTNESS {
@@ -21,7 +22,8 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-            return d.getArea()/d.getBoundingCircleArea();
+//            return d.getArea()/d.getBoundingCircleArea();
+            return 1;
         }
     },
     POLSBY_POPPER_COMPACTNESS {
@@ -30,7 +32,8 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-            return 4 * Math.PI * (d.getPerimeter()/(Math.pow(d.getArea(), 2)));
+//            return 4 * Math.PI * (d.getPerimeter()/(Math.pow(d.getArea(), 2)));
+            return 1;
         }
     },
     CONVEX_HULL_COMPACTNESS {
@@ -39,7 +42,8 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-            return d.getArea()/d.getConvexHull();
+//            return d.getArea()/d.getConvexHull();
+            return 1;
         }
     },
     EFFICIENCY_GAP {
@@ -48,6 +52,7 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
+//            System.out.println("sdf" + (1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation())));
             return 1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation());
         }
     },
@@ -57,7 +62,14 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-            return Math.abs((d.getPopulation() / DemographicType.values().length) - d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE));
+//            System.out.println("PopEquality");
+//            System.out.println("total Population " + d.population);
+//            System.out.println("total Population/num demos " + d.population/DemographicType.values().length);
+//            System.out.println("num white people " + d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE));
+//
+//            System.out.println(Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length)));
+//            return Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length));
+            return 1;
         }
     };
 

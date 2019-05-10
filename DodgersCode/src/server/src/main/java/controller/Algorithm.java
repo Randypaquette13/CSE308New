@@ -33,7 +33,7 @@ public class Algorithm {
         double objFunOutput = 0;
         for(District d : state.getDistrictSet()) {
             for(MeasureType m : MeasureType.values()) {
-                objFunOutput += m.calculateMeasure(d) * pref.getWeight(m);
+                objFunOutput += ((m.calculateMeasure(d) * pref.getWeight(m)) / (state.getDistrictSet().size() * MeasureType.values().length));
             }
         }
         return objFunOutput;
@@ -77,23 +77,31 @@ public class Algorithm {
     }
 
     public Summary doSimulatedAnnealing() {
+        System.out.println("\n\tSTARTED SIM ANNEALING STEP");
         Move candidateMove = null;
         //anneal until the objective function output is acceptable or the max steps is reached
         if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
             candidateMove = state.findCandidateMove();
 
             if(candidateMove != null) {
+                System.out.println(candidateMove);
                 state.doMove(candidateMove);
                 final double currObjFunVal = calculateObjectiveFunction();
 
                 if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
                     lastObjFunVal = currObjFunVal;
                 } else {
+                    System.out.println("undoing move");
                     state.undoMove();
                 }
+            } else {
+                System.out.println("NO CANDIDATE MOVE FOUND");
             }
             annealingSteps++;
+        } else {
+            System.out.println("SIM END CONDITION MET");
         }
+        System.out.println("\tENDED SIM ANNEALING STEP");
         return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove);
     }
 

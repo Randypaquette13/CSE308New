@@ -72,8 +72,8 @@ public class State {
      */
     public void doMove(Move m) {
         recentMove = m;
-        m.getFrom().getPrecinctSet().remove(m.getPrecinct());
-        m.getTo().getPrecinctSet().add(m.getPrecinct());
+        m.getFrom().removePrecinct(m.getPrecinct());
+        m.getTo().addPrecinct(m.getPrecinct());
         m.getPrecinct().setDistrict(m.getTo());
     }
 
@@ -84,8 +84,9 @@ public class State {
         if(recentMove == null) {
             return;
         }
-        recentMove.getFrom().getPrecinctSet().add(recentMove.getPrecinct());
-        recentMove.getTo().getPrecinctSet().remove(recentMove.getPrecinct());
+        recentMove.getTo().removePrecinct(recentMove.getPrecinct());
+        recentMove.getFrom().addPrecinct(recentMove.getPrecinct());
+
         recentMove.getPrecinct().setDistrict(recentMove.getFrom());
         recentMove = null;
     }
@@ -107,13 +108,11 @@ public class State {
 
         for(Precinct precinct : district.getPrecinctSet()) {
             for(Edge edge : precinct.getEdges()) {
-                if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD) {
-                    final Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC1() : edge.getC2());
-
-                    //if the neighbor is in another district
-                    if(!neighbor.getDistrict().equals(district)) {
-                        return new Move(district, neighbor.getDistrict(), precinct);
-                    }
+                System.out.println("move this:" + precinct);
+                final Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC2() : edge.getC1());
+                System.out.println("to this:" + neighbor);
+                if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD && !neighbor.getDistrict().equals(district)) {
+                    return new Move(district, neighbor.getDistrict(), precinct);
                 }
             }
         }
@@ -132,7 +131,11 @@ public class State {
 
     public void convertClustersToDistricts() {
         for(Cluster c : clusters) {
-            districtSet.add(new District(c));
+            District d = new District(c);
+            districtSet.add(d);
+            for(Precinct p : c.getPrecinctSet()) {
+                p.setDistrict(d);
+            }
         }
     }
 

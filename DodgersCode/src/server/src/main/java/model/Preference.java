@@ -19,8 +19,8 @@ public class Preference {
         return weights;
     }
 
-    public double getWeight(MeasureType m) {//TODO
-        return -1;
+    public double getWeight(MeasureType m) {
+        return weights.get(m);
     }
 
     public int getMaxMajMinDistricts() {

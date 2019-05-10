@@ -27,7 +27,11 @@ public class Edge {
             //compare demographic populations
             totalDemographicDifference += Math.abs(c1.getDemographics().getDemographicPopulation().get(demoType) - c2.getDemographics().getDemographicPopulation().get(demoType));
         }
-        joinability = 1.0 / totalDemographicDifference;
+        if(totalDemographicDifference == 0) {
+            joinability = 1;
+        } else {
+            joinability = 1.0 / totalDemographicDifference;
+        }
 
         return joinability;
     }
@@ -38,5 +42,10 @@ public class Edge {
         } else {
             return c1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return ("#1:" + c1 + " #2:" + c2 + " join:" + getJoinability());
     }
 }

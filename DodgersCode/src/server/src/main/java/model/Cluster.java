@@ -5,7 +5,7 @@ import java.util.*;
 public class Cluster implements MapVertex {
     private Set<Precinct> precinctSet;
     private Set<Edge> edgeSet;
-    private int population;
+    public int population;
     private Demographics demographics;
     public long id;
 

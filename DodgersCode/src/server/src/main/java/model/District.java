@@ -7,7 +7,7 @@ public class District extends Cluster {
     }
 
     public double getPerimeter() {//TODO
-        return -1.0;
+        return 10;
     }
 
     public double getArea() {
@@ -18,6 +18,14 @@ public class District extends Cluster {
         return area;
     }
 
+    public void addPrecinct(Precinct p) {
+        getPrecinctSet().add(p);
+        population += p.getPopulation();
+    }
+    public void removePrecinct(Precinct p) {
+        getPrecinctSet().remove(p);
+        population -= p.getPopulation();
+    }
     public double getBoundingCircleArea() {//TODO
         return -1.0;
     }
