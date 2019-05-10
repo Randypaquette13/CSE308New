@@ -247,9 +247,11 @@ public class ModelTests {
 
         Algorithm a = new Algorithm(new Preference(weights,2,0,2),s);
         System.out.println(a.doSimulatedAnnealing());
-        System.out.println(a.doSimulatedAnnealing());
-        System.out.println(a.doSimulatedAnnealing());
-        System.out.println(a.doSimulatedAnnealing());
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println(s);
 
     }
 }
