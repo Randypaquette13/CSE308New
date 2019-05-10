@@ -31,6 +31,7 @@ public class UserAccountController {
      * COOKIE.
      * @return  Success or Failure, depending on if the username and password exist in the DB or not.
      */
+    @SuppressWarnings("Duplicates")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody User user, HttpServletRequest req,
                                 HttpServletResponse response){
@@ -105,8 +106,6 @@ public class UserAccountController {
         System.out.println(user + " registered successfully.");
         return new ResponseEntity(HttpStatus.CREATED);    //201 Response
     }
-
-    //TODO: ADMIN LOGIN
 
     @RequestMapping(value = "guestlogin", method = RequestMethod.POST)
     public ResponseEntity guestLogin(){
