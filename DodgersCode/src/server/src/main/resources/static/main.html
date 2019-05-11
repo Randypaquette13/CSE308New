@@ -344,12 +344,15 @@
         });
 
         // send data to server when click run button
+        var graphPartitionData = [];
+        var simulatedAnnealing = "";
 
         $("#btnRun").click(function(){
 
             var data = null;
 
-            if($("#single").prop('checked')){
+
+        if($("#single").prop('checked')){
                 data = {
                     "type": "single",
                     "compactness": $("#compactness").val(),
@@ -377,25 +380,74 @@
                 }
             }
 
+
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/runSimulatedAnnealing",
+                url: "http://localhost:8080/graphPartitioning1 ",
                 data: JSON.stringify(data),
                 error: function(e) {
-                    if(e.status == 200){
-                        if(e.res.data !== null && e.res.data.length > 0){
-                            $("#summaryModalContent").empty();
-                            batchSummary.map((x,index)=>{
-                                $("#summaryModalContent").append(`<p><b>${index}. </b>${x}</p>`);
-                            });
-                        }
-                        window.location.href = './index.html';
+                    if(e.status === 200) {
+                        getGraphPartitionData();
+                    }else{
+                        alert("Running Error!");
                     }
                 },
                 dataType: "json",
                 contentType: "application/json"
             });
+
         });
+
+        function getGraphPartitionData () {
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8080/graphPartitioning2",
+                error: function(e) {
+                    if(e.status === 200){
+                        if(e.data !== null && e.data.length > 0){
+                            if(e.data === "done" ){
+                                return;
+                            }else{
+                                graphPartitionData.push(e.data);
+                                getGraphPartitionData();
+                            }
+                            // [C0 P2,P3,P0,, C1 P4,P1,P5,]
+                        }else{
+                            alert("Graph Partition Algo Error!");
+                        }
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        }
+
+        function getSimulatedAnnealing(){
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8080/simulatedannealing",
+                error: function(e) {
+                    if(e.status === 200){
+                        if(e.data !== null && e.data.length > 0){
+
+                            if(!e.data.message.toLowerCase().indexOf("move")){
+                                simulatedAnnealing = e.data;
+                                $("#summaryModalContent").empty();
+                                $("#summaryModalContent").append(`<p>${simulatedAnnealing}<p>`);
+                                getSimulatedAnnealing();
+                            }else{
+                                simulatedAnnealing = e.data;
+                                return;
+                            }
+                        }else{
+                            alert("Simulated Annealing Algo Error!");
+                        }
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        }
 
         // clickc summary button
 
