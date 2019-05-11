@@ -344,8 +344,9 @@
         });
 
         // send data to server when click run button
-        var graphPartitionData = [];
+        var graphPartitionData = "";
         var simulatedAnnealing = "";
+        var convertedResult = [];
 
         $("#btnRun").click(function(){
 
@@ -406,9 +407,18 @@
                     if(e.status === 200){
                         if(e.data !== null && e.data.length > 0){
                             if(e.data === "done" ){
+                                getSimulatedAnnealing();
                                 return;
                             }else{
-                                graphPartitionData.push(e.data);
+                                graphPartitionData=e.data;
+                                var result = graphPartitionData.map((x=>{
+                                    x.split(",,").map(y=>{
+                                        convertedResult.push({
+                                            color:y.split(" ")[0],
+                                            data: y.split(" ")[1]
+                                        });
+                                    });
+                                }));
                                 getGraphPartitionData();
                             }
                             // [C0 P2,P3,P0,, C1 P4,P1,P5,]
@@ -439,6 +449,7 @@
                                 simulatedAnnealing = e.data;
                                 return;
                             }
+                            //id: 0 move: D0 P4,P1,P5, D1 P2,P3,P0, P:P1
                         }else{
                             alert("Simulated Annealing Algo Error!");
                         }
