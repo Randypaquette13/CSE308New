@@ -181,7 +181,7 @@
             </div>
             <div class="section">
                 <div class="form-check-inline">
-                    <input type="checkbox" name="graphPartUpdate">Update During Graph Partitioning
+                    <input type="checkbox" id="graphPartUpdate" name="graphPartUpdate">Update During Graph Partitioning
                 </div>
             </div>
             <div class="section">
@@ -314,7 +314,6 @@
             batchSlider.map(x=>{
                 $(`#${x}`).slider({ id: `batch_${x}`, min: 0, max: 100, range: true, value: [0, 100]});
                 $(`#${x}`).on("slide", function(slideEvt) {
-                    console.log(slideEvt.value[0]);
                     $(`#bs_${x}`).text(slideEvt.value[0]);
                     $(`#be_${x}`).text(slideEvt.value[1]);
                 });
@@ -338,7 +337,6 @@
             id:"input_nom_md",min: 0, max: 100, range: true, value: [0, 100]
         });
         $("#nom_md").on("slide",function(slideEvt){
-            console.log(slideEvt.value);
             $("#s_nom_md").text(slideEvt.value[0]);
             $("#e_nom_md").text(slideEvt.value[1]);
         });
@@ -349,51 +347,67 @@
         var convertedResult = [];
 
         $("#btnRun").click(function(){
-
             var data = null;
-
-
             if($("#single").prop('checked')){
                 data = {
-                    "type": "single",
                     "compactness": $("#compactness").val(),
                     "contiguity": $("#contiguity").val(),
                     "population-equality": $("#population-equality").val(),
-                    "contiguity": $("#partisan-fairness").val(),
-                    "contiguity": $("#racial").val(),//TODO should this be called contiguity or something else
-                    "minNumberOfMajority": $("#e_nom_md").val(),
-                    "maxNumberOfMajority": $("#s_nom_md").val(),
-                    "numberOfDistrict":$("#nod_gp").val(),
-                    "graphPartUpdate":$("#graphPartUpdate").val()
+                    "partisan-fairness": $("#partisan-fairness").val(),
+                    "racial": $("#racial").val(),
+                    "minMajMinDistricts": $("#e_nom_md").text(),            //passed as an int
+                    "maxMajMinDistricts": $("#s_nom_md").text(),            //passed as an int
+                    "numDistricts":$("#nod_gp").val(),                      //pass as an int
+                    "graphPartUpdate":$("#graphPartUpdate").val()           //pass as a boolean
                 }
+                console.log("data",data);
+                 $.ajax({
+                     type: 'POST',
+                     url: "http://localhost:8080/runGraphPartitioning",
+                     data: JSON.stringify(data),
+                     error: function(e) {
+                         if(e.status === 200) {
+                             getGraphPartitionData();
+                         }else{
+                             alert("Running Error!");
+                         }
+                     },
+                     dataType: "json",
+                     contentType: "application/json"
+                 });
+
             }else{
                 data = {
-                    "type": "batch",
                     "compactness": $("#b_compactness").val(),
                     "contiguity": $("#b_contiguity").val(),
                     "population-equality": $("#b_population-equality").val(),
                     "contiguity": $("#b_partisan-fairness").val(),
                     "contiguity": $("#b_racial").val(),
-                    "minNumberOfMajority": $("#e_nom_md").val(),
-                    "maxNumberOfMajority": $("#s_nom_md").val(),
+                    "minNumberOfMajority": $("#e_nom_md").text(),
+                    "maxNumberOfMajority": $("#s_nom_md").text(),
                     "numberOfDistrict":$("#nod_gp").val(),
                     "graphPartUpdate":$("#graphPartUpdate").val()
                 }
+                $.ajax({
+                    type: 'POST',
+                    url: "http://localhost:8080/runBatchProcessing",
+                    data: JSON.stringify(data),
+                    error: function(e) {
+                        if(e.status === 200) {
+                            getGraphPartitionData();
+                        }else{
+                            alert("Running Error!");
+                        }
+                    },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+
             }
-            $.ajax({
-                type: 'POST',
-                url: "http://localhost:8080/runsimulatedannealing",
-                data: JSON.stringify(data),
-                error: function(e) {
-                    if(e.status === 200) {
-                        getGraphPartitionData();
-                    }else{
-                        alert("Running Error!");
-                    }
-                },
-                dataType: "json",
-                contentType: "application/json"
-            });
+
+            // if we have single run, we send data to runGraphPartitioning
+            // if we have batch run, we send data to runBatchProcessing
+
 
         });
 
@@ -517,7 +531,6 @@
         };
 
         info.update = function (infoProps) {
-            console.log("props=",infoProps);
             this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: </b>0.00000000000<br /><b>longitude: </b>0.00000000000<br />';
         };
 
