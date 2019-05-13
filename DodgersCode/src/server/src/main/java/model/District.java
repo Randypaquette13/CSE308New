@@ -1,5 +1,7 @@
 package model;
 
+import java.util.LinkedList;
+
 public class District extends Cluster {
 
     public District(Cluster c) {
@@ -80,5 +82,26 @@ public class District extends Cluster {
         }
 
         return sb.toString();
+    }
+
+    public boolean continuity(Precinct p) {
+        LinkedList<Precinct> precincts = new LinkedList<>();//precincts in this district that are adj to p
+        for(Edge e : p.getEdges()) {
+            final Precinct neighbor = (Precinct)(e.getC1().equals(p) ? e.getC2() : e.getC1());
+            if(neighbor.getDistrict().equals(p.getDistrict())) {
+                precincts.add(neighbor);
+            }
+        }
+
+        for(Precinct precinct : precincts) {
+            if(getEdges().stream().anyMatch(e -> {
+                final Precinct neighbor = (Precinct)(e.getC1().equals(precinct) ? e.getC2() : e.getC1());
+                return !precincts.contains(neighbor);
+            })) {
+                return false;
+            }
+        }
+        return true;
+
     }
 }

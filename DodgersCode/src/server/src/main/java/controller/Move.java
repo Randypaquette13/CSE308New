@@ -30,6 +30,6 @@ public class Move {
 
     @Override
     public String toString() {
-        return from + " " + to + " " + precinct;
+        return from + " " + to + " P:" + precinct;
     }
 }

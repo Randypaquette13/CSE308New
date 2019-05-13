@@ -235,11 +235,11 @@ public class ModelTests {
             weights.put(MeasureType.values()[i],1.0);
         }
 
-        Algorithm a = new Algorithm(new Preference(weights,2,0,2,true),s);
+        Algorithm a = new Algorithm(new Preference(weights,2,0,2,true, "Arizona"),s);
         System.out.println(a.doSimulatedAnnealing());
-        System.out.println(a.doSimulatedAnnealing());
-        System.out.println(a.doSimulatedAnnealing());
-        System.out.println(a.doSimulatedAnnealing());
+//        System.out.println(a.doSimulatedAnnealing());
+//        System.out.println(a.doSimulatedAnnealing());
+//        System.out.println(a.doSimulatedAnnealing());
 //        System.out.println(a.doSimulatedAnnealing());
 //        System.out.println(a.doSimulatedAnnealing());
 //        System.out.println(a.doSimulatedAnnealing());

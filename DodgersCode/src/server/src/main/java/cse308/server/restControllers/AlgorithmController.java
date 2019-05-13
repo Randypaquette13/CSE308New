@@ -1,6 +1,7 @@
 package cse308.server.restControllers;
 
 import controller.Algorithm;
+import model.Cluster;
 import model.Preference;
 import model.State;
 import model.Summary;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,18 +30,19 @@ public class AlgorithmController {
      * @return  unknown
      */
     @RequestMapping("/runGraphPartitioning")
-    public String doGraphPartitioning(@RequestBody Preference preference) {
+    public Collection<Cluster> doGraphPartitioning(@RequestBody Preference preference) {
         //TODO: Load state object from DB and set it to the private state obj
         algorithm = new Algorithm(preference, state);
 
         if (preference.isGraphPartUpdate()) {
-            return algorithm.doGraphPartitioning();
+            algorithm.doGraphPartitioning();
+            return state.getClusters();
         } else {
             String gps = algorithm.doGraphPartitioning();
             while(!"done".equals(gps)) {
                 gps = algorithm.doGraphPartitioning();
             }
-            return gps;
+            return state.getClusters();
         }
     }
 
@@ -48,8 +51,8 @@ public class AlgorithmController {
      * @return unknown
      */
     @RequestMapping("/runSimulatedAnnealing")
-    public String doSimulatedAnnealing() {
-        return algorithm.doSimulatedAnnealing().toString();
+    public Summary doSimulatedAnnealing() {
+        return algorithm.doSimulatedAnnealing();
     }
 
     /**
