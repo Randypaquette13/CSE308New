@@ -7,6 +7,7 @@ public class Cluster implements MapVertex {
     private Set<Edge> edgeSet;
     public int population;
     private Demographics demographics;
+    public boolean isMajMinDist;
     public long id;
 
     public Cluster(Precinct p) {
@@ -72,10 +73,12 @@ public class Cluster implements MapVertex {
         for(Map.Entry<DemographicType, Integer> e : dPop.entrySet()) {
             if(!e.getKey().equals(DemographicType.WHITE)) {
                 if(e.getValue() > dPop.get(DemographicType.WHITE)) {
+                    isMajMinDist = true;
                     return true;
                 }
             }
         }
+        isMajMinDist = false;
         return false;
     }
 
