@@ -353,7 +353,7 @@
             var data = null;
 
 
-        if($("#single").prop('checked')){
+            if($("#single").prop('checked')){
                 data = {
                     "type": "single",
                     "compactness": $("#compactness").val(),
@@ -578,7 +578,9 @@
                         L.geoJSON(data,{
                             style:style,
                             // onEachFeature: onEachAzDetailFeature
-                        }).bindTooltip("precinct").addTo(map);
+                        }).bindTooltip(function(layer){
+                            return layer.feature.properties.PRECNAME;
+                        }).addTo(map);
                     });
                 }
             }
@@ -599,7 +601,9 @@
                             L.geoJSON(data,{
                                 style:style,
                                 // onEachFeature: onEachMlDetailFeature
-                            }).bindTooltip("precinct").addTo(map);
+                            }).bindTooltip(function(layer){
+                                return layer.feature.properties.name;
+                            }).addTo(map);
                         });
                     }, 500);
                 }
@@ -616,11 +620,17 @@
                     }).bindTooltip("districts").addTo(map);
                 });
                 if(nhFlag){
-                    $.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
+                    //$.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
+                    $.getJSON('./NewHampshireData/output.json', function (data) {
                         L.geoJSON(data,{
                             style:style,
                             // onEachFeature: onEachNhDetailFeature
-                        }).bindTooltip("precinct").addTo(map);
+                        }).bindTooltip(function(layer){
+                            return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                                "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
+                                "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
+                                "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"];
+                        }).addTo(map);
                     });
                 }
             }
