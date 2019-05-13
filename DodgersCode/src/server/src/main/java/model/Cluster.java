@@ -63,11 +63,19 @@ public class Cluster implements MapVertex {
     }
 
     /**
-     * a certain minority has a majority vote in the district
+     * a certain minority has a majority population in the district
      * @return
      */
     public boolean isMajorityMinorityDistrict() {
-//        return Arrays.stream(demographicValues).noneMatch(dp -> dp > 0.5);//TODO this is wrong
+        HashMap<DemographicType, Integer> dPop = getDemographics().getDemographicPopulation();
+
+        for(Map.Entry<DemographicType, Integer> e : dPop.entrySet()) {
+            if(!e.getKey().equals(DemographicType.WHITE)) {
+                if(e.getValue() > dPop.get(DemographicType.WHITE)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

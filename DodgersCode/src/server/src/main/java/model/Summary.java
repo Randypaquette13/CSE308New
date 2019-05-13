@@ -2,7 +2,9 @@ package model;
 
 import controller.Move;
 
-public class Summary {
+import java.io.Serializable;
+
+public class Summary implements Serializable {
 
     private final double objectiveFunctionScore; //The total function score
     private final double[] measureScores; //individual scores

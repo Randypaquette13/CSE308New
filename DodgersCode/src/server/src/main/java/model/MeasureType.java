@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Set;
+
 /**
  * TODO there are more measures we need to add
  */
@@ -44,6 +46,33 @@ public enum MeasureType {
         public double calculateMeasure(District d) {
 //            return d.getArea()/d.getConvexHull();
             return 1;
+        }
+    },
+    RANDY_COMPACTNESS {
+        /**
+         * AVERAGE NUM NEIGHBORS/NUM CLUSTERS TOTAL
+         */
+        @Override
+        public double calculateMeasure(District d) {
+            Set<Precinct> precincts = d.getPrecinctSet();
+
+            double total = 0;
+            for(Precinct p : precincts) {
+//                System.out.println("num edges " + p.getEdges().size());
+                for(Edge e : p.getEdges()) {
+                    if(e.getNeighbor(p) instanceof Precinct) {
+//                        System.out.println(p);
+//                        System.out.println("adding maybe");
+//                        System.out.println(" neighbor " +(Precinct)e.getNeighbor(p));
+                        total += ((Precinct) e.getNeighbor(p)).getDistrict().equals(d) ? 1 : 0;
+                    }
+                }
+            }
+//            System.out.println("Randy compactness: " + total);
+//            System.out.println(precincts.size());
+//            System.out.println(d);
+            if(total > precincts.size()) return 1.0;
+            return total/precincts.size();
         }
     },
     EFFICIENCY_GAP {

@@ -96,7 +96,7 @@ public class Algorithm {
         if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
             candidateMove = state.findCandidateMove();
             if(candidateMove != null) {
-                System.out.println(candidateMove);
+//                System.out.println(candidateMove);
                 state.doMove(candidateMove);
                 final double currObjFunVal = calculateObjectiveFunction();
                 if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
