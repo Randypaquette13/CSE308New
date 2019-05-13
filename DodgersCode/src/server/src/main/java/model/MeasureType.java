@@ -48,7 +48,7 @@ public enum MeasureType {
             return 1;
         }
     },
-    RANDY_COMPACTNESS {
+    GRAPH_COMPACTNESS {
         /**
          * AVERAGE NUM NEIGHBORS/NUM CLUSTERS TOTAL
          */
