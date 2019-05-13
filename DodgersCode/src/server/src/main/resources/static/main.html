@@ -380,11 +380,9 @@
                     "graphPartUpdate":$("#graphPartUpdate").val()
                 }
             }
-
-
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/graphPartitioning1 ",
+                url: "http://localhost:8080/runsimulatedannealing",
                 data: JSON.stringify(data),
                 error: function(e) {
                     if(e.status === 200) {
