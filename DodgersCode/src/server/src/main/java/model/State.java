@@ -15,6 +15,7 @@ public class State {
     private Collection<Cluster> clusters;
     private Move recentMove;
     private int population = 0;
+    public boolean isGPDone;
 
     public State(Set<Precinct> precinctSet) {
         this.districtSet = new HashSet<>();
@@ -23,6 +24,7 @@ public class State {
         precinctSet.forEach(precinct -> {
             clusters.add(new Cluster(precinct));
             population+= precinct.getPopulation();
+            isGPDone = false;
         });
     }
 
@@ -54,6 +56,7 @@ public class State {
         //precinctSet stays the same
         clusters = new LinkedList<>();
         precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
+        isGPDone = false;
     }
 
     /**

@@ -11,12 +11,14 @@ public class Precinct implements MapVertex {
     private District district;
     private Demographics demographics;
     private static long numPrecincts = 0;
+    private String county;
 
-    public Precinct(int population, Set<Edge> edgeSet, Demographics demographics) {
+    public Precinct(int population, Set<Edge> edgeSet, Demographics demographics, String county) {
         this.id = numPrecincts++;
         this.population = population;
         this.edgeSet = edgeSet;
         this.demographics = demographics;
+        this.county = county;
     }
 
     public long getId() {
@@ -38,6 +40,10 @@ public class Precinct implements MapVertex {
     @Override
     public Demographics getDemographics() {
         return demographics;
+    }
+
+    public String getCounty() {
+        return county;
     }
 
     public void setDistrict(District district) {

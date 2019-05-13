@@ -28,9 +28,14 @@ public class Edge {
             totalDemographicDifference += Math.abs(c1.getDemographics().getDemographicPopulation().get(demoType) - c2.getDemographics().getDemographicPopulation().get(demoType));
         }
         if(totalDemographicDifference == 0) {
-            joinability = 1;
+            joinability = 1.0;
         } else {
             joinability = 1.0 / totalDemographicDifference;
+        }
+        joinability *= 0.5;
+
+        if(c1 instanceof Precinct && c2 instanceof Precinct) {
+            joinability *= ((Precinct) c1).getCounty().equals(((Precinct) c2).getCounty()) ? 2.0 : 1.0;
         }
 
         return joinability;

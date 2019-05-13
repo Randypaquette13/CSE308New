@@ -35,7 +35,12 @@ public class AlgorithmController {
         algorithm = new Algorithm(preference, state);
 
         if (preference.isGraphPartUpdate()) {
-            algorithm.doGraphPartitioning();
+            if(state.isGPDone) {
+                return null;
+            }
+            if("done".equals(algorithm.doGraphPartitioning())){
+                state.isGPDone = true;
+            }
             return state.getClusters();
         } else {
             String gps = algorithm.doGraphPartitioning();
