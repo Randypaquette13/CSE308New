@@ -19,6 +19,7 @@ public class Algorithm {
      * This is just an example of how to run the algorithm
      */
     public Summary doJob() {
+        state.reset();
         String gps = doGraphPartitioning();
         while(!"done".equals(gps)) {
             gps = doGraphPartitioning();
@@ -64,7 +65,8 @@ public class Algorithm {
     public String doGraphPartitioning() {
         String s;
         //you must reset the state so we dont have to make extra database calls
-        state.reset();
+        System.out.println("clusters size: " + state.getClusters().size());
+        System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
             int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
             int maxTargetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
@@ -78,6 +80,7 @@ public class Algorithm {
                 if(clusterPair == null){
                     break;
                 }
+                System.out.println("found cluster pair: " + clusterPair);
                 Cluster c = state.combinePair(clusterPair.getC1(), clusterPair.getC2());
                 mergedClusters.add(c);
             }
@@ -91,6 +94,10 @@ public class Algorithm {
 
     public Summary doSimulatedAnnealing() {
         System.out.println("\n\tSTARTED SIM ANNEALING STEP");
+        if(state.getDistrictSet().size() == 0) {
+            state.convertClustersToDistricts();
+        }
+
         Move candidateMove = null;
         //anneal until the objective function output is acceptable or the max steps is reached
         if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {

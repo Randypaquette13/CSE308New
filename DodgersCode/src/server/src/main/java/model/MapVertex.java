@@ -8,4 +8,5 @@ public interface MapVertex {
     Demographics getDemographics();
     Set<Edge> getEdges();
     List<MapVertex> getNeighbors();
+    void addEdgeTo(MapVertex p);
 }

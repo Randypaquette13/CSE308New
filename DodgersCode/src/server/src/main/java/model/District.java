@@ -87,7 +87,7 @@ public class District extends Cluster {
     public boolean continuity(Precinct p) {
         LinkedList<Precinct> precincts = new LinkedList<>();//precincts in this district that are adj to p
         for(Edge e : p.getEdges()) {
-            final Precinct neighbor = (Precinct)(e.getC1().equals(p) ? e.getC2() : e.getC1());
+            final Precinct neighbor = (Precinct)e.getNeighbor(p);
             if(neighbor.getDistrict().equals(p.getDistrict())) {
                 precincts.add(neighbor);
             }
@@ -95,8 +95,12 @@ public class District extends Cluster {
 
         for(Precinct precinct : precincts) {
             if(getEdges().stream().anyMatch(e -> {
-                final Precinct neighbor = (Precinct)(e.getC1().equals(precinct) ? e.getC2() : e.getC1());
-                return !precincts.contains(neighbor);
+                if(e.getNeighbor(precinct) instanceof Precinct) {
+                    final Precinct neighbor = (Precinct) e.getNeighbor(precinct);
+                    return !precincts.contains(neighbor);
+                } else {
+                    return false;
+                }
             })) {
                 return false;
             }

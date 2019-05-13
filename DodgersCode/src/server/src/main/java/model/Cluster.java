@@ -13,10 +13,22 @@ public class Cluster implements MapVertex {
     public Cluster(Precinct p) {
         precinctSet = new HashSet<>();
         precinctSet.add(p);
-        edgeSet = p.getEdges();
+//        edgeSet = p.getEdges();
         population = p.getPopulation();
         demographics = p.getDemographics();
         id = p.getId();
+
+        p.parentCluster = this;
+        edgeSet = new HashSet<>();
+        for(Edge e : p.getEdges()) {
+            if(e.getNeighbor(p) instanceof Precinct) {
+                if(((Precinct) e.getNeighbor(p)).parentCluster != null) {
+                    addEdgeTo(((Precinct) e.getNeighbor(p)).parentCluster);
+                }
+            }
+        }
+
+
     }
 
     public Cluster(Cluster c) {
@@ -89,6 +101,13 @@ public class Cluster implements MapVertex {
             neighbors.add(e.getNeighbor(this));
         }
         return neighbors;
+    }
+
+    @Override
+    public void addEdgeTo(MapVertex p) {
+        Edge e1 = new Edge(this,p);
+        getEdges().add(e1);
+        p.getEdges().add(e1);
     }
 
     @Override

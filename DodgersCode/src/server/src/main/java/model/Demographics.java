@@ -28,7 +28,7 @@ public class Demographics {
                 demographicVotingData.get(demoType)[ii] += d.demographicVotingData.get(demoType)[ii];
             }
         }
-        System.out.println("\t\t" + this);
+//        System.out.println("\t\t" + this);
     }
 
     public void remove(Demographics d) {

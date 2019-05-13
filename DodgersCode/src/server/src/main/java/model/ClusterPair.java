@@ -16,4 +16,8 @@ public class ClusterPair {
     public Cluster getC2() {
         return c2;
     }
+
+    public String toString() {
+        return c1.toString() + " :PAIR: " + c2.toString();
+    }
 }

@@ -37,12 +37,15 @@ public class ModelTests {
 
         State s = new State(hsp);
 
+        System.out.println(s);
         ArrayList<Cluster> clusters = new ArrayList<>();
         clusters.addAll(s.getClusters());
 
         assertEquals(1, clusters.get(0).getPrecinctSet().size());
         assertEquals(1, clusters.get(1).getPrecinctSet().size());
         Cluster c = s.combinePair(clusters.get(0),clusters.get(1));
+        System.out.println(s);
+        System.out.println(c);
 
 //        assertEquals( 1, s.getClusters().size());
 //        Cluster c = s.getClusters().iterator().next();
@@ -203,7 +206,7 @@ public class ModelTests {
 
         p0.addEdgeTo(p2);
         p0.addEdgeTo(p3);
-        System.out.println(p0 + " edges: " + p0.getEdges().size());
+//        System.out.println(p0 + " edges: " + p0.getEdges().size());
 
         p1.addEdgeTo(p4);
         p1.addEdgeTo(p5);
@@ -266,4 +269,60 @@ public class ModelTests {
         System.out.println(clusters);
         System.out.println(clusters.get(0).isMajorityMinorityDistrict());
     }
+
+    @Test
+    public void testGraphPartitioning() {
+        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+
+        p0.addEdgeTo(p1);
+
+        p0.addEdgeTo(p2);
+        p0.addEdgeTo(p3);
+
+        p1.addEdgeTo(p4);
+        p1.addEdgeTo(p5);
+
+        HashSet<Precinct> hsp = new HashSet<>();
+        hsp.add(p0);
+        hsp.add(p1);
+        hsp.add(p2);
+
+        hsp.add(p3);
+        hsp.add(p4);
+        hsp.add(p5);
+
+        State s = new State(hsp);
+//        System.out.println(s.toString());
+//        ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
+//        clusters.sort(Comparator.comparingLong(a -> a.id));
+//        System.out.println(clusters);
+
+        HashMap<MeasureType,Double> weights = new HashMap<>();
+        for(int i = 0; i < MeasureType.values().length;i++) {
+            weights.put(MeasureType.values()[i],1.0);
+        }
+
+        Algorithm a = new Algorithm(new Preference(weights,2,0,2,false, "Arizona"),s);
+        System.out.println(a.doGraphPartitioning());
+        System.out.println(s);
+        System.out.println(a.doGraphPartitioning());
+        System.out.println(s);
+        System.out.println(a.doGraphPartitioning());
+        System.out.println(s);
+
+//        System.out.println(a.doGraphPartitioning());
+//        String gps = "";
+//        while(!"done".equals(gps)) {
+//            gps = a.doGraphPartitioning();
+//            System.out.println(gps);
+//        }
+
+
+    }
+
 }

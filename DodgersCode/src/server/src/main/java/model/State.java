@@ -127,9 +127,28 @@ public class State {
      * Get a new candidate pair for graph partitioning. Returns null if no candidate pair is found
      */
     public ClusterPair findCandidateClusterPair() {
-        //TODO find candidate cluster pair for graph parittioning
-        //TODO: Return null if no candidate pair is found
-        return new ClusterPair(null,null);//TODO output
+        Cluster niceCluster = null;
+        Edge niceEdge = null;
+        double maxJoin = 0;
+//        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
+        for(Cluster c : getClusters()) {
+            for(Edge e : c.getEdges()) {
+                if(getClusters().contains(e.getNeighbor(c))) {//TODO this is never true
+//                    System.out.println("calc join of this cluster");
+                    double join = e.getJoinability();
+                    if(join > maxJoin) {
+                        niceCluster = c;
+                        niceEdge = e;
+                        maxJoin = join;
+                    }
+                }
+            }
+        }
+        if(niceCluster != null && niceEdge != null) {
+            return new ClusterPair(niceCluster, (Cluster)niceEdge.getNeighbor(niceCluster));
+        } else {
+            return null;
+        }
     }
 
     public void convertClustersToDistricts() {

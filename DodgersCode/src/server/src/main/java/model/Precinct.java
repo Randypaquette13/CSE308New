@@ -12,6 +12,7 @@ public class Precinct implements MapVertex {
     private Demographics demographics;
     private static long numPrecincts = 0;
     private String county;
+    public Cluster parentCluster = null;
 
     public Precinct(int population, Set<Edge> edgeSet, Demographics demographics, String county) {
         this.id = numPrecincts++;
@@ -63,7 +64,7 @@ public class Precinct implements MapVertex {
         return neighbors;
     }
 
-    public void addEdgeTo(Precinct p) {
+    public void addEdgeTo(MapVertex p) {
         Edge e1 = new Edge(this,p);
         getEdges().add(e1);
         p.getEdges().add(e1);

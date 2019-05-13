@@ -53,4 +53,15 @@ public class Edge {
     public String toString() {
         return ("#1:" + c1 + " #2:" + c2 + " join:" + getJoinability());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Edge)) {
+            return false;
+        }
+        if((getC1().equals(((Edge) obj).c1) || getC2().equals(((Edge) obj).c1)) && (getC1().equals(((Edge) obj).c2) || getC2().equals(((Edge) obj).c2))) {
+            return true;
+        } else return false;
+    }
+
 }
