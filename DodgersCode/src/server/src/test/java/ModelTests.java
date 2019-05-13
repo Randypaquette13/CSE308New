@@ -321,8 +321,42 @@ public class ModelTests {
 //            gps = a.doGraphPartitioning();
 //            System.out.println(gps);
 //        }
-
-
     }
 
+    @Test
+    public void testWholeFUCKINGThing() {
+        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+
+        p0.addEdgeTo(p1);
+
+        p0.addEdgeTo(p2);
+        p0.addEdgeTo(p3);
+
+        p1.addEdgeTo(p4);
+        p1.addEdgeTo(p5);
+
+        HashSet<Precinct> hsp = new HashSet<>();
+        hsp.add(p0);
+        hsp.add(p1);
+        hsp.add(p2);
+
+        hsp.add(p3);
+        hsp.add(p4);
+        hsp.add(p5);
+
+        State s = new State(hsp);
+        HashMap<MeasureType,Double> weights = new HashMap<>();
+        for(int i = 0; i < MeasureType.values().length;i++) {
+            weights.put(MeasureType.values()[i],1.0);
+        }
+
+        Algorithm a = new Algorithm(new Preference(weights,2,0,2,false, "Arizona"),s);
+        System.out.println(a.doJob());
+        System.out.println(s);
+    }
 }
