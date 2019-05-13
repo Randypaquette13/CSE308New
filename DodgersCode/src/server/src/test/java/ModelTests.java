@@ -111,16 +111,16 @@ public class ModelTests {
         int[] vote = {5,3,2};
         for(DemographicType type : DemographicType.values()) {
             populations.put(type, 10);
-            voting.put(type, vote);
+            voting.put(type, vote.clone());
         }
         Demographics d1 = new Demographics(populations, voting);
 
-        Precinct p0 = new Precinct(10,new HashSet<>(), d1,"my county");
-        Precinct p1 = new Precinct(10,new HashSet<>(), d1,"my county");
-        Precinct p2 = new Precinct(10,new HashSet<>(), d1,"my county");
-        Precinct p3 = new Precinct(10,new HashSet<>(), d1,"my county");
-        Precinct p4 = new Precinct(10,new HashSet<>(), d1,"my county");
-        Precinct p5 = new Precinct(10,new HashSet<>(), d1,"my county");
+        Precinct p0 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
 
         p0.addEdgeTo(p1);
 
