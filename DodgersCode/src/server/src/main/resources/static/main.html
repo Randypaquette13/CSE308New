@@ -345,20 +345,16 @@
         var graphPartitionData = "";
         var simulatedAnnealing = "";
         var convertedResult = [];
-        hashmap:n = new hashMap();
 
         $("#btnRun").click(function(){
             var data = null;
             if($("#single").prop('checked')){
                 data = {
-                    //n:put('compactness',$("#compactness").val()),
                     "compactness": $("#compactness").val(),
                     "contiguity": $("#contiguity").val(),
                     "population-equality": $("#population-equality").val(),
                     "partisan-fairness": $("#partisan-fairness").val(),
                     "racial": $("#racial").val(),
-
-                    //these are fine. no need to change for now
                     "minMajMinDistricts": $("#e_nom_md").text(),            //passed as an int
                     "maxMajMinDistricts": $("#s_nom_md").text(),            //passed as an int
                     "numDistricts":$("#nod_gp").val(),                      //pass as an int
