@@ -97,13 +97,25 @@ public class Algorithm {
             candidateMove = state.findCandidateMove();
             if(candidateMove != null) {
 //                System.out.println(candidateMove);
+
+                final int oldMajMinDistNum = state.numMaxMinDists();
                 state.doMove(candidateMove);
-                final double currObjFunVal = calculateObjectiveFunction();
-                if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
-                    lastObjFunVal = currObjFunVal;
-                } else {
+                final int newMajMinDistNum = state.numMaxMinDists();
+
+                if(newMajMinDistNum < pref.getMinMajMinDistricts() && oldMajMinDistNum > newMajMinDistNum) {//if it is less than min and it went down
                     System.out.println("undoing move");
                     state.undoMove();
+                } else if(newMajMinDistNum > pref.getMaxMajMinDistricts() && oldMajMinDistNum < newMajMinDistNum) {//if it is greater than max and it went up
+                    System.out.println("undoing move");
+                    state.undoMove();
+                } else {
+                    final double currObjFunVal = calculateObjectiveFunction();
+                    if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
+                        lastObjFunVal = currObjFunVal;
+                    } else {
+                        System.out.println("undoing move");
+                        state.undoMove();
+                    }
                 }
             } else {
                 System.out.println("NO CANDIDATE MOVE FOUND");
@@ -115,5 +127,4 @@ public class Algorithm {
         System.out.println("\tENDED SIM ANNEALING STEP");
         return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove);
     }
-
 }
