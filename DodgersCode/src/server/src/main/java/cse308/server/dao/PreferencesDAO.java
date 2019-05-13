@@ -15,8 +15,12 @@ public class PreferencesDAO {
     private int maxMajMinDistricts;
     private int numDistricts;
     private boolean graphPartUpdate;
+    private String stateName;
 
-    public PreferencesDAO(double compactness, double contiguity, double populationEquality, double partisanFairness, double racial, int minMajMinDistricts, int maxMajMinDistricts, int numDistricts, boolean graphPartUpdate) {
+    public PreferencesDAO(double compactness, double contiguity, double populationEquality,
+                          double partisanFairness, double racial, int minMajMinDistricts,
+                          int maxMajMinDistricts, int numDistricts, boolean graphPartUpdate,
+                          String stateName) {
         this.compactness = compactness;
         this.contiguity = contiguity;
         this.populationEquality = populationEquality;
@@ -26,23 +30,41 @@ public class PreferencesDAO {
         this.maxMajMinDistricts = maxMajMinDistricts;
         this.numDistricts = numDistricts;
         this.graphPartUpdate = graphPartUpdate;
+        this.stateName = stateName;
     }
 
-    HashMap<MeasureType, Double> hashMap = new HashMap<MeasureType, Double>();
-
-
-    hashMap.put()
     public Preference makePreferences(){
 
-            return new Preference(HashMap< MeasureType, Double> weights, int maxMajMinDistricts, int minMajMinDistricts, int numDistricts, boolean graphPartUpdate, String stateName) {
-            this.weights = weights;
-            this.maxMajMinDistricts = maxMajMinDistricts;
-            this.minMajMinDistricts = minMajMinDistricts;
-            this.numDistricts = numDistricts;
-            this.graphPartUpdate = graphPartUpdate;
-            this.stateName = stateName;
+        HashMap<MeasureType, Double> hashmap = new HashMap<MeasureType, Double>();
+        for(MeasureType m : MeasureType.values()){
+            switch (m){
+                case SCHWARTZBERG_COMPACTNESS:
+
+                    break;
+                case REOCK_COMPACTNESS:
+
+                    break;
+                case POLSBY_POPPER_COMPACTNESS:
+
+                    break;
+                case CONVEX_HULL_COMPACTNESS:
+
+                    break;
+                case GRAPH_COMPACTNESS:
+
+                    break;
+                case EFFICIENCY_GAP:
+
+                    break;
+                case POPULATION_EQUALITY:
+                    hashmap.put(m, populationEquality);
+                    break;
+            }
         }
 
+
+        return new Preference(hashmap, maxMajMinDistricts, minMajMinDistricts,
+                numDistricts, graphPartUpdate, stateName);
     }
 
     protected PreferencesDAO(){
