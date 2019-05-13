@@ -344,10 +344,14 @@
         });
 
         // send data to server when click run button
+        var graphPartitionData = "";
+        var simulatedAnnealing = "";
+        var convertedResult = [];
 
         $("#btnRun").click(function(){
 
             var data = null;
+
 
             if($("#single").prop('checked')){
                 data = {
@@ -357,7 +361,8 @@
                     "population-equality": $("#population-equality").val(),
                     "contiguity": $("#partisan-fairness").val(),
                     "contiguity": $("#racial").val(),//TODO should this be called contiguity or something else
-                    "numberOfMajority": $("#nom_md").val(),
+                    "minNumberOfMajority": $("#e_nom_md").val(),
+                    "maxNumberOfMajority": $("#s_nom_md").val(),
                     "numberOfDistrict":$("#nod_gp").val(),
                     "graphPartUpdate":$("#graphPartUpdate").val()
                 }
@@ -376,29 +381,103 @@
                 }
             }
 
+
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:8080/run",
+                url: "http://localhost:8080/graphPartitioning1 ",
                 data: JSON.stringify(data),
                 error: function(e) {
-                    if(e.status == 200){
-                        if(e.res.data !== null && e.res.data.length > 0){
-                            $("#summaryModalContent").empty();
-                            batchSummary.map((x,index)=>{
-                                $("#summaryModalContent").append(`<p><b>${index}. </b>${x}</p>`);
-                            });
-                        }
-                        window.location.href = './index.html';
+                    if(e.status === 200) {
+                        getGraphPartitionData();
+                    }else{
+                        alert("Running Error!");
                     }
                 },
                 dataType: "json",
                 contentType: "application/json"
             });
+
         });
 
-        // clickc summary button
+        function getGraphPartitionData () {
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8080/graphPartitioning2",
+                error: function(e) {
+                    if(e.status === 200){
+                        if(e.data !== null && e.data.length > 0){
+                            if(e.data === "done" ){
+                                getSimulatedAnnealing();
+                                return;
+                            }else{
+                                graphPartitionData=e.data;
+                                var result = graphPartitionData.map((x=>{
+                                    x.split(",,").map(y=>{
+                                        convertedResult.push({
+                                            color:y.split(" ")[0],
+                                            data: y.split(" ")[1]
+                                        });
+                                    });
+                                }));
+                                getGraphPartitionData();
+                            }
+                            // [C0 P2,P3,P0,, C1 P4,P1,P5,]
+                        }else{
+                            alert("Graph Partition Algo Error!");
+                        }
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        }
 
-        //Summary
+        function getSimulatedAnnealing(){
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8080/simulatedannealing",
+                error: function(e) {
+                    if(e.status === 200){
+                        if(e.data !== null && e.data.length > 0){
+
+                            if(e.data.message.toLowerCase().indexOf("move")){
+                                var simulatedAnnealingData = convertStrObj(e.data);
+                                getSimulatedAnnealing();
+                            }else{
+                                simulatedAnnealing = e.data;
+                                $("#summaryModalContent").empty();
+                                $("#summaryModalContent").append(`<p>${simulatedAnnealing}<p>`);
+                                return;
+                            }
+                        }else{
+                            alert("Simulated Annealing Algo Error!");
+                        }
+                    }
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        }
+
+        // Convert string to object function
+
+        function convertStrObj(param){
+            var mainStr = param.split("move:")[1]; // ["D0 P4,P1,P5, D1 P2,P3,P0"]
+            var splitByDistrict = mainStr.split(", ");//["D0 P4,P1,P5","D1 P2,P3,P0"]
+            var result = [];
+            splitByDistrict.map(x=>{
+                result.push({
+                    "district": x.split(" ")[0],
+                    "precincts": []
+                });
+                x.split(" ")[1].split(",").map(y=>{
+                    result.precincts.push(JSON.parse(y));
+                });
+            }); // [{district: D0,precincts: [P4,P1,P5]},{district: D1,precincts: [P2,P3,P0]}]
+            return result ;
+        }
+
+        // clickc summary button
 
         $("#btnSummary").click(function(){
             var singleSummary = "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2";
@@ -499,7 +578,9 @@
                         L.geoJSON(data,{
                             style:style,
                             // onEachFeature: onEachAzDetailFeature
-                        }).bindTooltip("precinct").addTo(map);
+                        }).bindTooltip(function(layer){
+                            return layer.feature.properties.PRECNAME;
+                        }).addTo(map);
                     });
                 }
             }
@@ -520,7 +601,9 @@
                             L.geoJSON(data,{
                                 style:style,
                                 // onEachFeature: onEachMlDetailFeature
-                            }).bindTooltip("precinct").addTo(map);
+                            }).bindTooltip(function(layer){
+                                return layer.feature.properties.name;
+                            }).addTo(map);
                         });
                     }, 500);
                 }
@@ -537,11 +620,17 @@
                     }).bindTooltip("districts").addTo(map);
                 });
                 if(nhFlag){
-                    $.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
+                    //$.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
+                    $.getJSON('./NewHampshireData/output.json', function (data) {
                         L.geoJSON(data,{
                             style:style,
                             // onEachFeature: onEachNhDetailFeature
-                        }).bindTooltip("precinct").addTo(map);
+                        }).bindTooltip(function(layer){
+                            return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                                "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
+                                "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
+                                "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"];
+                        }).addTo(map);
                     });
                 }
             }

@@ -176,12 +176,15 @@
         });
         grid.on('rowRemoving', function (e, $row, id, record) {
             if (confirm('Are you sure?')) {
-                $.ajax({ url: '/deleteuser', data: { id: id }, method: 'POST' })
-                    .done(function () {
-                        grid.reload();
-                    })
-                    .fail(function () {
-                        alert('Failed to delete.');
+                $.ajax({ type: 'POST', url: '/deleteuser', data: JSON.stringify(record), dataType: "json", contentType: "application/json" })
+                    .fail(function (e) {
+                        console.log(e);
+                        if(e.status !== 200){
+                            alert('Failed to delete.');
+                        }else{
+                            grid.reload();
+                        }
+                        dialog.close();
                     });
             }
         });
