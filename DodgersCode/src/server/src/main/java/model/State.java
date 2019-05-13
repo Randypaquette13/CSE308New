@@ -174,4 +174,12 @@ public class State {
         sb.append("\n");
         return sb.toString();
     }
+
+    public int numMaxMinDists() {
+        int total = 0;
+        for(District d : getDistrictSet()) {
+            total += d.isMajorityMinorityDistrict() ? 1 : 0;
+        }
+        return total;
+    }
 }

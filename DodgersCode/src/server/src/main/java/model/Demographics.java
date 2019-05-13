@@ -62,9 +62,15 @@ public class Demographics {
         HashMap<DemographicType, Integer> populations = new HashMap<>();
         HashMap<DemographicType, int[]> voting = new HashMap<>();
         int[] vote = {5,3,2};
+        int[] vote2 = {10,0,0};
         for(DemographicType type : DemographicType.values()) {
-            populations.put(type, 10);
-            voting.put(type, vote.clone());
+            if(type.equals(DemographicType.WHITE)) {
+                populations.put(type, 10);
+                voting.put(type,vote2.clone());
+            } else {
+                populations.put(type, 10);
+                voting.put(type, vote.clone());
+            }
         }
         Demographics d1 = new Demographics(populations, voting);
         return d1;
