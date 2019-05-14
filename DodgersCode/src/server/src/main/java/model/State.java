@@ -201,4 +201,42 @@ public class State {
         }
         return total;
     }
+
+    public static State getState(String stateName) {
+        switch (stateName){
+            case "Arizona":
+                break;
+            case "New Hampshire":
+                break;
+            case "Maryland":
+                break;
+            default:
+                break;
+        }
+        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+
+        p0.addEdgeTo(p1);
+
+        p0.addEdgeTo(p2);
+        p0.addEdgeTo(p3);
+
+        p1.addEdgeTo(p4);
+        p1.addEdgeTo(p5);
+
+        HashSet<Precinct> hsp = new HashSet<>();
+        hsp.add(p0);
+        hsp.add(p1);
+        hsp.add(p2);
+
+        hsp.add(p3);
+        hsp.add(p4);
+        hsp.add(p5);
+
+        return new State(hsp);
+    }
 }
