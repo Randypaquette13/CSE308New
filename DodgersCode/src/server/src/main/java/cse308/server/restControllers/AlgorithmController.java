@@ -1,6 +1,7 @@
 package cse308.server.restControllers;
 
 import controller.Algorithm;
+import cse308.server.dao.PreferencesDAO;
 import model.Cluster;
 import model.Preference;
 import model.State;
@@ -30,9 +31,12 @@ public class AlgorithmController {
      * @return  unknown
      */
     @RequestMapping("/runGraphPartitioning")
-    public Collection<Cluster> doGraphPartitioning(@RequestBody Preference preference) {
+    public Collection<Cluster> doGraphPartitioning(@RequestBody PreferencesDAO preference) {
         //TODO: Load state object from DB and set it to the private state obj
-        algorithm = new Algorithm(preference, state);
+        Preference p = preference.makePreferences();
+        state = State.getState(p.getStateName());
+        
+        algorithm = new Algorithm(preference.makePreferences(), state);
 
         if (preference.isGraphPartUpdate()) {
             if(state.isGPDone) {

@@ -39,6 +39,10 @@ public class Preference {
         return numDistricts;
     }
 
+    public String getStateName() {
+        return stateName;
+    }
+
     public boolean isGraphPartUpdate() {
         return graphPartUpdate;
     }
