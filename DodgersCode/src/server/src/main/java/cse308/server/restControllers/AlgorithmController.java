@@ -35,9 +35,8 @@ public class AlgorithmController {
         //TODO: Load state object from DB and set it to the private state obj
         Preference p = preference.makePreferences();
         state = State.getState(p.getStateName());
-        
-        algorithm = new Algorithm(preference.makePreferences(), state);
 
+        algorithm = new Algorithm(preference.makePreferences(), state);
         if (preference.isGraphPartUpdate()) {
             if(state.isGPDone) {
                 return null;

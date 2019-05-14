@@ -111,10 +111,12 @@ public class State {
 
         for(Precinct precinct : district.getPrecinctSet()) {
             for(Edge edge : precinct.getEdges()) {
-                System.out.println("move this:" + precinct);
-                final Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC2() : edge.getC1());
-                System.out.println("to this:" + neighbor.getDistrict());
+                final Precinct neighbor = (Precinct)edge.getNeighbor(precinct);
                 if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD && !neighbor.getDistrict().equals(district) && precinct.getDistrict().continuity(precinct)) {
+                    System.out.println("move this:" + precinct);
+                    System.out.println("from this:" + precinct.getDistrict());
+                    System.out.println("to this:" + neighbor.getDistrict());
+                    System.out.println("joinability: " + edge.getJoinability());
                     return new Move(district, neighbor.getDistrict(), precinct);
                 }
             }

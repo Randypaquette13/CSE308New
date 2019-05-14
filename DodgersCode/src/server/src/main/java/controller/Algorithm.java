@@ -24,6 +24,8 @@ public class Algorithm {
         while(!"done".equals(gps)) {
             gps = doGraphPartitioning();
         }
+        System.out.println("GRAPH PART DONE");
+        System.out.println(state.getClusters());
 
         Summary s = doSimulatedAnnealing();
         while (s.getMove() != null) {
@@ -78,6 +80,7 @@ public class Algorithm {
             while(!state.getClusters().isEmpty()) {
                 final ClusterPair clusterPair = state.findCandidateClusterPair();
                 if(clusterPair == null){
+                    System.out.println("NO VALID CLUSTER PAIR");
                     break;
                 }
                 System.out.println("found cluster pair: " + clusterPair);
@@ -96,10 +99,13 @@ public class Algorithm {
         System.out.println("\n\tSTARTED SIM ANNEALING STEP");
         if(state.getDistrictSet().size() == 0) {
             state.convertClustersToDistricts();
+            System.out.println("GENERATE DISTRICTS FROM SLUSTERS");
+            System.out.println(state.getDistrictSet());
         }
 
         Move candidateMove = null;
         //anneal until the objective function output is acceptable or the max steps is reached
+        System.out.println("Objective function value: " + lastObjFunVal);
         if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
             candidateMove = state.findCandidateMove();
             if(candidateMove != null) {

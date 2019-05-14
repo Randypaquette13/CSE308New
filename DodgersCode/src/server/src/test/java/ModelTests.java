@@ -334,6 +334,10 @@ public class ModelTests {
 
         p0.addEdgeTo(p1);
 
+//        ArrayList<Edge> es = new ArrayList<>(p0.getEdges());
+//        System.out.println(es.get(0).getJoinability());
+//        System.exit(0);
+//
         p0.addEdgeTo(p2);
         p0.addEdgeTo(p3);
 

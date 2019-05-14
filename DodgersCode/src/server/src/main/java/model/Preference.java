@@ -46,4 +46,10 @@ public class Preference {
     public boolean isGraphPartUpdate() {
         return graphPartUpdate;
     }
+
+    @Override
+    public String toString() {
+        return weights.values() + " " + maxMajMinDistricts + minMajMinDistricts + numDistricts + graphPartUpdate + stateName;
+    }
+
 }
