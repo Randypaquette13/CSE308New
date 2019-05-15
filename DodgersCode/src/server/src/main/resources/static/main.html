@@ -254,6 +254,7 @@
                     <button type="button" class="btn btn-primary btn-sm">Stop</button>
                     <button type="button" class="btn btn-primary btn-sm">Pause</button>
                     <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
+                    <button type="button" id="testColorPrecinct" class="btn btn-primary btn-sm">Test</button>
                 </div>
             </div>
         </div>
@@ -285,6 +286,7 @@
 
 <script>
     $(document).ready(function () {
+        var New_HampshireLayer = null;
 
         //Log Out
         $("#logOut").click(function(){
@@ -726,7 +728,7 @@
                 });
                 if(nhFlag){
                     //$.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
-                    $.getJSON('./NewHampshireData/NewHampshirePrecinctData.json', function (data) {
+                    New_HampshireLayer = $.getJSON('./NewHampshireData/NewHampshirePrecinctData.json', function (data) {
                         L.geoJSON(data,{
                             style:style,
                             // onEachFeature: onEachNhDetailFeature
@@ -863,6 +865,35 @@
             $(this).parent().prev().text($(this).text());
             loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
         });
+
+        $("#testColorPrecinct").click(function(){
+            if(New_HampshireLayer == null) {
+                alert("test layer: New_HampshireLayer is not yet loaded!");
+                return;
+            }
+
+            var color = "#ff0000";
+            var precinctId = 72;
+
+            colorPrecinct(color, precinctId);
+        });
+
+        function colorPrecinct(color, precinctId) {
+            New_HampshireLayer.eachLayer(function (layer) {
+                if(layer.feature.properties.OID_== precinctId) {
+                    layer.setStyle({
+                        fillColor: color,
+                        weight: 0.5,
+                        opacity: 1,
+                        color: 'white',
+                        fillOpacity: 1
+                    });
+
+                    console.log("ok found");
+                }
+            });
+        }
+
     });
 </script>
 </body>
