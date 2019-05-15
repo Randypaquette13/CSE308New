@@ -22,8 +22,8 @@ public class Edge {
      * 0 means not joinable
      */
     public double getJoinability() {
-        System.out.println("getting joinability");
-        System.out.println("#1:" + c1 + " #2:" + c2);
+//        System.out.println("getting joinability");
+//        System.out.println("#1:" + c1 + " #2:" + c2);
         double totalDemographicDifference = 0;
         for(DemographicType demoType : DemographicType.values()) {
             //compare demographic populations
@@ -42,7 +42,7 @@ public class Edge {
             joinability *= 2;
         }
 
-        System.out.println("Joinability:" + joinability);
+//        System.out.println("Joinability:" + joinability);
         return joinability;
     }
 

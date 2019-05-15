@@ -1,6 +1,7 @@
 package model;
 
 import controller.Move;
+import cse308.server.dao.SummaryDAO;
 
 import java.io.Serializable;
 
@@ -47,5 +48,12 @@ public class Summary implements Serializable {
             }
         }
         return sb.toString();
+    }
+
+    public SummaryDAO toDAO() {
+        if(move != null) {
+            return new SummaryDAO(move.getTo().id, move.getPrecinct().getId(), objectiveFunctionScore, measureScores);
+        }
+        return new SummaryDAO(-1, -1, objectiveFunctionScore, measureScores);
     }
 }
