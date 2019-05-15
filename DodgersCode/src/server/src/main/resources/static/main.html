@@ -30,7 +30,7 @@
         .block{
             display: block;
         }
-        #b_compactness, #b_contiguity,#b_population-equality,#b_partisan-fairness,#b_racial{
+        #SCHWARTZBERG_BATCH, #REOCK_BATCH,#POPULATION_EQUALITY_BATCH,#POLSBY_POPPER_BATCH,#CONVEX_HULL_BATCH, #GRAPH_COMPACTNESS_BATCH, #EFFICIENCY_GAP_BATCH{
             background: yellow;
         }
         .info {
@@ -70,7 +70,7 @@
         <div class="flex-grow-1 p-3" style="overflow-y: auto; max-width: 370px; width: 100%;">
             <div class="section">
                 <div class="form-group dropdown show ">
-                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                    <button id="state" class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" style="width: 150px">
                         Select State
                     </button>
@@ -83,80 +83,110 @@
             </div>
             <div class="section p-3" id="singleRangeSlider">
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="compactness">Compactness</label>
+                    <label class="col-form-label col-form-label-sm" for="SCHWARTZBERG_COMPACTNESS">Schwartzberg Compactness</label>
                     <div class="flex-row">
-                        <input type="text" id="compactness">
-                        <span id="v_compactness" class="ml-3">0</span>
+                        <input type="text" data-slider-step="0.1" id="SCHWARTZBERG_COMPACTNESS">
+                        <span id="v_SCHWARTZBERG_COMPACTNESS" class="ml-3">0.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="contiguity">Contiguity</label>
+                    <label class="col-form-label col-form-label-sm" for="REOCK_COMPACTNESS">Reock Compactness</label>
                     <div class="flex-row">
-                        <input type="text" id="contiguity">
-                        <span id="v_contiguity" class="ml-3">0</span>
+                        <input type="text" data-slider-step="0.1"  id="REOCK_COMPACTNESS">
+                        <span id="v_REOCK_COMPACTNESS" class="ml-3">0.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
+                    <label class="col-form-label col-form-label-sm" for="POPULATION_EQUALITY">Population Equality</label>
                     <div class="flex-row">
-                        <input type="text" id="population-equality">
-                        <span id="v_population-equality" class="ml-3">0</span>
+                        <input type="text" id="POPULATION_EQUALITY" data-slider-step="0.1" >
+                        <span id="v_POPULATION_EQUALITY" class="ml-3">0.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
+                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_COMPACTNESS">Polsby Popper</label>
                     <div class="flex-row">
-                        <input type="text" id="partisan-fairness">
-                        <span id="v_partisan-fairness" class="ml-3">0</span>
+                        <input type="text" id="POLSBY_POPPER_COMPACTNESS" data-slider-step="0.1">
+                        <span id="v_POLSBY_POPPER_COMPACTNESS" class="ml-3">0.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
+                    <label class="col-form-label col-form-label-sm" for="CONVEX_HULL_COMPACTNESS">Convex Hull Compactness</label>
                     <div class="flex-row">
-                        <input type="text" id="racial">
-                        <span id="v_racial" class="ml-3">0</span>
+                        <input type="text" id="CONVEX_HULL_COMPACTNESS" data-slider-step="0.1">
+                        <span id="v_CONVEX_HULL_COMPACTNESS" class="ml-3">0.0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="GRAPH_COMPACTNESS">Graph Compactness</label>
+                    <div class="flex-row">
+                        <input type="text" id="GRAPH_COMPACTNESS" data-slider-step="0.1">
+                        <span id="v_GRAPH_COMPACTNESS" class="ml-3">0.0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="EFFICIENCY_GAP">Efficiency Gap</label>
+                    <div class="flex-row">
+                        <input type="text" id="EFFICIENCY_GAP" data-slider-step="0.1">
+                        <span id="v_EFFICIENCY_GAP" class="ml-3">0.0</span>
                     </div>
                 </div>
             </div>
             <div class="section p-3 hide" id="batchRangeSlider">
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="b_compactness">Compactness</label>
+                    <label class="col-form-label col-form-label-sm" for="SCHWARTZBERG_BATCH">Schwartzberg Compactness</label>
                     <div class="flex-row">
-                        <span id="bs_b_compactness" class="mr-3">0</span>
-                        <input type="text" id="b_compactness">
-                        <span id="be_b_compactness" class="ml-3">100</span>
+                        <span id="bs_SCHWARTZBERG_BATCH" class="mr-3">0.0</span>
+                        <input type="text" id="SCHWARTZBERG_BATCH" data-slider-step="0.1">
+                        <span id="be_SCHWARTZBERG_BATCH" class="ml-3">100.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="b_contiguity">Contiguity</label>
+                    <label class="col-form-label col-form-label-sm" for="REOCK_BATCH">Reock Compactness</label>
                     <div class="flex-row">
-                        <span id="bs_b_contiguity" class="mr-3">0</span>
-                        <input type="text" id="b_contiguity">
-                        <span id="be_b_contiguity" class="ml-3">100</span>
+                        <span id="bs_REOCK_BATCH" class="mr-3">0.0</span>
+                        <input type="text" id="REOCK_BATCH" data-slider-step="0.1">
+                        <span id="be_REOCK_BATCH" class="ml-3">100.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="population-equality">Population Equality</label>
+                    <label class="col-form-label col-form-label-sm" for="POPULATION_EQUALITY_BATCH">Population Equality</label>
                     <div class="flex-row">
-                        <span id="bs_b_population-equality" class="mr-3">0 </span>
-                        <input type="text" id="b_population-equality">
-                        <span id="be_b_population-equality" class="ml-3">100</span>
+                        <span id="bs_POPULATION_EQUALITY_BATCH" class="mr-3">0.0 </span>
+                        <input type="text" id="POPULATION_EQUALITY_BATCH" data-slider-step="0.1">
+                        <span id="be_POPULATION_EQUALITY_BATCH" class="ml-3">100.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="partisan-fairness">Partisan Fairness</label>
+                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_BATCH">Polsby Popper</label>
                     <div class="flex-row">
-                        <span id="bs_b_partisan-fairness" class="mr-3">0</span>
-                        <input type="text" id="b_partisan-fairness">
-                        <span id="be_b_partisan-fairness" class="ml-3">100</span>
+                        <span id="bs_POLSBY_POPPER_BATCH" class="mr-3">0.0</span>
+                        <input type="text" id="POLSBY_POPPER_BATCH" data-slider-step="0.1">
+                        <span id="be_POLSBY_POPPER_BATCH" class="ml-3">100.0</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="racial">Racial/Ethnic</label>
+                    <label class="col-form-label col-form-label-sm" for="CONVEX_HULL_BATCH">Convex Hull Compactness</label>
                     <div class="flex-row">
-                        <span id="bs_b_racial" class="mr-3">0</span>
-                        <input type="text" id="b_racial">
-                        <span id="be_b_racial" class="ml-3">100</span>
+                        <span id="bs_CONVEX_HULL_BATCH" class="mr-3">0.0</span>
+                        <input type="text" id="CONVEX_HULL_BATCH" data-slider-step="0.1">
+                        <span id="be_CONVEX_HULL_BATCH" class="ml-3">100.0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="GRAPH_COMPACTNESS_BATCH">Graph Compactness</label>
+                    <div class="flex-row">
+                        <span id="bs_GRAPH_COMPACTNESS_BATCH" class="mr-3">0.0</span>
+                        <input type="text" id="GRAPH_COMPACTNESS_BATCH" data-slider-step="0.1">
+                        <span id="be_GRAPH_COMPACTNESS_BATCH" class="ml-3">100.0</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm" for="EFFICIENCY_GAP_BATCH">Efficiency Gap</label>
+                    <div class="flex-row">
+                        <span id="bs_EFFICIENCY_GAP_BATCH" class="mr-3">0.0</span>
+                        <input type="text" id="EFFICIENCY_GAP_BATCH" data-slider-step="0.1">
+                        <span id="be_EFFICIENCY_GAP_BATCH" class="ml-3">100.0</span>
                     </div>
                 </div>
             </div>
@@ -175,7 +205,7 @@
                         </label>
                     </div>
                     <div class="form-group hide mt-3" id="batch-hide-section">
-                        <input type="text" class="form-control" value="" placeholder="Number of Runs">
+                        <input type="text" id= "numR" class="form-control" value="" placeholder="Number of Runs">
                     </div>
                 </div>
             </div>
@@ -209,21 +239,22 @@
             </div>
             <div class="section">
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="racial">Number of Majority / Minority Districts</label>
+                    <label class="col-form-label col-form-label-sm" for="num_districts">Number of Majority / Minority Districts</label>
                     <div class="flex-row">
-                        <span id="s_nom_md" class="mr-3">0</span>
-                        <input type="text" id="nom_md">
-                        <span id="e_nom_md" class="ml-3">100</span>
+                        <span id="min_majority" class="mr-3">0</span>
+                        <input type="text"  id="num_districts">
+                        <span id="max_majority" class="ml-3">100</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="nod_gp">Number of Districts for graph partitioning</label>
-                    <input type="text" class="form-control" value="" id="nod_gp">
+                    <label class="col-form-label col-form-label-sm" for="NUM_DIST_GRAPH">Number of Districts for graph partitioning</label>
+                    <input type="text" class="form-control" value="" id="NUM_DIST_GRAPH">
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary btn-sm">Stop</button>
                     <button type="button" class="btn btn-primary btn-sm">Pause</button>
                     <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
+                    <button type="button" id="testColorPrecinct" class="btn btn-primary btn-sm">Test</button>
                 </div>
             </div>
         </div>
@@ -255,6 +286,7 @@
 
 <script>
     $(document).ready(function () {
+        var New_HampshireLayer = null;
 
         //Log Out
         $("#logOut").click(function(){
@@ -310,7 +342,7 @@
 
         // slider generation when batch
         function loadBatchRangeSlider() {
-            var batchSlider = ["b_compactness","b_contiguity","b_population-equality","b_partisan-fairness","b_racial"];
+            var batchSlider = ["SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH","CONVEX_HULL_BATCH", "GRAPH_COMPACTNESS_BATCH", "EFFICIENCY_GAP_BATCH"];
             batchSlider.map(x=>{
                 $(`#${x}`).slider({ id: `batch_${x}`, min: 0, max: 100, range: true, value: [0, 100]});
                 $(`#${x}`).on("slide", function(slideEvt) {
@@ -321,7 +353,7 @@
         }
 
         function loadSingleRangeSlider() {
-            var batchSlider = ["compactness","contiguity","population-equality","partisan-fairness","racial"];
+            var batchSlider = ["SCHWARTZBERG_COMPACTNESS","REOCK_COMPACTNESS","POPULATION_EQUALITY","POLSBY_POPPER_COMPACTNESS","CONVEX_HULL_COMPACTNESS", "GRAPH_COMPACTNESS", "EFFICIENCY_GAP"];
             batchSlider.map(x=>{
                 $(`#${x}`).slider({id: `single_${x}`, min: 0, max: 100, value: 0  });
                 $(`#${x}`).on("slide", function(slideEvt) {
@@ -333,61 +365,91 @@
         loadBatchRangeSlider();
         loadSingleRangeSlider();
 
-        $("#nom_md").slider({
-            id:"input_nom_md",min: 0, max: 100, range: true, value: [0, 100]
+        $("#num_districts").slider({
+            id:"input_num_districts",min: 0, max: 100, range: true, value: [0, 100]
         });
-        $("#nom_md").on("slide",function(slideEvt){
-            $("#s_nom_md").text(slideEvt.value[0]);
-            $("#e_nom_md").text(slideEvt.value[1]);
+        $("#num_districts").on("slide",function(slideEvt){
+            $("#min_majority").text(slideEvt.value[0]);
+            $("#max_majority").text(slideEvt.value[1]);
         });
 
-        // send data to server when click run button
-        var graphPartitionData = "";
-        var simulatedAnnealing = "";
-        var convertedResult = [];
+        //["SCHWARTZBERG_COMPACTNESS","REOCK_COMPACTNESS","POPULATION_EQUALITY",
+        // "POLSBY_POPPER_COMPACTNESS","CONVEX_HULL_COMPACTNESS", "GRAPH_COMPACTNESS", "EFFICIENCY_GAP"];
 
         $("#btnRun").click(function(){
             var data = null;
             if($("#single").prop('checked')){
                 data = {
-                    "compactness": $("#compactness").val(),
-                    "contiguity": $("#contiguity").val(),
-                    "population-equality": $("#population-equality").val(),
-                    "partisan-fairness": $("#partisan-fairness").val(),
-                    "racial": $("#racial").val(),
-                    "minMajMinDistricts": $("#e_nom_md").text(),            //passed as an int
-                    "maxMajMinDistricts": $("#s_nom_md").text(),            //passed as an int
-                    "numDistricts":$("#nod_gp").val(),                      //pass as an int
-                    "graphPartUpdate":$("#graphPartUpdate").val()           //pass as a boolean
+                    "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
+                    "reackCompactness": parseFloat($("#REOCK_COMPACTNESS").val()),
+                    "populationEquality": parseFloat($("#POPULATION_EQUALITY").val()),
+                    "polsbyCompactness": parseFloat($("#POLSBY_POPPER_COMPACTNESS").val()),
+                    "convexCompactness": parseFloat($("#CONVEX_HULL_COMPACTNESS").val()),
+                    "graphCompactness": parseFloat( $("#GRAPH_COMPACTNESS").val()),
+                    "efficiencyGap": parseFloat($("#EFFICIENCY_GAP").val()),
+                    "minMajMinDistricts": parseInt($("#min_majority").text()),
+                    "maxMajMinDistricts": parseInt($("#max_majority").text()),
+                    "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
+                    "graphPartUpdate":$("#graphPartUpdate").prop("checked"),
+                    "stateName": $("#state").text()
                 }
                 console.log("data",data);
-                 $.ajax({
-                     type: 'POST',
-                     url: "http://localhost:8080/runGraphPartitioning",
-                     data: JSON.stringify(data),
-                     error: function(e) {
-                         if(e.status === 200) {
-                             getGraphPartitionData();
-                         }else{
-                             alert("Running Error!");
-                         }
-                     },
-                     dataType: "json",
-                     contentType: "application/json"
-                 });
+                $.ajax({
+                    type: 'POST',
+                    url: "http://localhost:8080/runGraphPartitioning",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(e) {
+                        console.log(e);//e is a double array of clusters where e[0] is the first cluster and e[0][0] is its id
+                        console.log(e.length);
+                        console.log(e[1][0]);
+
+                        if(!data.graphPartUpdate.valueOf()) {
+                            getSimulatedAnnealing();
+                        }
+
+                    },
+                    error: function(e) {
+                        console.log("here");
+                        console.log(e.responseText);
+                        console.log("above");
+                        if(e.status === 200) {
+                            getSimulatedAnnealing();
+                        }else{
+                            alert("Running Error!");
+                        }
+                    }
+                });
 
             }else{
                 data = {
-                    "compactness": $("#b_compactness").val(),
-                    "contiguity": $("#b_contiguity").val(),
-                    "population-equality": $("#b_population-equality").val(),
-                    "contiguity": $("#b_partisan-fairness").val(),
-                    "contiguity": $("#b_racial").val(),
-                    "minNumberOfMajority": $("#e_nom_md").text(),
-                    "maxNumberOfMajority": $("#s_nom_md").text(),
-                    "numberOfDistrict":$("#nod_gp").val(),
-                    "graphPartUpdate":$("#graphPartUpdate").val()
+
+                    //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
+                    //CONVEX_HULL_BATCH", "GRAPH_COMPACTNESS_BATCH", "EFFICIENCY_GAP_BATCH"
+
+                    "stateName": $("#state").text(),
+                    "schwartzbergCompactnessMax": parseFloat($("#bs_SCHWARTZBERG_BATCH").text()),
+                    "schwartzbergCompactnessMin": parseFloat($("#be_SCHWARTZBERG_BATCH").text()),
+                    "reackCompactnessMax": parseFloat($("#bs_REOCK_BATCH").text()),
+                    "reackCompactnessMin": parseFloat($("#be_REOCK_BATCH").text()),
+                    "populationEqualityMax": parseFloat($("#bs_POPULATION_EQUALITY_BATCH").text()),
+                    "populationEqualityMin": parseFloat($("#be_POPULATION_EQUALITY_BATCH").text()),
+                    "polsbyCompactnessMax": parseFloat($("#bs_POLSBY_POPPER_BATCH").text()),
+                    "polsbyCompactnessMin": parseFloat($("#be_POLSBY_POPPER_BATCH").text()),
+                    "convexCompactnessMax": parseFloat($("#bs_CONVEX_HULL_BATCH").text()),
+                    "convexCompactnessMin": parseFloat($("#be_CONVEX_HULL_BATCH").text()),
+                    "graphCompactnessMax": parseFloat( $("#bs_GRAPH_COMPACTNESS_BATCH").text()),
+                    "graphCompactnessMin": parseFloat( $("#be_GRAPH_COMPACTNESS_BATCH").text()),
+                    "efficiencyGapMax": parseFloat($("#bs_EFFICIENCY_GAP_BATCH").text()),
+                    "efficiencyGapMin": parseFloat($("#be_EFFICIENCY_GAP_BATCH").text()),
+                    "graphPartUpdate":$("#graphPartUpdate").prop("checked"),
+                    "maxMajMinDistricts": parseInt($("#max_majority").text()),
+                    "minMajMinDistricts": parseInt($("#min_majority").text()),
+                    "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
+                    "numRuns": parseInt($("#numR").val())
                 }
+                console.log("data",data);
                 $.ajax({
                     type: 'POST',
                     url: "http://localhost:8080/runBatchProcessing",
@@ -404,70 +466,79 @@
                 });
 
             }
-
             // if we have single run, we send data to runGraphPartitioning
             // if we have batch run, we send data to runBatchProcessing
-
-
         });
 
-        function getGraphPartitionData () {
-            $.ajax({
-                type: 'GET',
-                url: "http://localhost:8080/graphPartitioning2",
-                error: function(e) {
-                    if(e.status === 200){
-                        if(e.data !== null && e.data.length > 0){
-                            if(e.data === "done" ){
-                                getSimulatedAnnealing();
-                                return;
-                            }else{
-                                graphPartitionData=e.data;
-                                var result = graphPartitionData.map((x=>{
-                                    x.split(",,").map(y=>{
-                                        convertedResult.push({
-                                            color:y.split(" ")[0],
-                                            data: y.split(" ")[1]
-                                        });
-                                    });
-                                }));
-                                getGraphPartitionData();
-                            }
-                            // [C0 P2,P3,P0,, C1 P4,P1,P5,]
-                        }else{
-                            alert("Graph Partition Algo Error!");
-                        }
-                    }
-                },
-                dataType: "json",
-                contentType: "application/json"
-            });
-        }
+        // function getGraphPartitionData () {
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: "http://localhost:8080/graphPartitioning2",
+        //         error: function(e) {
+        //             console.log("everyone is useless");
+        //             console.log(e.data);
+        //             if(e.status === 200){
+        //                 if(e.data !== null && e.data.length > 0){
+        //                     if(e.data === "done" ){
+        //                         getSimulatedAnnealing();
+        //                         return;
+        //                     }else{
+        //                         graphPartitionData=e.data;
+        //                         var result = graphPartitionData.map((x=>{
+        //                             x.split(",,").map(y=>{
+        //                                 convertedResult.push({
+        //                                     color:y.split(" ")[0],
+        //                                     data: y.split(" ")[1]
+        //                                 });
+        //                             });
+        //                         }));
+        //                         getGraphPartitionData();
+        //                     }
+        //                     // [C0 P2,P3,P0,, C1 P4,P1,P5,]
+        //                 }else{
+        //                     alert("Graph Partition Algo Error!");
+        //                 }
+        //             }
+        //         },
+        //         dataType: "json",
+        //         contentType: "application/json"
+        //     });
+        // }
 
         function getSimulatedAnnealing(){
             $.ajax({
                 type: 'GET',
-                url: "http://localhost:8080/simulatedannealing",
-                error: function(e) {
-                    if(e.status === 200){
-                        if(e.data !== null && e.data.length > 0){
+                url: "http://localhost:8080/runSimulatedAnnealing",
+                dataType: "json",
+                contentType: "application/json",
+                success: function(e) {
+                    console.log("recieved:");
+                    console.log(e);
 
-                            if(e.data.message.toLowerCase().indexOf("move")){
-                                var simulatedAnnealingData = convertStrObj(e.data);
-                                getSimulatedAnnealing();
-                            }else{
-                                simulatedAnnealing = e.data;
-                                $("#summaryModalContent").empty();
-                                $("#summaryModalContent").append(`<p>${simulatedAnnealing}<p>`);
-                                return;
-                            }
-                        }else{
-                            alert("Simulated Annealing Algo Error!");
-                        }
+                    if(e.precinctID !== -1) {
+                        getSimulatedAnnealing();
                     }
                 },
-                dataType: "json",
-                contentType: "application/json"
+                error: function(e) {
+                    console.log("error somehow");
+                    console.log(e);
+                    // if(e.status === 200){
+                    //     if(e.data !== null && e.data.length > 0){
+                    //
+                    //         if(e.data.message.toLowerCase().indexOf("move")){
+                    //             var simulatedAnnealingData = convertStrObj(e.data);
+                    //             getSimulatedAnnealing();
+                    //         }else{
+                    //             simulatedAnnealing = e.data;
+                    //             $("#summaryModalContent").empty();
+                    //             $("#summaryModalContent").append(`<p>${simulatedAnnealing}<p>`);
+                    //             return;
+                    //         }
+                    //     }else{
+                    //         alert("Simulated Annealing Algo Error!");
+                    //     }
+                    // }
+                }
             });
         }
 
@@ -578,19 +649,30 @@
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                $.getJSON('./AZ-FULL.geojson', function (data) {
+                $.getJSON('./ArizonaData/ArizonaDistrictData.json', function (data) {
                     L.geoJson(data,{
                         style: hooverStyle,
                         onEachFeature: onEachAzFeature
-                    }).bindTooltip("districts").addTo(map);
+                    }).bindTooltip(function(layer){
+                        return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
+                            "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
+                            "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
+                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                    }).addTo(map);
                 });
                 if(azFlag){
-                    $.getJSON('./ArizonaData/Arizona.json', function (data) {
+                    $.getJSON('./ArizonaData/ArizonaPrecinctData.json', function (data) {
                         L.geoJSON(data,{
                             style:style,
-                            // onEachFeature: onEachAzDetailFeature
                         }).bindTooltip(function(layer){
-                            return layer.feature.properties.PRECNAME;
+                            return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                                "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
+                                "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
+                                "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
+                                "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"] +
+                                "<br/>Republican:" +layer.feature.properties.PRS08_REP +
+                                "<br/>Democratic:" +layer.feature.properties.PRS08_DEM;
                         }).addTo(map);
                     });
                 }
@@ -600,23 +682,30 @@
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                $.getJSON('./MD-FULL.geojson', function (data) {
+                $.getJSON('./MarylandData/MarylandDistrictData.json', function (data) {
                     L.geoJson(data,{
                         style: hooverStyle,
                         onEachFeature: onEachMlFeature
-                    }).bindTooltip("districts").addTo(map);
+                    }).bindTooltip(function(layer){
+                        return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
+                            "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
+                            "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
+                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                    }).addTo(map);
                 });
                 if(mlFlag){
-                    setTimeout(function(){
-                        $.getJSON('./MarylandData/Maryland.json', function (data) {
-                            L.geoJSON(data,{
-                                style:style,
-                                // onEachFeature: onEachMlDetailFeature
-                            }).bindTooltip(function(layer){
-                                return layer.feature.properties.name;
-                            }).addTo(map);
-                        });
-                    }, 500);
+                    $.getJSON('./MarylandData/MarylandPrecinctData.json', function (data) {
+                        L.geoJSON(data,{
+                            style:style,
+                        }).bindTooltip(function(layer){
+                            return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                                "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
+                                "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
+                                "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
+                                "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                        }).addTo(map);
+                    });
                 }
             }
 
@@ -624,23 +713,33 @@
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                $.getJSON('./NH-FULL.geojson', function (data) {
+                //$.getJSON('./NH-FULL.geojson', function (data) {
+                $.getJSON('./NewHampshireData/NewHampshireDistrictData.json', function (data) {
                     L.geoJson(data,{
                         style: hooverStyle,
                         onEachFeature: onEachNhFeature
-                    }).bindTooltip("districts").addTo(map);
+                    }).bindTooltip(function(layer){
+                        return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
+                            "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
+                            "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
+                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                    }).addTo(map);
                 });
                 if(nhFlag){
                     //$.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
-                    $.getJSON('./NewHampshireData/output.json', function (data) {
-                        L.geoJSON(data,{
+                    $.getJSON('./NewHampshireData/NewHampshirePrecinctData.json', function (data) {
+                        New_HampshireLayer = L.geoJSON(data,{
                             style:style,
                             // onEachFeature: onEachNhDetailFeature
                         }).bindTooltip(function(layer){
                             return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
-                                "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"];
+                                "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
+                                "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"] +
+                                "<br/>Republican:" +layer.feature.properties.PRES_REP08 +
+                                "<br/>Democratic:" +layer.feature.properties.PRES_DEM08;
                         }).addTo(map);
                     });
                 }
@@ -766,6 +865,35 @@
             $(this).parent().prev().text($(this).text());
             loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
         });
+
+        $("#testColorPrecinct").click(function(){
+            if(New_HampshireLayer == null) {
+                alert("test layer: New_HampshireLayer is not yet loaded!");
+                return;
+            }
+
+            var color = "#ff0000";
+            var precinctId = 72;
+
+            colorPrecinct(color, precinctId);
+        });
+
+        function colorPrecinct(color, precinctId) {
+            New_HampshireLayer.eachLayer(function (layer) {
+                if(layer.feature.properties.OID_== precinctId) {
+                    layer.setStyle({
+                        fillColor: color,
+                        weight: 0.5,
+                        opacity: 1,
+                        color: 'white',
+                        fillOpacity: 1
+                    });
+
+                    console.log("ok found");
+                }
+            });
+        }
+
     });
 </script>
 </body>

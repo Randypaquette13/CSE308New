@@ -1,4 +1,11 @@
 
+DodgersCode/src/server/src/main/resources/static/ArizonaData/ArizonaDistrictData.json
+        DodgersCode/src/server/src/main/resources/static/ArizonaData/ArizonaPrecinctData.json
+        DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandDistrictData.json
+        DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandPrecinctData.json
+        DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshireDistrictData.json
+        DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData.json
+        DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData2.json
 
 DodgersCode/.idea/workspace.xml
 DodgersCode/.idea/misc.xml
@@ -71,3 +78,9 @@ fabric.properties
 
 #server parameter file with database password
 DodgersCode/src/server/src/main/resources/application.properties
+DodgersCode/src/server/src/main/resources/static/ArizonaData/ArizonaPrecinctData.json
+DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandDistrictData.json
+DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandPrecinctData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshireDistrictData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData2.json

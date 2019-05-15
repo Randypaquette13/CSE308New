@@ -39,7 +39,17 @@ public class Preference {
         return numDistricts;
     }
 
+    public String getStateName() {
+        return stateName;
+    }
+
     public boolean isGraphPartUpdate() {
         return graphPartUpdate;
     }
+
+    @Override
+    public String toString() {
+        return weights.values() + " " + maxMajMinDistricts + minMajMinDistricts + numDistricts + graphPartUpdate + stateName;
+    }
+
 }

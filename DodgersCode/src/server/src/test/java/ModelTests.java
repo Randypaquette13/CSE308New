@@ -299,11 +299,13 @@ public class ModelTests {
         hsp.add(p5);
 
         State s = new State(hsp);
-//        System.out.println(s.toString());
-//        ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
-//        clusters.sort(Comparator.comparingLong(a -> a.id));
-//        System.out.println(clusters);
+        System.out.println(s.toString());
+        ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
+        clusters.sort(Comparator.comparingLong(a -> a.id));
+        System.out.println(clusters);
 
+        s.getClusters().add(s.combinePair(clusters.get(0),clusters.get(1)));
+        System.out.println("weird: " + s.getClusters());
         HashMap<MeasureType,Double> weights = new HashMap<>();
         for(int i = 0; i < MeasureType.values().length;i++) {
             weights.put(MeasureType.values()[i],1.0);
@@ -311,11 +313,11 @@ public class ModelTests {
 
         Algorithm a = new Algorithm(new Preference(weights,2,0,2,false, "Arizona"),s);
         System.out.println(a.doGraphPartitioning());
-        System.out.println(s);
+        System.out.println(s.getClusters());
         System.out.println(a.doGraphPartitioning());
-        System.out.println(s);
+        System.out.println(s.getClusters());
         System.out.println(a.doGraphPartitioning());
-        System.out.println(s);
+        System.out.println(s.getClusters());
 
 //        System.out.println(a.doGraphPartitioning());
 //        String gps = "";
@@ -336,6 +338,10 @@ public class ModelTests {
 
         p0.addEdgeTo(p1);
 
+//        ArrayList<Edge> es = new ArrayList<>(p0.getEdges());
+//        System.out.println(es.get(0).getJoinability());
+//        System.exit(0);
+//
         p0.addEdgeTo(p2);
         p0.addEdgeTo(p3);
 

@@ -6,26 +6,30 @@ import model.Preference;
 import java.util.HashMap;
 
 public class PreferencesDAO {
-    private double compactness;
-    private double contiguity;
+    private double schwartzbergCompactness;
+    private double reackCompactness;
     private double populationEquality;
-    private double partisanFairness;
-    private double racial;
+    private double polsbyCompactness;
+    private double convexCompactness;
+    private double graphCompactness;
+    private double efficiencyGap;
     private int minMajMinDistricts;
     private int maxMajMinDistricts;
     private int numDistricts;
     private boolean graphPartUpdate;
     private String stateName;
 
-    public PreferencesDAO(double compactness, double contiguity, double populationEquality,
-                          double partisanFairness, double racial, int minMajMinDistricts,
-                          int maxMajMinDistricts, int numDistricts, boolean graphPartUpdate,
-                          String stateName) {
-        this.compactness = compactness;
-        this.contiguity = contiguity;
+    public PreferencesDAO(double schwartzbergCompactness, double reackCompactness, double populationEquality,
+                          double polsbyCompactness, double convexCompactness, double graphCompactness,
+                          double efficiencyGap, int minMajMinDistricts, int maxMajMinDistricts,
+                          int numDistricts, boolean graphPartUpdate, String stateName) {
+        this.schwartzbergCompactness = schwartzbergCompactness;
+        this.reackCompactness = reackCompactness;
         this.populationEquality = populationEquality;
-        this.partisanFairness = partisanFairness;
-        this.racial = racial;
+        this.polsbyCompactness = polsbyCompactness;
+        this.convexCompactness = convexCompactness;
+        this.graphCompactness = graphCompactness;
+        this.efficiencyGap = efficiencyGap;
         this.minMajMinDistricts = minMajMinDistricts;
         this.maxMajMinDistricts = maxMajMinDistricts;
         this.numDistricts = numDistricts;
@@ -39,22 +43,22 @@ public class PreferencesDAO {
         for(MeasureType m : MeasureType.values()){
             switch (m){
                 case SCHWARTZBERG_COMPACTNESS:
-
+                    hashmap.put(m, schwartzbergCompactness);
                     break;
                 case REOCK_COMPACTNESS:
-
+                    hashmap.put(m, reackCompactness);
                     break;
                 case POLSBY_POPPER_COMPACTNESS:
-
+                    hashmap.put(m, polsbyCompactness);
                     break;
                 case CONVEX_HULL_COMPACTNESS:
-
+                    hashmap.put(m, convexCompactness);
                     break;
                 case GRAPH_COMPACTNESS:
-
+                    hashmap.put(m, graphCompactness);
                     break;
                 case EFFICIENCY_GAP:
-
+                    hashmap.put(m, efficiencyGap);
                     break;
                 case POPULATION_EQUALITY:
                     hashmap.put(m, populationEquality);
@@ -70,20 +74,21 @@ public class PreferencesDAO {
     protected PreferencesDAO(){
 
     }
-    public double getCompactness() {
-        return compactness;
+
+    public double getSchwartzbergCompactness() {
+        return schwartzbergCompactness;
     }
 
-    public void setCompactness(double compactness) {
-        this.compactness = compactness;
+    public void setSchwartzbergCompactness(double schwartzbergCompactness) {
+        this.schwartzbergCompactness = schwartzbergCompactness;
     }
 
-    public double getContiguity() {
-        return contiguity;
+    public double getReackCompactness() {
+        return reackCompactness;
     }
 
-    public void setContiguity(double contiguity) {
-        this.contiguity = contiguity;
+    public void setReackCompactness(double reackCompactness) {
+        this.reackCompactness = reackCompactness;
     }
 
     public double getPopulationEquality() {
@@ -94,20 +99,36 @@ public class PreferencesDAO {
         this.populationEquality = populationEquality;
     }
 
-    public double getPartisanFairness() {
-        return partisanFairness;
+    public double getPolsbyCompactness() {
+        return polsbyCompactness;
     }
 
-    public void setPartisanFairness(double partisanFairness) {
-        this.partisanFairness = partisanFairness;
+    public void setPolsbyCompactness(double polsbyCompactness) {
+        this.polsbyCompactness = polsbyCompactness;
     }
 
-    public double getRacial() {
-        return racial;
+    public double getConvexCompactness() {
+        return convexCompactness;
     }
 
-    public void setRacial(double racial) {
-        this.racial = racial;
+    public void setConvexCompactness(double convexCompactness) {
+        this.convexCompactness = convexCompactness;
+    }
+
+    public double getGraphCompactness() {
+        return graphCompactness;
+    }
+
+    public void setGraphCompactness(double graphCompactness) {
+        this.graphCompactness = graphCompactness;
+    }
+
+    public double getEfficiencyGap() {
+        return efficiencyGap;
+    }
+
+    public void setEfficiencyGap(double efficiencyGap) {
+        this.efficiencyGap = efficiencyGap;
     }
 
     public int getMinMajMinDistricts() {
@@ -140,5 +161,13 @@ public class PreferencesDAO {
 
     public void setGraphPartUpdate(boolean graphPartUpdate) {
         this.graphPartUpdate = graphPartUpdate;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

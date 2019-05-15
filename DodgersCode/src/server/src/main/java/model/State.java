@@ -3,6 +3,7 @@ package model;
 import controller.Configuration;
 import controller.Move;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -111,10 +112,12 @@ public class State {
 
         for(Precinct precinct : district.getPrecinctSet()) {
             for(Edge edge : precinct.getEdges()) {
-                System.out.println("move this:" + precinct);
-                final Precinct neighbor = (Precinct)(edge.getC1().equals(precinct) ? edge.getC2() : edge.getC1());
-                System.out.println("to this:" + neighbor.getDistrict());
+                final Precinct neighbor = (Precinct)edge.getNeighbor(precinct);
                 if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD && !neighbor.getDistrict().equals(district) && precinct.getDistrict().continuity(precinct)) {
+                    System.out.println("move this:" + precinct);
+                    System.out.println("from this:" + precinct.getDistrict());
+                    System.out.println("to this:" + neighbor.getDistrict());
+                    System.out.println("joinability: " + edge.getJoinability());
                     return new Move(district, neighbor.getDistrict(), precinct);
                 }
             }
@@ -126,7 +129,8 @@ public class State {
     /**
      * Get a new candidate pair for graph partitioning. Returns null if no candidate pair is found
      */
-    public ClusterPair findCandidateClusterPair() {
+    public ClusterPair findCandidateClusterPair(int targetPop) {
+        LinkedList<ClusterPair> pairs = new LinkedList<>();
         Cluster niceCluster = null;
         Edge niceEdge = null;
         double maxJoin = 0;
@@ -140,12 +144,25 @@ public class State {
                         niceCluster = c;
                         niceEdge = e;
                         maxJoin = join;
+                        pairs.add(new ClusterPair(niceCluster, (Cluster)niceEdge.getNeighbor(niceCluster)));
                     }
                 }
             }
         }
         if(niceCluster != null && niceEdge != null) {
-            return new ClusterPair(niceCluster, (Cluster)niceEdge.getNeighbor(niceCluster));
+            ClusterPair bestPair = null;
+            int bestScore = Integer.MAX_VALUE;
+            for(ClusterPair cp : pairs) {
+                int popScore = Math.abs(targetPop - (cp.getC1().getPopulation() + cp.getC2().getPopulation()));
+                if(popScore < bestScore) {
+                    bestPair = cp;
+                }
+            }
+            if(bestPair != null) {
+                return bestPair;
+            } else {
+                return new ClusterPair(niceCluster, (Cluster)niceEdge.getNeighbor(niceCluster));
+            }
         } else {
             return null;
         }
@@ -200,5 +217,61 @@ public class State {
             total += d.isMajorityMinorityDistrict() ? 1 : 0;
         }
         return total;
+    }
+
+    public static State getState(String stateName) {
+        switch (stateName){
+            case "Arizona":
+                break;
+            case "New Hampshire":
+                break;
+            case "Maryland":
+                break;
+            default:
+                break;
+        }
+        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+
+        p0.addEdgeTo(p1);
+
+        p0.addEdgeTo(p2);
+        p0.addEdgeTo(p3);
+        p2.addEdgeTo(p3);
+
+        p1.addEdgeTo(p4);
+        p1.addEdgeTo(p5);
+        p4.addEdgeTo(p5);
+
+        HashSet<Precinct> hsp = new HashSet<>();
+        hsp.add(p0);
+        hsp.add(p1);
+        hsp.add(p2);
+
+        hsp.add(p3);
+        hsp.add(p4);
+        hsp.add(p5);
+
+        State s = new State(hsp);
+        s.reset();
+        return s;
+    }
+
+    public Collection<long[]> getClustersSimple() {
+        Collection<long[]> out = new LinkedList<>();
+        for(Cluster c : getClusters()) {
+            long[] precincts = new long[c.getPrecinctSet().size()+1];
+            ArrayList<Precinct> ps = new ArrayList<>(c.getPrecinctSet());
+            precincts[0] = c.id;
+            for(int ii = 1; ii < precincts.length; ii++) {
+                precincts[ii] = ps.get(ii-1).getId();
+            }
+            out.add(precincts);
+        }
+        return out;
     }
 }

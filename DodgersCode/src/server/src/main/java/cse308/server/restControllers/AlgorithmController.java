@@ -1,6 +1,8 @@
 package cse308.server.restControllers;
 
 import controller.Algorithm;
+import cse308.server.dao.PreferencesDAO;
+import cse308.server.dao.SummaryDAO;
 import model.Cluster;
 import model.Preference;
 import model.State;
@@ -22,7 +24,7 @@ import java.util.List;
 @RestController
 public class AlgorithmController {
 
-    private State state;
+    private State state= null;
     private Algorithm algorithm;
 
     /**
@@ -30,10 +32,14 @@ public class AlgorithmController {
      * @return  unknown
      */
     @RequestMapping("/runGraphPartitioning")
-    public Collection<Cluster> doGraphPartitioning(@RequestBody Preference preference) {
+    public Collection<long[]> doGraphPartitioning(@RequestBody PreferencesDAO preference) {
         //TODO: Load state object from DB and set it to the private state obj
-        algorithm = new Algorithm(preference, state);
+        Preference p = preference.makePreferences();
+        if(state == null) {
+            state = State.getState(p.getStateName());
+        }
 
+        algorithm = new Algorithm(preference.makePreferences(), state);
         if (preference.isGraphPartUpdate()) {
             if(state.isGPDone) {
                 return null;
@@ -41,13 +47,13 @@ public class AlgorithmController {
             if("done".equals(algorithm.doGraphPartitioning())){
                 state.isGPDone = true;
             }
-            return state.getClusters();
+            return state.getClustersSimple();
         } else {
             String gps = algorithm.doGraphPartitioning();
             while(!"done".equals(gps)) {
                 gps = algorithm.doGraphPartitioning();
             }
-            return state.getClusters();
+            return state.getClustersSimple();
         }
     }
 
@@ -56,8 +62,8 @@ public class AlgorithmController {
      * @return unknown
      */
     @RequestMapping("/runSimulatedAnnealing")
-    public Summary doSimulatedAnnealing() {
-        return algorithm.doSimulatedAnnealing();
+    public SummaryDAO doSimulatedAnnealing() {
+        return algorithm.doSimulatedAnnealing().toDAO();
     }
 
     /**

@@ -24,6 +24,8 @@ public class Algorithm {
         while(!"done".equals(gps)) {
             gps = doGraphPartitioning();
         }
+        System.out.println("GRAPH PART DONE");
+        System.out.println(state.getClusters());
 
         Summary s = doSimulatedAnnealing();
         while (s.getMove() != null) {
@@ -69,15 +71,18 @@ public class Algorithm {
         System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
             int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
-            int maxTargetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
-            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
+            int targetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
+//            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
 
             ((List<Cluster>) state.getClusters()).sort(Comparator.comparingInt(Cluster::getPopulation));
 
             Collection<Cluster> mergedClusters = new LinkedList<>();
             while(!state.getClusters().isEmpty()) {
-                final ClusterPair clusterPair = state.findCandidateClusterPair();
+//                System.out.println(state.getClusters());
+                final ClusterPair clusterPair = state.findCandidateClusterPair(targetPop);
                 if(clusterPair == null){
+                    System.out.println("NO VALID CLUSTER PAIR");
+                    System.out.println(state.getClusters());
                     break;
                 }
                 System.out.println("found cluster pair: " + clusterPair);
@@ -96,10 +101,13 @@ public class Algorithm {
         System.out.println("\n\tSTARTED SIM ANNEALING STEP");
         if(state.getDistrictSet().size() == 0) {
             state.convertClustersToDistricts();
+            System.out.println("GENERATE DISTRICTS FROM SLUSTERS");
+            System.out.println(state.getDistrictSet());
         }
 
         Move candidateMove = null;
         //anneal until the objective function output is acceptable or the max steps is reached
+        System.out.println("Objective function value: " + lastObjFunVal);
         if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
             candidateMove = state.findCandidateMove();
             if(candidateMove != null) {
@@ -132,6 +140,7 @@ public class Algorithm {
             System.out.println("SIM END CONDITION MET");
         }
         System.out.println("\tENDED SIM ANNEALING STEP");
+        System.out.println(state.getDistrictSet());
         return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove);
     }
 }
