@@ -728,8 +728,8 @@
                 });
                 if(nhFlag){
                     //$.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
-                    New_HampshireLayer = $.getJSON('./NewHampshireData/NewHampshirePrecinctData.json', function (data) {
-                        L.geoJSON(data,{
+                    $.getJSON('./NewHampshireData/NewHampshirePrecinctData.json', function (data) {
+                        New_HampshireLayer = L.geoJSON(data,{
                             style:style,
                             // onEachFeature: onEachNhDetailFeature
                         }).bindTooltip(function(layer){
