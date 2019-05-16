@@ -38,7 +38,7 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-            return 4 * Math.PI * (d.getPerimeter()/(Math.pow(d.getArea(), 2)));
+            return 4 * Math.PI * (d.getArea()/(Math.pow(d.getPerimeter(), 2)));
         }
     },
     CONVEX_HULL_COMPACTNESS {
