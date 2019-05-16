@@ -65,11 +65,11 @@ public class Cluster implements MapVertex {
         }
         population += c.getPopulation();
 
-        getNeighbors().forEach(neighbor -> {
-            if(c.getNeighbors().contains(neighbor)) {
-                //TODO adjust the edge that contains this cluster
-            }
-        });
+//        getNeighbors().forEach(neighbor -> {
+//            if(c.getNeighbors().contains(neighbor)) {
+//                //TODO adjust the edge that contains this cluster
+//            }
+//        });
 
         //set demographics to combined value
         demographics.add(c.getDemographics());
