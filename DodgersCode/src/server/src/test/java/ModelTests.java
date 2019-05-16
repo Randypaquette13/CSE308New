@@ -370,7 +370,7 @@ public class ModelTests {
 
     @Test
     public void testJSONReading(){
-        String path = "C:\\Users\\Owner\\Desktop\\District&Precinct\\ArizonaDistrictData.json";
+        String path = "";
         try {
             JsonDistrictData j = new JsonDistrictData(path);
             assertNotEquals(j.getJson(), null);
