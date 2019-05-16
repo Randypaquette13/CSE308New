@@ -59,36 +59,13 @@ public class District extends Cluster {
     }
 
     public int wastedDemVotes() {
-        int total = 0;
-
-        for(DemographicType d : DemographicType.values()) {
-            int dem = getDemographics().getDemographicVotingData().get(d)[0];
-            int rep = getDemographics().getDemographicVotingData().get(d)[1];
-
-            if(dem != Math.max(dem,rep)) {
-                total += dem;
-            }
-        }
-        return total;
+        int diff = getDemographics().demVotes - getDemographics().repVotes;
+        return diff > 0 ? diff : 0;
     }
 
     public int wastedRepVotes() {
-        int total = 0;
-        for(DemographicType d : DemographicType.values()) {
-//            System.out.println(this.getPopulation());
-            int dem = getDemographics().getDemographicVotingData().get(d)[0];
-//            System.out.println("\t" + dem);
-            int rep = getDemographics().getDemographicVotingData().get(d)[1];
-//            System.out.println("\t" + rep);
-//            int oth = getDemographics().getDemographicVotingData().get(d)[2];
-//            System.out.println("\t" + oth);
-
-            if(rep != Math.max(dem,rep)) {
-                total += rep;
-            }
-//            System.out.println("\ttotale:" + total);
-        }
-        return total;
+        int diff = getDemographics().repVotes - getDemographics().demVotes;
+        return diff > 0 ? diff : 0;
     }
 
     @Override
