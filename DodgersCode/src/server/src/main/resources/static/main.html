@@ -287,6 +287,8 @@
 <script>
     $(document).ready(function () {
         var New_HampshireLayer = null;
+        var ArizonaStateLayer = null;
+        var MarylandStateLayer = null;
 
         //Log Out
         $("#logOut").click(function(){
@@ -663,7 +665,7 @@
                 });
                 if(azFlag){
                     $.getJSON('./ArizonaData/ArizonaPrecinctData.json', function (data) {
-                        L.geoJSON(data,{
+                      ArizonaStateLayer =  L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
                             return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
@@ -696,7 +698,7 @@
                 });
                 if(mlFlag){
                     $.getJSON('./MarylandData/MarylandPrecinctData.json', function (data) {
-                        L.geoJSON(data,{
+                        MarylandStateLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
                             return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
@@ -867,8 +869,8 @@
         });
 
         $("#testColorPrecinct").click(function(){
-            if(New_HampshireLayer == null) {
-                alert("test layer: New_HampshireLayer is not yet loaded!");
+            if(New_HampshireLayer === null && MarylandStateLayer === null && ArizonaStateLayer === null) {
+                alert("test layer:Layer is not yet loaded!");
                 return;
             }
 
@@ -878,20 +880,55 @@
             colorPrecinct(color, precinctId);
         });
 
-        function colorPrecinct(color, precinctId) {
-            New_HampshireLayer.eachLayer(function (layer) {
-                if(layer.feature.properties.OID_== precinctId) {
-                    layer.setStyle({
-                        fillColor: color,
-                        weight: 0.5,
-                        opacity: 1,
-                        color: 'white',
-                        fillOpacity: 1
-                    });
+        //problem with maryland
 
-                    console.log("ok found");
-                }
-            });
+        function colorPrecinct(color, precinctId) {
+            console.log($("#state").text());
+            if($("#state").text() === "New Hampshire" && New_HampshireLayer !== null){
+                New_HampshireLayer.eachLayer(function (layer) {
+                    if(layer.feature.properties.OID_== precinctId) {
+                        layer.setStyle({
+                            fillColor: color,
+                            weight: 0.5,
+                            opacity: 1,
+                            color: 'white',
+                            fillOpacity: 1
+                        });
+
+                        console.log("ok found");
+                    }
+                });
+            }else if($("#state").text() === "Arizona" && ArizonaStateLayer !== null){
+                ArizonaStateLayer.eachLayer(function (layer) {
+                    if(layer.feature.properties.OID_== precinctId) {
+                        layer.setStyle({
+                            fillColor: color,
+                            weight: 0.5,
+                            opacity: 1,
+                            color: 'white',
+                            fillOpacity: 1
+                        });
+
+                        console.log("ok found");
+                    }
+                });
+            }else if($("#state").text() === "Maryland" && MarylandStateLayer !== null){
+                MarylandStateLayer.eachLayer(function (layer) {
+                    if(layer.feature.properties.OID_== precinctId) {
+                        layer.setStyle({
+                            fillColor: color,
+                            weight: 0.5,
+                            opacity: 1,
+                            color: 'white',
+                            fillOpacity: 1
+                        });
+
+                        console.log("ok found");
+                    }
+                });
+            }else{
+              alert("error!");
+            }
         }
 
     });
