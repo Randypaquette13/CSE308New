@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.Algorithm;
 import controller.Move;
 import cse308.server.dao.JsonDistrictData;
@@ -5,6 +7,8 @@ import model.*;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -24,10 +28,11 @@ public class ModelTests {
         }
         Demographics d1 = new Demographics(populations, voting);
 
+        int id = 0;
 //        double[] d1 = {0,2,2,2,2};
-        Precinct p1 = new Precinct(10,new HashSet<>(), d1,"my county");
+        Precinct p1 = new Precinct(id++,10,new HashSet<>(), d1,"my county");
 //        double[] d2 = {2,2,2,3,2};
-        Precinct p2 = new Precinct(11,new HashSet<>(), d1,"my county");
+        Precinct p2 = new Precinct(id++,11,new HashSet<>(), d1,"my county");
 
         Edge e1 = new Edge(p1,p2);
         p1.getEdges().add(e1);
@@ -75,10 +80,11 @@ public class ModelTests {
         }
         Demographics d1 = new Demographics(populations, voting);
 
+        int id = 0;
 //        double[] d1 = {0,2,2,2,2};
-        Precinct p1 = new Precinct(10,new HashSet<>(), d1,"my county");
+        Precinct p1 = new Precinct(id++,10,new HashSet<>(), d1,"my county");
 //        double[] d2 = {2,2,2,3,2};
-        Precinct p2 = new Precinct(11,new HashSet<>(), d1,"my county");
+        Precinct p2 = new Precinct(id++,11,new HashSet<>(), d1,"my county");
 
         Edge e1 = new Edge(p1,p2);
         p1.getEdges().add(e1);
@@ -119,13 +125,13 @@ public class ModelTests {
             voting.put(type, vote.clone());
         }
         Demographics d1 = new Demographics(populations, voting);
-
-        Precinct p0 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        int id = 0;
+        Precinct p0 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
 
         p0.addEdgeTo(p1);
 
@@ -197,12 +203,13 @@ public class ModelTests {
 
     @Test
     public void testSimulatedAnnealing() {
-        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        int id = 0;
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
 
         p0.addEdgeTo(p1);
 
@@ -259,8 +266,9 @@ public class ModelTests {
 
     @Test
     public void majorityMinorityTest(){
-        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        int id = 0;
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
         p0.addEdgeTo(p1);
         HashSet<Precinct> hsp = new HashSet<>();
         hsp.add(p0);
@@ -274,12 +282,13 @@ public class ModelTests {
 
     @Test
     public void testGraphPartitioning() {
-        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        int id = 0;
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
 
         p0.addEdgeTo(p1);
 
@@ -329,12 +338,13 @@ public class ModelTests {
 
     @Test
     public void testWholeFUCKINGThing() {
-        Precinct p0 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        int id = 0;
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
 
         p0.addEdgeTo(p1);
 
@@ -370,10 +380,44 @@ public class ModelTests {
 
     @Test
     public void testJSONReading(){
-        String path = "";
+        String path = ""; //place path to file here
         try {
-            JsonDistrictData j = new JsonDistrictData(path);
-            assertNotEquals(j.getJson(), null);
+            byte[] jsonData = Files.readAllBytes(Paths.get(path));
+            ObjectMapper objectMapper  = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonData); //gets root of object
+            JsonNode featuresNode = rootNode.path("features"); //gets array titled "features"
+            Iterator<JsonNode> elements = featuresNode.elements();
+            if(elements.hasNext()){
+                JsonNode featureZero = elements.next();
+                JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
+                JsonNode neighbors = propertiesNode.path("neighbors"); //array of neighbors
+                System.out.println("neighbors : " + neighbors.toString());
+                JsonNode totalpop = propertiesNode.path("Total"); //total population
+                System.out.println("Total : " + totalpop.toString());
+                JsonNode precinctId = propertiesNode.path("OID_"); //precinct id
+                System.out.println("OID_ : " + precinctId);
+                JsonNode voteDem = propertiesNode.path("PRS08_DEM"); //dem votes in 08 election
+                System.out.println("PRS08_DEM : " + voteDem.toString());
+                JsonNode voteOther = propertiesNode.path("PRS08_OTH"); //other votes in 08 election
+                System.out.println("PRS08_DEM : " + voteOther.toString());
+                JsonNode voteRep = propertiesNode.path("PRS08_OTH"); //rep votes in 08 election
+                System.out.println("PRS08_DEM : " + voteRep.toString());
+                JsonNode hispanicPop = propertiesNode.path("Hispanic/Latino"); // hispanic population
+                System.out.println("Hispanic/Latino : " + hispanicPop.toString());
+                JsonNode asianPop = propertiesNode.path("Asian"); // asian population
+                System.out.println("Asian : " + asianPop.toString());
+                JsonNode afAmerPop = propertiesNode.path("Black"); // african american population
+                System.out.println("Black : " + afAmerPop.toString());
+                JsonNode whitePop = propertiesNode.path("White"); // white population
+                System.out.println("White : " + whitePop.toString());
+                JsonNode nativePop = propertiesNode.path("AI/AN"); //american indians population
+                System.out.println("AI/AN : " + nativePop.toString());
+                JsonNode county = propertiesNode.path("COUNTY"); //county precinct is in.
+                System.out.println("COUNTY : " + county.toString());
+
+                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), null, null, county.toString());
+                System.out.println("Precint is:  " + p);
+            }
         }
         catch(IOException e){
             System.out.println("could not read");
