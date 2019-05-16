@@ -2,6 +2,7 @@ package model;
 
 import controller.Configuration;
 import controller.Move;
+import org.locationtech.jts.geom.Coordinate;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -259,6 +260,8 @@ public class State {
 
         State s = new State(hsp);
         s.reset();
+
+        Coordinate c;
         return s;
     }
 
