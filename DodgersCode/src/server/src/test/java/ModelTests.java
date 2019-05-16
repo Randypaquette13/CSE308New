@@ -5,6 +5,7 @@ import controller.Move;
 import cse308.server.dao.JsonDistrictData;
 import model.*;
 import org.junit.Test;
+import org.locationtech.jts.geom.Coordinate;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -363,6 +364,29 @@ public class ModelTests {
             Iterator<JsonNode> elements = featuresNode.elements();
             if(elements.hasNext()){
                 JsonNode featureZero = elements.next();
+                //extract from the geometry.coordinates object
+                JsonNode coordinates = featureZero.path("geometry").path("coordinates");
+                Iterator<JsonNode> coordinatesAtZero = coordinates.elements(); //iterator to get the first element in coord array (only object)
+                if(coordinatesAtZero.hasNext()){
+                    JsonNode coordArray = coordinatesAtZero.next(); //coordinates is an array with one entry that holds arrays
+                    Iterator<JsonNode> coordIterator = coordArray.elements();
+                    int i = 0;
+                    while(coordIterator.hasNext()){
+                        JsonNode coordinate = coordIterator.next(); //get the next coordinate array.
+                        System.out.println("Coordinate at " + i++ + " is " + coordinate.toString());
+                        Iterator<JsonNode> coordValue = coordinate.elements(); //to get the two values from the coordinate
+                        double coord1 = coordValue.next().asDouble();
+                        double coord2 = coordValue.next().asDouble();
+                        Coordinate coord = new Coordinate(coord1, coord2); //read the two values into a Coordinate obj
+                        System.out.println("Coord is " + coord.toString());
+                    }
+                }
+
+
+
+
+                //System.out.println("coordinates : " + coordinates.toString());
+                //extract from the properties object
                 JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
                 JsonNode neighbors = propertiesNode.path("neighbors"); //array of neighbors
                 System.out.println("neighbors : " + neighbors.toString());
