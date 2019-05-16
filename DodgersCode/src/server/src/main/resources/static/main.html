@@ -524,6 +524,16 @@
         // }
 
         function getSimulatedAnnealing(){
+            var measureScoreLabel = [
+                "Schwartzberg Compactness",
+                "Reock Compactness",
+                "Population Equality",
+                "Polsby Popper",
+                "Convex Hull Compactness",
+                "Graph Compactness",
+                "Efficiency Gap"
+            ];
+
             $.ajax({
                 type: 'GET',
                 url: "http://localhost:8080/runSimulatedAnnealing",
@@ -548,7 +558,7 @@
                                  <br/>
                                  <strong>Measure Score : </strong><br/>
                                  ${e.measureScores.map((x,index)=> (
-                                     `${index} : ${x}<br/>`
+                                     `${measureScoreLabel[index]} : ${x}<br/>`
                                 )).join('')}
                                  </p>
                                  `);
