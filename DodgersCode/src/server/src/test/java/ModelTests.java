@@ -420,39 +420,7 @@ public class ModelTests {
                     }
                 }
 
-                //voting data by demographic for Demographics object
-                HashMap<DemographicType, int[]> demographicVoting= new HashMap<DemographicType, int[]>();
-                for(DemographicType t : DemographicType.values()){
-                    switch (t){
-                        case HISPANIC:
-                            int[] hispanicVotes = new int[3];
-                            demographicVoting.put(DemographicType.HISPANIC, hispanicVotes);
-                            break;
-                        case ASIAN:
-                            int[] asianVotes = new int[3];
-                            demographicVoting.put(DemographicType.ASIAN, asianVotes);
-                            break;
-                        case AFRICAN_AMERICAN:
-                            int[] africanAmericanVotes = new int[3];
-                            demographicVoting.put(DemographicType.AFRICAN_AMERICAN, africanAmericanVotes);
-                            break;
-                        case WHITE:
-                            int[] whiteVotes = new int[3];
-                            demographicVoting.put(DemographicType.WHITE, whiteVotes);
-                            break;
-                        case NATIVE:
-                            int[] nativeAmericanVotes = new int[3];
-                            demographicVoting.put(DemographicType.NATIVE, nativeAmericanVotes);
-                            break;
-                        case OTHER:
-                            int[] otherVotes = new int[3];
-                            demographicVoting.put(DemographicType.OTHER, otherVotes); //no other population
-                            break;
-                    }
-                }
-
-
-                Demographics d = new Demographics(demographicPop, demographicVoting);
+                Demographics d = new Demographics(demographicPop);
                 Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
 
                 precinctSet.add(p);
