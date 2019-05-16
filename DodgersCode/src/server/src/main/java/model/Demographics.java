@@ -20,6 +20,8 @@ public class Demographics {
     }
 
     public void add(Demographics d) {
+//        System.out.println("\taddtree:" + this);
+//        System.out.println("\taddleaf" + d);
         for(DemographicType demoType : DemographicType.values()) {
             //handle demographic population
             demographicPopulation.put(demoType, demographicPopulation.get(demoType) + d.getDemographicPopulation().get(demoType));
@@ -32,6 +34,9 @@ public class Demographics {
     }
 
     public void remove(Demographics d) {
+//        System.out.println("\tremovetree:" + this);
+//        System.out.println("\tremoveleaf" + d);
+
         for(DemographicType demoType : DemographicType.values()) {
             //handle demographic population
             demographicPopulation.put(demoType, demographicPopulation.get(demoType) - d.getDemographicPopulation().get(demoType));
@@ -64,15 +69,19 @@ public class Demographics {
         int[] vote = {5,3,2};
         int[] vote2 = {10,0,0};
         for(DemographicType type : DemographicType.values()) {
-            if(type.equals(DemographicType.WHITE)) {
-                populations.put(type, 10);
-                voting.put(type,vote2.clone());
-            } else {
+//            if(type.equals(DemographicType.WHITE)) {
+//                populations.put(type, 10);
+//                voting.put(type,vote2.clone());
+//            } else {
                 populations.put(type, 10);
                 voting.put(type, vote.clone());
-            }
+//            }
         }
         Demographics d1 = new Demographics(populations, voting);
         return d1;
+    }
+
+    public Demographics clone() {
+        return new Demographics(new HashMap<>(getDemographicPopulation()),new HashMap<>(getDemographicVotingData()));
     }
 }

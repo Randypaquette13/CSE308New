@@ -55,12 +55,15 @@ public enum MeasureType {
         @Override
         public double calculateMeasure(District d) {
             Set<Precinct> precincts = d.getPrecinctSet();
-
+            System.out.println(precincts.size());
+            System.out.println(d);
             double total = 0;
             for(Precinct p : precincts) {
-//                System.out.println("num edges " + p.getEdges().size());
+                System.out.println("\tprecinct " + p);
+                System.out.println("\tnum edges " + p.getEdges().size());
                 for(Edge e : p.getEdges()) {
                     if(e.getNeighbor(p) instanceof Precinct) {
+                        System.out.println("\t\tneighbor:" + e.getNeighbor(p) + " is part of the same district");
 //                        System.out.println(p);
 //                        System.out.println("adding maybe");
 //                        System.out.println(" neighbor " +(Precinct)e.getNeighbor(p));
@@ -68,9 +71,9 @@ public enum MeasureType {
                     }
                 }
             }
+            total /= 2;
 //            System.out.println("Randy compactness: " + total);
-//            System.out.println(precincts.size());
-//            System.out.println(d);
+            System.out.println("\ttotal neighbors: " + total);
             if(total > precincts.size()) return 1.0;
             return total/precincts.size();
         }
@@ -95,14 +98,18 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-//            System.out.println("PopEquality");
+//            System.out.println("PopEquality in :" + d);
 //            System.out.println("total Population " + d.population);
 //            System.out.println("total Population/num demos " + d.population/DemographicType.values().length);
 //            System.out.println("num white people " + d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE));
 //
-//            System.out.println(Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length)));
-            return Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length));
-//            return 1;
+//            System.out.println(1.0/Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length)));
+            double temp = Math.abs((d.getDemographics().getDemographicPopulation().get(DemographicType.WHITE) / (double)d.getPopulation()) - (1.0/DemographicType.values().length));
+            if(temp == 0) {
+                return 1;
+            } else {
+                return 1.0/temp;
+            }
         }
     };
 

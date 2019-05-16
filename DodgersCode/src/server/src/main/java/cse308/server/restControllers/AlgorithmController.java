@@ -1,20 +1,17 @@
 package cse308.server.restControllers;
 
 import controller.Algorithm;
-import cse308.server.dao.PreferencesDAO;
+import cse308.server.dao.BatchedPreferencesDAO;
+import cse308.server.dao.PreferenceDAO;
 import cse308.server.dao.SummaryDAO;
-import model.Cluster;
 import model.Preference;
 import model.State;
 import model.Summary;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,14 +29,14 @@ public class AlgorithmController {
      * @return  unknown
      */
     @RequestMapping("/runGraphPartitioning")
-    public Collection<long[]> doGraphPartitioning(@RequestBody PreferencesDAO preference) {
+    public Collection<long[]> doGraphPartitioning(@RequestBody PreferenceDAO preference) {
         //TODO: Load state object from DB and set it to the private state obj
-        Preference p = preference.makePreferences();
+        Preference p = preference.makePreference();
         if(state == null) {
             state = State.getState(p.getStateName());
         }
 
-        algorithm = new Algorithm(preference.makePreferences(), state);
+        algorithm = new Algorithm(p, state);
         if (preference.isGraphPartUpdate()) {
             if(state.isGPDone) {
                 return null;
@@ -71,8 +68,9 @@ public class AlgorithmController {
      * @return  unknown
      */
     @RequestMapping("/runBatchProcessing")
-    public List<Summary> doBatchProcessing(@RequestBody List<Preference> preferences) {
+    public List<Summary> doBatchProcessing(@RequestBody BatchedPreferencesDAO preferenceDAO) {
         final List<Summary> summaryBatch = new LinkedList<>();
+        List<Preference> preferences = preferenceDAO.makePreferences();
         for(Preference preference : preferences) {
             final Algorithm algorithm = new Algorithm(preference, state);
             summaryBatch.add(algorithm.doJob());

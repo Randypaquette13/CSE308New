@@ -55,7 +55,7 @@ public class Algorithm {
 
         for(District d : state.getDistrictSet()) {
             for(int ii = 0; ii < MeasureType.values().length; ii++) {
-                measureScores[ii] = MeasureType.values()[ii].calculateMeasure(d);
+                measureScores[ii] += MeasureType.values()[ii].calculateMeasure(d);
             }
         }
         for(int ii = 0; ii < measureScores.length; ii++) {
@@ -101,6 +101,7 @@ public class Algorithm {
         System.out.println("\n\tSTARTED SIM ANNEALING STEP");
         if(state.getDistrictSet().size() == 0) {
             state.convertClustersToDistricts();
+            lastObjFunVal = calculateObjectiveFunction();
             System.out.println("GENERATE DISTRICTS FROM SLUSTERS");
             System.out.println(state.getDistrictSet());
         }

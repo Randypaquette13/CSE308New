@@ -15,7 +15,7 @@ public class Cluster implements MapVertex {
         precinctSet.add(p);
 //        edgeSet = p.getEdges();
         population = p.getPopulation();
-        demographics = p.getDemographics();
+        demographics = p.getDemographics().clone();
         id = p.getId();
 
         p.parentCluster = this;

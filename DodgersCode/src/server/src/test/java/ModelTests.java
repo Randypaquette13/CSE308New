@@ -199,33 +199,33 @@ public class ModelTests {
 
     @Test
     public void testSimulatedAnnealing() {
-        int id = 0;
-        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+//        int id = 0;
+//        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+//        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+//        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+//        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+//        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+//        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+//
+//        p0.addEdgeTo(p1);
+//
+//        p0.addEdgeTo(p2);
+//        p0.addEdgeTo(p3);
+////        System.out.println(p0 + " edges: " + p0.getEdges().size());
+//
+//        p1.addEdgeTo(p4);
+//        p1.addEdgeTo(p5);
+//
+//        HashSet<Precinct> hsp = new HashSet<>();
+//        hsp.add(p0);
+//        hsp.add(p1);
+//        hsp.add(p2);
+//
+//        hsp.add(p3);
+//        hsp.add(p4);
+//        hsp.add(p5);
 
-        p0.addEdgeTo(p1);
-
-        p0.addEdgeTo(p2);
-        p0.addEdgeTo(p3);
-//        System.out.println(p0 + " edges: " + p0.getEdges().size());
-
-        p1.addEdgeTo(p4);
-        p1.addEdgeTo(p5);
-
-        HashSet<Precinct> hsp = new HashSet<>();
-        hsp.add(p0);
-        hsp.add(p1);
-        hsp.add(p2);
-
-        hsp.add(p3);
-        hsp.add(p4);
-        hsp.add(p5);
-
-        State s = new State(hsp);
+        State s = State.getState("sdljf");
         ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
         clusters.sort(Comparator.comparingLong(a -> a.id));
         Set<Cluster> newClusters = new HashSet<>();
@@ -246,17 +246,16 @@ public class ModelTests {
         }
 
         Algorithm a = new Algorithm(new Preference(weights,2,0,2,true, "Arizona"),s);
-        System.out.println(a.doSimulatedAnnealing());
-//        System.out.println(a.doSimulatedAnnealing());
-//        System.out.println(a.doSimulatedAnnealing());
-//        System.out.println(a.doSimulatedAnnealing());
-//        System.out.println(a.doSimulatedAnnealing());
-//        System.out.println(a.doSimulatedAnnealing());
-//        System.out.println(a.doSimulatedAnnealing());
+        int i = 0;
+        Summary sum = a.doSimulatedAnnealing();
+//        while (sum.getMove() != null) {
+//            i++;
+//            sum = a.doSimulatedAnnealing();
+//        } System.out.println(++i);
         System.out.println();
         System.out.println();
         System.out.println();
-        System.out.println();
+        System.out.println(sum.toString());
         System.out.println(s.getClusters());
     }
 

@@ -26,6 +26,7 @@ public class District extends Cluster {
         getDemographics().add(p.getDemographics());
     }
     public void removePrecinct(Precinct p) {
+//        System.out.println("\tremoving P:" + p);
         getPrecinctSet().remove(p);
         population -= p.getPopulation();
         getDemographics().remove(p.getDemographics());
