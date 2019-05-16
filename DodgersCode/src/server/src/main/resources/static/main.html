@@ -378,6 +378,7 @@
         //["SCHWARTZBERG_COMPACTNESS","REOCK_COMPACTNESS","POPULATION_EQUALITY",
         // "POLSBY_POPPER_COMPACTNESS","CONVEX_HULL_COMPACTNESS", "GRAPH_COMPACTNESS", "EFFICIENCY_GAP"];
 
+        var districtColors;
         $("#btnRun").click(function(){
             var data = null;
             if($("#single").prop('checked')){
@@ -405,6 +406,21 @@
                     success: function(e) {
                         console.log(e);//e is a double array of clusters where e[0] is the first cluster and e[0][0] is its id
                         console.log(e.length);
+                        //16777215
+                        districtColors = {};
+                        for(i = 0; i < e.length;i++) {
+                            // var num = Math.floor(Math.random() * 16777215)
+                            var color1 = getRandomColorReal();
+                            console.log("the color is:");
+                            console.log(color1);
+                            e[i][0];//the id of the cluster
+                            districtColors[e[i][0]] = color1;
+
+                            for(j = 1; j<e[i].length;j++) {
+                                colorPrecinct(color1,e[i][j]);
+                            }
+                        }
+
                         console.log(e[1][0]);
 
                         if(!data.graphPartUpdate.valueOf()) {
@@ -518,7 +534,11 @@
                     console.log(e);
 
                     if(e.precinctID !== -1) {
+                        colorPrecinct(districtColors[e.toID],e.precinctID);
                         getSimulatedAnnealing();
+                    } else {
+                        //TODO ADI SET SUMMARY HERE
+                        console.log(districtColors);
                     }
                 },
                 error: function(e) {
@@ -544,24 +564,6 @@
             });
         }
 
-        // Convert string to object function
-
-        function convertStrObj(param){
-            var mainStr = param.split("move:")[1]; // ["D0 P4,P1,P5, D1 P2,P3,P0"]
-            var splitByDistrict = mainStr.split(", ");//["D0 P4,P1,P5","D1 P2,P3,P0"]
-            var result = [];
-            splitByDistrict.map(x=>{
-                result.push({
-                    "district": x.split(" ")[0],
-                    "precincts": []
-                });
-                x.split(" ")[1].split(",").map(y=>{
-                    result.precincts.push(JSON.parse(y));
-                });
-            }); // [{district: D0,precincts: [P4,P1,P5]},{district: D1,precincts: [P2,P3,P0]}]
-            return result ;
-        }
-
         // clickc summary button
 
         $("#btnSummary").click(function(){
@@ -571,7 +573,6 @@
                 "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2",
                 "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2"
             ]
-
 
             var checked = $("#single").prop('checked');
             if(checked){
@@ -607,7 +608,14 @@
             this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: </b>0.00000000000<br /><b>longitude: </b>0.00000000000<br />';
         };
 
-
+        function getRandomColorReal() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
         //Generating Random color function
         function getRandomColor(feature) {
             return feature.properties.color;
@@ -656,7 +664,7 @@
                         style: hooverStyle,
                         onEachFeature: onEachAzFeature
                     }).bindTooltip(function(layer){
-                        return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                        return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                             "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                             "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                             "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -668,7 +676,7 @@
                       ArizonaStateLayer =  L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -689,7 +697,7 @@
                         style: hooverStyle,
                         onEachFeature: onEachMlFeature
                     }).bindTooltip(function(layer){
-                        return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                        return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                             "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                             "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                             "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -701,7 +709,7 @@
                         MarylandStateLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -721,7 +729,7 @@
                         style: hooverStyle,
                         onEachFeature: onEachNhFeature
                     }).bindTooltip(function(layer){
-                        return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                        return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                             "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                             "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                             "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -735,7 +743,7 @@
                             style:style,
                             // onEachFeature: onEachNhDetailFeature
                         }).bindTooltip(function(layer){
-                            return "Total:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
