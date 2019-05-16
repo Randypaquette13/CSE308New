@@ -58,7 +58,7 @@ public class Demographics {
         for(DemographicType dt : DemographicType.values()) {
             populations.put(dt,10);
         }
-        Demographics d1 = new Demographics(populations, 30,30);
+        Demographics d1 = new Demographics(populations, 20,40);
         return d1;
     }
 

@@ -448,11 +448,11 @@ public class ModelTests {
                     }
                 }
 
-                
-                Demographics d = new Demographics(demographicPop, demographicVoting);
-                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
 
-                precinctSet.add(p);
+//                Demographics d = new Demographics(demographicPop, demographicVoting);
+//                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
+//
+//                precinctSet.add(p);
                 //System.out.println("Precinct id: " + p.getId());
                 //System.out.println("Precinct pop: " + p.getPopulation());
                 //System.out.println("Precinct edges: " + p.getEdges());
