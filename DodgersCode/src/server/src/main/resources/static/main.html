@@ -10,10 +10,7 @@
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
           crossorigin=""/>
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet"/>
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css" rel="stylesheet"/>
-
-
 
     <style>
         body, wrapper {
@@ -32,18 +29,6 @@
         }
         #SCHWARTZBERG_BATCH, #REOCK_BATCH,#POPULATION_EQUALITY_BATCH,#POLSBY_POPPER_BATCH,#CONVEX_HULL_BATCH, #GRAPH_COMPACTNESS_BATCH, #EFFICIENCY_GAP_BATCH{
             background: yellow;
-        }
-        .info {
-            padding: 6px 8px;
-            font: 14px/16px Arial, Helvetica, sans-serif;
-            background: white;
-            background: rgba(255,255,255,0.8);
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            border-radius: 5px;
-        }
-        .info h4 {
-            margin: 0 0 5px;
-            color: #777;
         }
     </style>
 </head>
@@ -227,18 +212,6 @@
 
             <div class="section">
                 <div class="form-group">
-                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Select Algorithm
-                    </button>
-                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Select Precinct
-                    </button>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group">
                     <label class="col-form-label col-form-label-sm" for="num_districts">Number of Majority / Minority Districts</label>
                     <div class="flex-row">
                         <span id="min_majority" class="mr-3">0</span>
@@ -254,7 +227,6 @@
                     <button type="button" class="btn btn-primary btn-sm">Stop</button>
                     <button type="button" class="btn btn-primary btn-sm">Pause</button>
                     <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
-                    <button type="button" id="testColorPrecinct" class="btn btn-primary btn-sm">Test</button>
                 </div>
             </div>
         </div>
@@ -290,7 +262,7 @@
         var ArizonaStateLayer = null;
         var MarylandStateLayer = null;
 
-        //Log Out
+//=====================================  Logout  =====================================//
         $("#logOut").click(function(){
             $.ajax({
                 type: 'POST',
@@ -307,8 +279,7 @@
             });
         });
 
-        //=====================================  Right Side Panel  =====================================//
-
+//=====================================  Right Side Panel  =====================================//
         // when selected batch radio select option
         $("#batch").click(function(){
             var checked = $("#batch").prop('checked');
@@ -324,7 +295,6 @@
             }
         });
 
-
         // when selected batch radio select option
         $("#single").click(function(){
             var checked = $("#single").prop('checked');
@@ -339,8 +309,6 @@
                 }
             }
         });
-
-
 
         // slider generation when batch
         function loadBatchRangeSlider() {
@@ -375,9 +343,7 @@
             $("#max_majority").text(slideEvt.value[1]);
         });
 
-        //["SCHWARTZBERG_COMPACTNESS","REOCK_COMPACTNESS","POPULATION_EQUALITY",
-        // "POLSBY_POPPER_COMPACTNESS","CONVEX_HULL_COMPACTNESS", "GRAPH_COMPACTNESS", "EFFICIENCY_GAP"];
-
+        //=====================================  Run Button  =====================================//
         var districtColors;
         $("#btnRun").click(function(){
             var data = null;
@@ -598,27 +564,12 @@
             });
         }
 
-        // clickc summary button
-
-
         //==================================  Map  =============================================//
-
         // Variable
         var azFlag = false;
         var mlFlag = false;
         var nhFlag = false;
         var map = null;
-
-        var info = L.control();
-        info.onAdd = function (map) {
-            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-            this.update();
-            return this._div;
-        };
-
-        info.update = function (infoProps) {
-            this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: </b>0.00000000000<br /><b>longitude: </b>0.00000000000<br />';
-        };
 
         function getRandomColorReal() {
             var letters = '0123456789ABCDEF';
@@ -656,8 +607,7 @@
             };
         }
 
-        //
-        // load state...
+        //=====================================  Loading State  =====================================//
         function loadState(latitude , longitude , fileName){
             document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
             map = L.map('mapContainer').setView([latitude, longitude], 7);
@@ -666,12 +616,12 @@
                 maxZoom: 17,
                 minZoom: 2
             }).addTo(map);
-            info.addTo(map);
+
             if(fileName == "AZ"){
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                $.getJSON('./ArizonaData/ArizonaDistrictData.json', function (data) {
+                $.getJSON('./ArizonaData/AZDistrictData.json', function (data) {
                     L.geoJson(data,{
                         style: hooverStyle,
                         onEachFeature: onEachAzFeature
@@ -684,7 +634,7 @@
                     }).addTo(map);
                 });
                 if(azFlag){
-                    $.getJSON('./ArizonaData/ArizonaPrecinctData.json', function (data) {
+                    $.getJSON('./ArizonaData/AZPrecinctData.json', function (data) {
                       ArizonaStateLayer =  L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
@@ -704,7 +654,7 @@
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                $.getJSON('./MarylandData/MarylandDistrictData.json', function (data) {
+                $.getJSON('./MarylandData/MDDistrictData.json', function (data) {
                     L.geoJson(data,{
                         style: hooverStyle,
                         onEachFeature: onEachMlFeature
@@ -717,7 +667,7 @@
                     }).addTo(map);
                 });
                 if(mlFlag){
-                    $.getJSON('./MarylandData/MarylandPrecinctData.json', function (data) {
+                    $.getJSON('./MarylandData/MDPrecinctData.json', function (data) {
                         MarylandStateLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
@@ -735,8 +685,7 @@
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
                 }).addTo(map);
-                //$.getJSON('./NH-FULL.geojson', function (data) {
-                $.getJSON('./NewHampshireData/NewHampshireDistrictData.json', function (data) {
+                $.getJSON('./NewHampshireData/NHDistrictData.json', function (data) {
                     L.geoJson(data,{
                         style: hooverStyle,
                         onEachFeature: onEachNhFeature
@@ -750,10 +699,9 @@
                 });
                 if(nhFlag){
                     //$.getJSON('./NewHampshireData/New_Hampshire.json', function (data) {
-                    $.getJSON('./NewHampshireData/NewHampshirePrecinctData.json', function (data) {
+                    $.getJSON('./NewHampshireData/NHPrecinctData.json', function (data) {
                         New_HampshireLayer = L.geoJSON(data,{
                             style:style,
-                            // onEachFeature: onEachNhDetailFeature
                         }).bindTooltip(function(layer){
                             return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
@@ -794,16 +742,7 @@
                     mlFlag = false;
                     nhFlag = false;
                     loadState(33.729759,-111.431221,"AZ");
-                },
-                mouseover: highlightFeature,
-                mouseout: resetHighlight
-            });
-        }
-        // AZ detail Event
-        function onEachAzDetailFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight
+                }
             });
         }
 
@@ -815,16 +754,7 @@
                     mlFlag = true;
                     nhFlag = false;
                     loadState(39.063946,-76.802101,"ML");
-                },
-                mouseover: highlightFeature,
-                mouseout: resetHighlight
-            });
-        }
-        // ML detail click Event
-        function onEachMlDetailFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight
+                }
             });
         }
 
@@ -836,38 +766,11 @@
                     mlFlag = false;
                     nhFlag = true;
                     loadState(43.452492,-71.563896,"NH");
-                },
-                mouseover: highlightFeature,
-                mouseout: resetHighlight
-            });
-        }
-        // NH detail Event
-        function onEachNhDetailFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight
+                }
             });
         }
 
-        function highlightFeature(e) {
-            // method that we will use to update the control based on feature properties passed
-            var event = e;
-            info.update = function (e) {
-                this._div.innerHTML = '<h4>Lat-Lng of Districts</h4>' +  (event ?
-                    '<b>latitude: </b>' + event.latlng.lat +'<br /><b>longitude: </b>'+ event.latlng.lng
-                    : '<b>latitude: 0.00000000000</b><br /><b>longitude: 0.00000000000</b><br />');
-            };
-            info.addTo(map);
-        }
-
-        function resetHighlight(e) {
-            info.update = function (e) {
-                this._div.innerHTML = '<h4>Lat-Lng of Districts</h4><b>latitude: 0.00000000000</b><br /><b>longitude: 0.00000000000</b><br />';
-            };
-            info.addTo(map);
-        }
-
-        // Load map first time...
+        //=====================================  Initial loading of map  =====================================//
         document.getElementById("map").innerHTML = "<div id='mapContainer' style='width:100%;height:100%'></div>";
         map = L.map('mapContainer').setView([39.8870, -97.9803], 5);
         var layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -880,27 +783,11 @@
             onEachFeature: onEachFeature
         }).addTo(map);
 
-        info.addTo(map);
-
         // Change state, change in dropdown as well
         $("#stateDropdown a").click(function(){
             $(this).parent().prev().text($(this).text());
             loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
         });
-
-        $("#testColorPrecinct").click(function(){
-            if(New_HampshireLayer === null && MarylandStateLayer === null && ArizonaStateLayer === null) {
-                alert("test layer:Layer is not yet loaded!");
-                return;
-            }
-
-            var color = "#ff0000";
-            var precinctId = 72;
-
-            colorPrecinct(color, precinctId);
-        });
-
-        //problem with maryland
 
         function colorPrecinct(color, precinctId) {
             console.log($("#state").text());
@@ -950,7 +837,6 @@
               alert("error!");
             }
         }
-
     });
 </script>
 </body>
