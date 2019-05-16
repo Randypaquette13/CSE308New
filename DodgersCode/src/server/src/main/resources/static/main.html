@@ -537,10 +537,34 @@
                         colorPrecinct(districtColors[e.toID],e.precinctID);
                         getSimulatedAnnealing();
                     } else {
-                        //TODO ADI SET SUMMARY HERE
-                        console.log(districtColors);
+                        //TODO SET SUMMARY HERE PERFECTTTTTT
+                        console.log("districtColors",districtColors);
+                        console.log("event",e);
+                        var checked = $("#single").prop('checked');
+                        if(checked){
+                            $("#summaryModalContent").empty();
+                            $("#summaryModalContent").append(
+                                `<p><strong>Objective FunctionScore : </strong>${JSON.stringify(e.objectiveFunctionScore)}
+                                 <br/>
+                                 <strong>Measure Score : </strong><br/>
+                                 ${e.measureScores.map((x,index)=> (
+                                     `${index} : ${x}<br/>`
+                                )).join('')}
+                                 </p>
+                                 `);
+                        }else{
+                            // if(batchSummary !== null && batchSummary.length > 0){
+                            //     $("#summaryModalContent").empty();
+                            //     batchSummary.map((x,index)=>{
+                            //         $("#summaryModalContent").append(`<p><b>${index}. </b>${x}</p>`);
+                            //     });
+                            // }
+
+                        }
                     }
                 },
+
+
                 error: function(e) {
                     console.log("error somehow");
                     console.log(e);
@@ -566,28 +590,6 @@
 
         // clickc summary button
 
-        $("#btnSummary").click(function(){
-            var singleSummary = "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2";
-            var batchSummary = [
-                "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2",
-                "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2",
-                "State:District#0 P5,P4,P0,District#1 P1,P2,P3, Cluster#1 P1,P2,P3,Cluster#0 P5,P4,P0, Precinct: P1,P0, Districts:2 Clusters:2 Precincts:2 tScore: 0.11 mScores: 1.2,1.0,3.2"
-            ]
-
-            var checked = $("#single").prop('checked');
-            if(checked){
-                $("#summaryModalContent").empty();
-                $("#summaryModalContent").append(`<p>${singleSummary}<p>`);
-            }else{
-                if(batchSummary !== null && batchSummary.length > 0){
-                    $("#summaryModalContent").empty();
-                    batchSummary.map((x,index)=>{
-                        $("#summaryModalContent").append(`<p><b>${index}. </b>${x}</p>`);
-                    });
-                }
-
-            }
-        });
 
         //==================================  Map  =============================================//
 
