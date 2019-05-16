@@ -36,6 +36,8 @@ public class Demographics {
             //handle demographic population
             demographicPopulation.put(demoType, demographicPopulation.get(demoType) - d.getDemographicPopulation().get(demoType));
         }
+        demVotes -= d.demVotes;
+        repVotes -= d.repVotes;
     }
 
     @Override
