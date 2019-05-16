@@ -362,30 +362,30 @@ public class ModelTests {
             JsonNode rootNode = objectMapper.readTree(jsonData); //gets root of object
             JsonNode featuresNode = rootNode.path("features"); //gets array titled "features"
             Iterator<JsonNode> elements = featuresNode.elements();
-            if(elements.hasNext()){
+            HashSet<Precinct> precinctSet = new HashSet<Precinct>();
+            while(elements.hasNext()){
                 JsonNode featureZero = elements.next();
                 //extract from the geometry.coordinates object
                 JsonNode coordinates = featureZero.path("geometry").path("coordinates");
                 Iterator<JsonNode> coordinatesAtZero = coordinates.elements(); //iterator to get the first element in coord array (only object)
+                ArrayList<Coordinate> coordinateList = new ArrayList<Coordinate>(); //will hold all the Coordinate objects
                 if(coordinatesAtZero.hasNext()){
                     JsonNode coordArray = coordinatesAtZero.next(); //coordinates is an array with one entry that holds arrays
                     Iterator<JsonNode> coordIterator = coordArray.elements();
                     int i = 0;
                     while(coordIterator.hasNext()){
                         JsonNode coordinate = coordIterator.next(); //get the next coordinate array.
-                        System.out.println("Coordinate at " + i++ + " is " + coordinate.toString());
+                        //System.out.println("Coordinate at " + i++ + " is " + coordinate.toString());
                         Iterator<JsonNode> coordValue = coordinate.elements(); //to get the two values from the coordinate
                         double coord1 = coordValue.next().asDouble();
                         double coord2 = coordValue.next().asDouble();
                         Coordinate coord = new Coordinate(coord1, coord2); //read the two values into a Coordinate obj
-                        System.out.println("Coord is " + coord.toString());
+                        //System.out.println("Coord is " + coord.toString());
+                        coordinateList.add(coord);
                     }
+                    System.out.println("Arraylist:\n" + coordinateList);
                 }
 
-
-
-
-                //System.out.println("coordinates : " + coordinates.toString());
                 //extract from the properties object
                 JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
                 JsonNode neighbors = propertiesNode.path("neighbors"); //array of neighbors
@@ -413,6 +413,73 @@ public class ModelTests {
                 JsonNode county = propertiesNode.path("COUNTY"); //county precinct is in.
                 System.out.println("COUNTY : " + county.toString());
 
+                //population of demographics for Demographics object
+                HashMap<DemographicType, Integer> demographicPop = new HashMap<DemographicType, Integer>();
+                for(DemographicType t : DemographicType.values()){
+                    switch (t){
+                        case HISPANIC:
+                            demographicPop.put(DemographicType.HISPANIC, hispanicPop.asInt());
+                            break;
+                        case ASIAN:
+                            demographicPop.put(DemographicType.ASIAN, asianPop.asInt());
+                            break;
+                        case AFRICAN_AMERICAN:
+                            demographicPop.put(DemographicType.AFRICAN_AMERICAN, afAmerPop.asInt());
+                            break;
+                        case WHITE:
+                            demographicPop.put(DemographicType.WHITE, whitePop.asInt());
+                            break;
+                        case NATIVE:
+                            demographicPop.put(DemographicType.NATIVE, nativePop.asInt());
+                            break;
+                        case OTHER:
+                            demographicPop.put(DemographicType.OTHER, 0); //no other population
+                            break;
+                    }
+                }
+
+                //voting data by demographic for Demographics object
+                HashMap<DemographicType, int[]> demographicVoting= new HashMap<DemographicType, int[]>();
+                for(DemographicType t : DemographicType.values()){
+                    switch (t){
+                        case HISPANIC:
+                            int[] hispanicVotes = new int[3];
+                            demographicVoting.put(DemographicType.HISPANIC, hispanicVotes);
+                            break;
+                        case ASIAN:
+                            int[] asianVotes = new int[3];
+                            demographicVoting.put(DemographicType.ASIAN, asianVotes);
+                            break;
+                        case AFRICAN_AMERICAN:
+                            int[] africanAmericanVotes = new int[3];
+                            demographicVoting.put(DemographicType.AFRICAN_AMERICAN, africanAmericanVotes);
+                            break;
+                        case WHITE:
+                            int[] whiteVotes = new int[3];
+                            demographicVoting.put(DemographicType.WHITE, whiteVotes);
+                            break;
+                        case NATIVE:
+                            int[] nativeAmericanVotes = new int[3];
+                            demographicVoting.put(DemographicType.NATIVE, nativeAmericanVotes);
+                            break;
+                        case OTHER:
+                            int[] otherVotes = new int[3];
+                            demographicVoting.put(DemographicType.OTHER, otherVotes); //no other population
+                            break;
+                    }
+                }
+
+
+                Demographics d = new Demographics(demographicPop, demographicVoting);
+                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
+
+                precinctSet.add(p);
+                //System.out.println("Precinct id: " + p.getId());
+                //System.out.println("Precinct pop: " + p.getPopulation());
+                //System.out.println("Precinct edges: " + p.getEdges());
+                //System.out.println("Precinct demographics: " + p.getDemographics());
+                //System.out.println("Precinct county: " + p.getCounty());
+                //System.out.println("Random vertex: " + p.getPolygon().getCoordinate());
                 //TODO
 //                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), null, null, county.toString());
 //                System.out.println("Precint is:  " + p);
