@@ -1,5 +1,11 @@
 package model;
 
+import org.locationtech.jts.algorithm.MinimumBoundingCircle;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class District extends Cluster {
@@ -8,16 +14,26 @@ public class District extends Cluster {
         super(c);
     }
 
-    public double getPerimeter() {//TODO
-        return 10;
+    public MultiPolygon computeMulti() {
+        Polygon[] polygons = new Polygon[getPrecinctSet().size()];
+
+        Iterator<Precinct> piter = getPrecinctSet().iterator();
+        for(int ii = 0; ii < polygons.length; ii++) {
+            polygons[ii] = piter.next().getPolygon();
+        }
+
+        MultiPolygon mp = new MultiPolygon(polygons,new GeometryFactory());
+        return mp;
+    }
+
+    public double getPerimeter() {
+        MultiPolygon mp = computeMulti();
+        return mp.convexHull().getLength();
     }
 
     public double getArea() {
-        double area = 0;
-        for(Precinct p : getPrecinctSet()) {
-            area += p.getArea();
-        }
-        return area;
+        MultiPolygon mp = computeMulti();
+        return mp.getArea();
     }
 
     public void addPrecinct(Precinct p) {
@@ -31,12 +47,15 @@ public class District extends Cluster {
         population -= p.getPopulation();
         getDemographics().remove(p.getDemographics());
     }
-    public double getBoundingCircleArea() {//TODO
-        return -1.0;
+    public double getBoundingCircleArea() {
+        MultiPolygon mp = computeMulti();
+        MinimumBoundingCircle mbc = new MinimumBoundingCircle(mp);
+        return Math.PI * Math.pow(mbc.getRadius(),2);
     }
 
-    public double getConvexHull() {//TODO
-        return -1.0;
+    public double getConvexHull() {
+        MultiPolygon mp = computeMulti();
+        return mp.convexHull().getArea();
     }
 
     public int wastedDemVotes() {

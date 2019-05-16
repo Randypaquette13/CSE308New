@@ -102,6 +102,7 @@ public class Algorithm {
         if(state.getDistrictSet().size() == 0) {
             state.convertClustersToDistricts();
             lastObjFunVal = calculateObjectiveFunction();
+            System.out.println("obj funct init value: " + lastObjFunVal);
             System.out.println("GENERATE DISTRICTS FROM SLUSTERS");
             System.out.println(state.getDistrictSet());
         }

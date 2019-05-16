@@ -3,6 +3,9 @@ package model;
 import controller.Configuration;
 import controller.Move;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -231,13 +234,15 @@ public class State {
             default:
                 break;
         }
+
+
         int id = 0;
-        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county", getCoords(1,2,0,1));
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county", getCoords(2,3,0,1));
+        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county", getCoords(0,1,1,2));
+        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county", getCoords(0,1,0,1));
+        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county", getCoords(3,4,1,2));
+        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county", getCoords(3,4,0,1));
 
         p0.addEdgeTo(p1);
 
@@ -260,9 +265,25 @@ public class State {
 
         State s = new State(hsp);
         s.reset();
+//        System.out.println("sanity" + p0.getPolygon().convexHull().getLength());
+        Polygon[] pss = new Polygon[3];
+        pss[0] = p0.getPolygon();
+        pss[1] = p3.getPolygon();
+        pss[2] = p2.getPolygon();
 
-        Coordinate c;
+        MultiPolygon mp = new MultiPolygon(pss, new GeometryFactory());
+//        System.out.println("Satnit" + mp.convexHull().getLength());
         return s;
+    }
+
+    private static Coordinate[] getCoords(double xmin, double xmax, double ymin, double ymax) {
+        Coordinate[] coordinates = {
+                new Coordinate(xmin,ymin),
+                new Coordinate(xmin,ymax),
+                new Coordinate(xmax,ymax),
+                new Coordinate(xmax,ymin),
+                new Coordinate(xmin,ymin)};
+        return coordinates;
     }
 
     public Collection<long[]> getClustersSimple() {
