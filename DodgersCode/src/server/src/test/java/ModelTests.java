@@ -20,8 +20,7 @@ public class ModelTests {
     public void combineClusterPairTest() {
 //        System.out.println("COMBINE CLUSTER TEST");
 
-        HashMap<DemographicType, Integer> populations = new HashMap<>();
-        Demographics d1 = new Demographics(populations);
+        Demographics d1 = Demographics.getDemographicTest();
 
         int id = 0;
 //        double[] d1 = {0,2,2,2,2};
@@ -66,8 +65,7 @@ public class ModelTests {
     @Test
     public void testReset() {
 //        System.out.println("TEST RESET");
-        HashMap<DemographicType, Integer> populations = new HashMap<>();
-        Demographics d1 = new Demographics(populations);
+        Demographics d1 = Demographics.getDemographicTest();
 
         int id = 0;
 //        double[] d1 = {0,2,2,2,2};
@@ -106,8 +104,7 @@ public class ModelTests {
 
     @Test
     public void testDoMove() {
-        HashMap<DemographicType, Integer> populations = new HashMap<>();
-        Demographics d1 = new Demographics(populations);
+        Demographics d1 = Demographics.getDemographicTest();
         int id = 0;
         Precinct p0 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
         Precinct p1 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);

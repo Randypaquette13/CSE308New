@@ -7,8 +7,10 @@ public class Demographics {
     int demVotes;
     int repVotes;
 
-    public Demographics(HashMap<DemographicType, Integer> demographicPopulation) {
+    public Demographics(HashMap<DemographicType, Integer> demographicPopulation, int demVotes, int repVotes) {
         this.demographicPopulation = demographicPopulation;
+        this.demVotes = demVotes;
+        this.repVotes = repVotes;
     }
 
     public HashMap<DemographicType, Integer> getDemographicPopulation() {
@@ -36,6 +38,8 @@ public class Demographics {
             //handle demographic population
             demographicPopulation.put(demoType, demographicPopulation.get(demoType) - d.getDemographicPopulation().get(demoType));
         }
+        demVotes -= d.demVotes;
+        repVotes -= d.repVotes;
     }
 
     @Override
@@ -51,11 +55,14 @@ public class Demographics {
 
     public static Demographics getDemographicTest() {
         HashMap<DemographicType, Integer> populations = new HashMap<>();
-        Demographics d1 = new Demographics(populations);
+        for(DemographicType dt : DemographicType.values()) {
+            populations.put(dt,10);
+        }
+        Demographics d1 = new Demographics(populations, 30,30);
         return d1;
     }
 
     public Demographics clone() {
-        return new Demographics(new HashMap<>(getDemographicPopulation()));
+        return new Demographics(new HashMap<>(getDemographicPopulation()), demVotes, repVotes);
     }
 }
