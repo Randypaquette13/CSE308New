@@ -209,14 +209,14 @@ public class ModelTests {
         ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
         clusters.sort(Comparator.comparingLong(a -> a.id));
         Set<Cluster> newClusters = new HashSet<>();
+        newClusters.add(s.combinePair(clusters.get(0),clusters.get(1)));
         newClusters.add(s.combinePair(clusters.get(0),clusters.get(2)));
         newClusters.add(s.combinePair(clusters.get(0),clusters.get(3)));
 
-        newClusters.add(s.combinePair(clusters.get(1),clusters.get(4)));
-        newClusters.add(s.combinePair(clusters.get(1),clusters.get(5)));
+//        newClusters.add(s.combinePair(clusters.get(1),clusters.get(4)));
+        newClusters.add(s.combinePair(clusters.get(4),clusters.get(5)));
 
         s.setClusters(newClusters);
-        s.convertClustersToDistricts();
 
 //        double[] darr = new double[MeasureType.values().length];
 //        Arrays.fill(darr, 1.0);
@@ -228,10 +228,10 @@ public class ModelTests {
         Algorithm a = new Algorithm(new Preference(weights,2,0,2,true, "Arizona"),s);
         int i = 0;
         Summary sum = a.doSimulatedAnnealing();
-//        while (sum.getMove() != null) {
-//            i++;
-//            sum = a.doSimulatedAnnealing();
-//        } System.out.println(++i);
+        while (sum.getMove() != null) {
+            i++;
+            sum = a.doSimulatedAnnealing();
+        } System.out.println(++i);
         System.out.println();
         System.out.println();
         System.out.println();

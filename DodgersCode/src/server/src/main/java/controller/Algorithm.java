@@ -111,33 +111,41 @@ public class Algorithm {
         //anneal until the objective function output is acceptable or the max steps is reached
         System.out.println("Objective function value: " + lastObjFunVal);
         if(calculateObjectiveFunction() < Configuration.OBJECTIVE_FUNCTION_GOAL && annealingSteps < Configuration.MAX_ANNEALING_STEPS) {
-            candidateMove = state.findCandidateMove();
-            if(candidateMove != null) {
+            while(annealingSteps < Configuration.MAX_ANNEALING_STEPS && candidateMove == null) {
+
+                candidateMove = state.findCandidateMove();
+                if (candidateMove != null) {
 //                System.out.println(candidateMove);
 
-                final int oldMajMinDistNum = state.numMaxMinDists();
-                state.doMove(candidateMove);
-                final int newMajMinDistNum = state.numMaxMinDists();
+                    final int oldMajMinDistNum = state.numMaxMinDists();
+                    state.doMove(candidateMove);
+                    final int newMajMinDistNum = state.numMaxMinDists();
 
-                if(newMajMinDistNum < pref.getMinMajMinDistricts() && oldMajMinDistNum > newMajMinDistNum) {//if it is less than min and it went down
-                    System.out.println("undoing move");
-                    state.undoMove();
-                } else if(newMajMinDistNum > pref.getMaxMajMinDistricts() && oldMajMinDistNum < newMajMinDistNum) {//if it is greater than max and it went up
-                    System.out.println("undoing move");
-                    state.undoMove();
-                } else {
-                    final double currObjFunVal = calculateObjectiveFunction();
-                    if((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
-                        lastObjFunVal = currObjFunVal;
-                    } else {
+                    if (newMajMinDistNum < pref.getMinMajMinDistricts() && oldMajMinDistNum > newMajMinDistNum) {//if it is less than min and it went down
                         System.out.println("undoing move");
                         state.undoMove();
+                        candidateMove = null;
+                    } else if (newMajMinDistNum > pref.getMaxMajMinDistricts() && oldMajMinDistNum < newMajMinDistNum) {//if it is greater than max and it went up
+                        System.out.println("undoing move");
+                        state.undoMove();
+                        candidateMove = null;
+                    } else {
+                        final double currObjFunVal = calculateObjectiveFunction();
+                        if ((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
+                            lastObjFunVal = currObjFunVal;
+                            System.out.println("VALID MOVE ACCEPTED");
+                        } else {
+                            System.out.println("undoing move");
+                            state.undoMove();
+                            candidateMove = null;
+                        }
                     }
+
+                } else {
+                    System.out.println("NO CANDIDATE MOVE FOUND... try again");
                 }
-            } else {
-                System.out.println("NO CANDIDATE MOVE FOUND");
+                annealingSteps++;
             }
-            annealingSteps++;
         } else {
             System.out.println("SIM END CONDITION MET");
         }
