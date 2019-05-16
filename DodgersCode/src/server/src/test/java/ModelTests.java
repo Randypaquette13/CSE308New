@@ -1,11 +1,13 @@
 import controller.Algorithm;
 import controller.Move;
+import cse308.server.dao.JsonDistrictData;
 import model.*;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class ModelTests {
 
@@ -364,5 +366,19 @@ public class ModelTests {
         Algorithm a = new Algorithm(new Preference(weights,2,0,2,false, "Arizona"),s);
         System.out.println(a.doJob());
         System.out.println(s);
+    }
+
+    @Test
+    public void testJSONReading(){
+        String path = "";
+        try {
+            JsonDistrictData j = new JsonDistrictData(path);
+            assertNotEquals(j.getJson(), null);
+        }
+        catch(IOException e){
+            System.out.println("could not read");
+            fail();
+        }
+
     }
 }
