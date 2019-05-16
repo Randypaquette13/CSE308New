@@ -14,7 +14,7 @@ public class Precinct implements MapVertex {
     private String county;
     public Cluster parentCluster = null;
 
-    public Precinct(int id, int population, Set<Edge> edgeSet, Demographics demographics, String county) {
+    public Precinct(long id, int population, Set<Edge> edgeSet, Demographics demographics, String county) {
         this.id = id;
         numPrecincts++;
         this.population = population;
