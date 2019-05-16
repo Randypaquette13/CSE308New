@@ -1,11 +1,18 @@
 
+DodgersCode/src/server/src/main/resources/static/ArizonaData/AZDistrictData.json
+DodgersCode/src/server/src/main/resources/static/ArizonaData/AZPrecinctData.json
+DodgersCode/src/server/src/main/resources/static/MarylandData/MDDistrictData.json
+DodgersCode/src/server/src/main/resources/static/MarylandData/MDPrecinctData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NHDistrictData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NHPrecinctData.json
+
 DodgersCode/src/server/src/main/resources/static/ArizonaData/ArizonaDistrictData.json
-        DodgersCode/src/server/src/main/resources/static/ArizonaData/ArizonaPrecinctData.json
-        DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandDistrictData.json
-        DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandPrecinctData.json
-        DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshireDistrictData.json
-        DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData.json
-        DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData2.json
+DodgersCode/src/server/src/main/resources/static/ArizonaData/ArizonaPrecinctData.json
+DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandDistrictData.json
+DodgersCode/src/server/src/main/resources/static/MarylandData/MarylandPrecinctData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshireDistrictData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData.json
+DodgersCode/src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData2.json
 
 DodgersCode/.idea/workspace.xml
 DodgersCode/.idea/misc.xml
