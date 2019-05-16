@@ -1,5 +1,10 @@
 package model;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -14,13 +19,18 @@ public class Precinct implements MapVertex {
     private String county;
     public Cluster parentCluster = null;
 
-    public Precinct(long id, int population, Set<Edge> edgeSet, Demographics demographics, String county) {
+    private Polygon polygon;
+
+    public Precinct(long id, int population, Set<Edge> edgeSet, Demographics demographics, String county, Coordinate[] coordinates) {
         this.id = id;
         numPrecincts++;
         this.population = population;
         this.edgeSet = edgeSet;
         this.demographics = demographics;
         this.county = county;
+
+        final GeometryFactory geometryFactory = new GeometryFactory();
+        this.polygon = geometryFactory.createPolygon(coordinates);
     }
 
     public long getId() {
@@ -52,8 +62,8 @@ public class Precinct implements MapVertex {
         this.district = district;
     }
 
-    public double getArea() {
-        return -1.0;//TODO
+    public Polygon getPolygon() {
+        return polygon;
     }
 
     @Override

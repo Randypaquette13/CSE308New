@@ -13,9 +13,11 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-//            final double radius = Math.sqrt(d.getArea()/Math.PI);
-//            return ((2.0*radius*Math.PI) / d.getPerimeter());
-            return 1;
+            final double radius = Math.sqrt(d.getArea()/Math.PI);
+//            System.out.println(this);
+//            System.out.println("\t" + d.getArea());
+//            System.out.println("\t" + d.getPerimeter());
+            return ((2.0*radius*Math.PI) / d.getPerimeter());
         }
     },
     REOCK_COMPACTNESS {
@@ -24,8 +26,10 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-//            return d.getArea()/d.getBoundingCircleArea();
-            return 1;
+//            System.out.println(this);
+//            System.out.println("\t" + d.getArea());
+//            System.out.println("\t" + d.getBoundingCircleArea());
+            return d.getArea()/d.getBoundingCircleArea();
         }
     },
     POLSBY_POPPER_COMPACTNESS {
@@ -34,8 +38,7 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-//            return 4 * Math.PI * (d.getPerimeter()/(Math.pow(d.getArea(), 2)));
-            return 1;
+            return 4 * Math.PI * (d.getArea()/(Math.pow(d.getPerimeter(), 2)));
         }
     },
     CONVEX_HULL_COMPACTNESS {
@@ -44,8 +47,7 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-//            return d.getArea()/d.getConvexHull();
-            return 1;
+            return d.getArea()/d.getConvexHull();
         }
     },
     GRAPH_COMPACTNESS {
@@ -55,15 +57,15 @@ public enum MeasureType {
         @Override
         public double calculateMeasure(District d) {
             Set<Precinct> precincts = d.getPrecinctSet();
-            System.out.println(precincts.size());
-            System.out.println(d);
+//            System.out.println(precincts.size());
+//            System.out.println(d);
             double total = 0;
             for(Precinct p : precincts) {
-                System.out.println("\tprecinct " + p);
-                System.out.println("\tnum edges " + p.getEdges().size());
+//                System.out.println("\tprecinct " + p);
+//                System.out.println("\tnum edges " + p.getEdges().size());
                 for(Edge e : p.getEdges()) {
                     if(e.getNeighbor(p) instanceof Precinct) {
-                        System.out.println("\t\tneighbor:" + e.getNeighbor(p) + " is part of the same district");
+//                        System.out.println("\t\tneighbor:" + e.getNeighbor(p) + " is part of the same district");
 //                        System.out.println(p);
 //                        System.out.println("adding maybe");
 //                        System.out.println(" neighbor " +(Precinct)e.getNeighbor(p));
@@ -73,7 +75,7 @@ public enum MeasureType {
             }
             total /= 2;
 //            System.out.println("Randy compactness: " + total);
-            System.out.println("\ttotal neighbors: " + total);
+//            System.out.println("\ttotal neighbors: " + total);
             if(total > precincts.size()) return 1.0;
             return total/precincts.size();
         }
@@ -84,11 +86,12 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-//            System.out.println(d);
-//            System.out.println(d.getPopulation());
-//            System.out.println("eff gap" + (1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation())));
-//            System.out.println("dem votes wasted" + d.wastedDemVotes());
-//            System.out.println("rep votes wasted" + d.wastedRepVotes());
+            System.out.println(this);
+            System.out.println(d);
+            System.out.println(d.getPopulation());
+            System.out.println("eff gap" + (1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation())));
+            System.out.println("dem votes wasted" + d.wastedDemVotes());
+            System.out.println("rep votes wasted" + d.wastedRepVotes());
             return 1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation());
         }
     },

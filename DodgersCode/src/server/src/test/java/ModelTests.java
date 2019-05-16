@@ -5,6 +5,7 @@ import controller.Move;
 import cse308.server.dao.JsonDistrictData;
 import model.*;
 import org.junit.Test;
+import org.locationtech.jts.geom.Coordinate;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,20 +20,13 @@ public class ModelTests {
     public void combineClusterPairTest() {
 //        System.out.println("COMBINE CLUSTER TEST");
 
-        HashMap<DemographicType, Integer> populations = new HashMap<>();
-        HashMap<DemographicType, int[]> voting = new HashMap<>();
-        int[] vote = {5,3,2};
-        for(DemographicType type : DemographicType.values()) {
-            populations.put(type, 10);
-            voting.put(type, vote);
-        }
-        Demographics d1 = new Demographics(populations, voting);
+        Demographics d1 = Demographics.getDemographicTest();
 
         int id = 0;
 //        double[] d1 = {0,2,2,2,2};
-        Precinct p1 = new Precinct(id++,10,new HashSet<>(), d1,"my county");
+        Precinct p1 = new Precinct(id++,10,new HashSet<>(), d1,"my county", null);
 //        double[] d2 = {2,2,2,3,2};
-        Precinct p2 = new Precinct(id++,11,new HashSet<>(), d1,"my county");
+        Precinct p2 = new Precinct(id++,11,new HashSet<>(), d1,"my county", null);
 
         Edge e1 = new Edge(p1,p2);
         p1.getEdges().add(e1);
@@ -71,20 +65,13 @@ public class ModelTests {
     @Test
     public void testReset() {
 //        System.out.println("TEST RESET");
-        HashMap<DemographicType, Integer> populations = new HashMap<>();
-        HashMap<DemographicType, int[]> voting = new HashMap<>();
-        int[] vote = {5,3,2};
-        for(DemographicType type : DemographicType.values()) {
-            populations.put(type, 10);
-            voting.put(type, vote);
-        }
-        Demographics d1 = new Demographics(populations, voting);
+        Demographics d1 = Demographics.getDemographicTest();
 
         int id = 0;
 //        double[] d1 = {0,2,2,2,2};
-        Precinct p1 = new Precinct(id++,10,new HashSet<>(), d1,"my county");
+        Precinct p1 = new Precinct(id++,10,new HashSet<>(), d1,"my county",null);
 //        double[] d2 = {2,2,2,3,2};
-        Precinct p2 = new Precinct(id++,11,new HashSet<>(), d1,"my county");
+        Precinct p2 = new Precinct(id++,11,new HashSet<>(), d1,"my county", null);
 
         Edge e1 = new Edge(p1,p2);
         p1.getEdges().add(e1);
@@ -117,21 +104,14 @@ public class ModelTests {
 
     @Test
     public void testDoMove() {
-        HashMap<DemographicType, Integer> populations = new HashMap<>();
-        HashMap<DemographicType, int[]> voting = new HashMap<>();
-        int[] vote = {5,3,2};
-        for(DemographicType type : DemographicType.values()) {
-            populations.put(type, 10);
-            voting.put(type, vote.clone());
-        }
-        Demographics d1 = new Demographics(populations, voting);
+        Demographics d1 = Demographics.getDemographicTest();
         int id = 0;
-        Precinct p0 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p0 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p1 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p2 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p3 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p4 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p5 = new Precinct(id++,10,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
 
         p0.addEdgeTo(p1);
 
@@ -203,44 +183,19 @@ public class ModelTests {
 
     @Test
     public void testSimulatedAnnealing() {
-//        int id = 0;
-//        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-//        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-//        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-//        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-//        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-//        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-//
-//        p0.addEdgeTo(p1);
-//
-//        p0.addEdgeTo(p2);
-//        p0.addEdgeTo(p3);
-////        System.out.println(p0 + " edges: " + p0.getEdges().size());
-//
-//        p1.addEdgeTo(p4);
-//        p1.addEdgeTo(p5);
-//
-//        HashSet<Precinct> hsp = new HashSet<>();
-//        hsp.add(p0);
-//        hsp.add(p1);
-//        hsp.add(p2);
-//
-//        hsp.add(p3);
-//        hsp.add(p4);
-//        hsp.add(p5);
-
         State s = State.getState("sdljf");
+
         ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
         clusters.sort(Comparator.comparingLong(a -> a.id));
         Set<Cluster> newClusters = new HashSet<>();
+        newClusters.add(s.combinePair(clusters.get(0),clusters.get(1)));
         newClusters.add(s.combinePair(clusters.get(0),clusters.get(2)));
         newClusters.add(s.combinePair(clusters.get(0),clusters.get(3)));
 
-        newClusters.add(s.combinePair(clusters.get(1),clusters.get(4)));
-        newClusters.add(s.combinePair(clusters.get(1),clusters.get(5)));
+//        newClusters.add(s.combinePair(clusters.get(1),clusters.get(4)));
+        newClusters.add(s.combinePair(clusters.get(4),clusters.get(5)));
 
         s.setClusters(newClusters);
-        s.convertClustersToDistricts();
 
 //        double[] darr = new double[MeasureType.values().length];
 //        Arrays.fill(darr, 1.0);
@@ -252,10 +207,10 @@ public class ModelTests {
         Algorithm a = new Algorithm(new Preference(weights,2,0,2,true, "Arizona"),s);
         int i = 0;
         Summary sum = a.doSimulatedAnnealing();
-//        while (sum.getMove() != null) {
-//            i++;
-//            sum = a.doSimulatedAnnealing();
-//        } System.out.println(++i);
+        while (sum.getMove() != null) {
+            i++;
+            sum = a.doSimulatedAnnealing();
+        } System.out.println(++i);
         System.out.println();
         System.out.println();
         System.out.println();
@@ -266,8 +221,8 @@ public class ModelTests {
     @Test
     public void majorityMinorityTest(){
         int id = 0;
-        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
         p0.addEdgeTo(p1);
         HashSet<Precinct> hsp = new HashSet<>();
         hsp.add(p0);
@@ -282,12 +237,12 @@ public class ModelTests {
     @Test
     public void testGraphPartitioning() {
         int id = 0;
-        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
 
         p0.addEdgeTo(p1);
 
@@ -338,12 +293,12 @@ public class ModelTests {
     @Test
     public void testWholeFUCKINGThing() {
         int id = 0;
-        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
-        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county");
+        Precinct p0 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p1 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p2 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p3 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p4 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
+        Precinct p5 = new Precinct(id++,60,new HashSet<>(), Demographics.getDemographicTest(),"my county",null);
 
         p0.addEdgeTo(p1);
 
@@ -386,8 +341,31 @@ public class ModelTests {
             JsonNode rootNode = objectMapper.readTree(jsonData); //gets root of object
             JsonNode featuresNode = rootNode.path("features"); //gets array titled "features"
             Iterator<JsonNode> elements = featuresNode.elements();
-            if(elements.hasNext()){
+            HashSet<Precinct> precinctSet = new HashSet<Precinct>();
+            while(elements.hasNext()){
                 JsonNode featureZero = elements.next();
+                //extract from the geometry.coordinates object
+                JsonNode coordinates = featureZero.path("geometry").path("coordinates");
+                Iterator<JsonNode> coordinatesAtZero = coordinates.elements(); //iterator to get the first element in coord array (only object)
+                ArrayList<Coordinate> coordinateList = new ArrayList<Coordinate>(); //will hold all the Coordinate objects
+                if(coordinatesAtZero.hasNext()){
+                    JsonNode coordArray = coordinatesAtZero.next(); //coordinates is an array with one entry that holds arrays
+                    Iterator<JsonNode> coordIterator = coordArray.elements();
+                    int i = 0;
+                    while(coordIterator.hasNext()){
+                        JsonNode coordinate = coordIterator.next(); //get the next coordinate array.
+                        //System.out.println("Coordinate at " + i++ + " is " + coordinate.toString());
+                        Iterator<JsonNode> coordValue = coordinate.elements(); //to get the two values from the coordinate
+                        double coord1 = coordValue.next().asDouble();
+                        double coord2 = coordValue.next().asDouble();
+                        Coordinate coord = new Coordinate(coord1, coord2); //read the two values into a Coordinate obj
+                        //System.out.println("Coord is " + coord.toString());
+                        coordinateList.add(coord);
+                    }
+                    System.out.println("Arraylist:\n" + coordinateList);
+                }
+
+                //extract from the properties object
                 JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
                 JsonNode neighbors = propertiesNode.path("neighbors"); //array of neighbors
                 System.out.println("neighbors : " + neighbors.toString());
@@ -414,8 +392,44 @@ public class ModelTests {
                 JsonNode county = propertiesNode.path("COUNTY"); //county precinct is in.
                 System.out.println("COUNTY : " + county.toString());
 
-                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), null, null, county.toString());
-                System.out.println("Precint is:  " + p);
+                //population of demographics for Demographics object
+                HashMap<DemographicType, Integer> demographicPop = new HashMap<DemographicType, Integer>();
+                for(DemographicType t : DemographicType.values()){
+                    switch (t){
+                        case HISPANIC:
+                            demographicPop.put(DemographicType.HISPANIC, hispanicPop.asInt());
+                            break;
+                        case ASIAN:
+                            demographicPop.put(DemographicType.ASIAN, asianPop.asInt());
+                            break;
+                        case AFRICAN_AMERICAN:
+                            demographicPop.put(DemographicType.AFRICAN_AMERICAN, afAmerPop.asInt());
+                            break;
+                        case WHITE:
+                            demographicPop.put(DemographicType.WHITE, whitePop.asInt());
+                            break;
+                        case NATIVE:
+                            demographicPop.put(DemographicType.NATIVE, nativePop.asInt());
+                            break;
+                        case OTHER:
+                            demographicPop.put(DemographicType.OTHER, 0); //no other population
+                            break;
+                    }
+                }
+
+                Demographics d = new Demographics(demographicPop);
+                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
+
+                precinctSet.add(p);
+                //System.out.println("Precinct id: " + p.getId());
+                //System.out.println("Precinct pop: " + p.getPopulation());
+                //System.out.println("Precinct edges: " + p.getEdges());
+                //System.out.println("Precinct demographics: " + p.getDemographics());
+                //System.out.println("Precinct county: " + p.getCounty());
+                //System.out.println("Random vertex: " + p.getPolygon().getCoordinate());
+                //TODO
+//                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), null, null, county.toString());
+//                System.out.println("Precint is:  " + p);
             }
         }
         catch(IOException e){

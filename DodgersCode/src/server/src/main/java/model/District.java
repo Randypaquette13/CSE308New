@@ -1,5 +1,11 @@
 package model;
 
+import org.locationtech.jts.algorithm.MinimumBoundingCircle;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class District extends Cluster {
@@ -8,16 +14,26 @@ public class District extends Cluster {
         super(c);
     }
 
-    public double getPerimeter() {//TODO
-        return 10;
+    public MultiPolygon computeMulti() {
+        Polygon[] polygons = new Polygon[getPrecinctSet().size()];
+
+        Iterator<Precinct> piter = getPrecinctSet().iterator();
+        for(int ii = 0; ii < polygons.length; ii++) {
+            polygons[ii] = piter.next().getPolygon();
+        }
+
+        MultiPolygon mp = new MultiPolygon(polygons,new GeometryFactory());
+        return mp;
+    }
+
+    public double getPerimeter() {
+        MultiPolygon mp = computeMulti();
+        return mp.convexHull().getLength();
     }
 
     public double getArea() {
-        double area = 0;
-        for(Precinct p : getPrecinctSet()) {
-            area += p.getArea();
-        }
-        return area;
+        MultiPolygon mp = computeMulti();
+        return mp.getArea();
     }
 
     public void addPrecinct(Precinct p) {
@@ -31,45 +47,25 @@ public class District extends Cluster {
         population -= p.getPopulation();
         getDemographics().remove(p.getDemographics());
     }
-    public double getBoundingCircleArea() {//TODO
-        return -1.0;
+    public double getBoundingCircleArea() {
+        MultiPolygon mp = computeMulti();
+        MinimumBoundingCircle mbc = new MinimumBoundingCircle(mp);
+        return Math.PI * Math.pow(mbc.getRadius(),2);
     }
 
-    public double getConvexHull() {//TODO
-        return -1.0;
+    public double getConvexHull() {
+        MultiPolygon mp = computeMulti();
+        return mp.convexHull().getArea();
     }
 
     public int wastedDemVotes() {
-        int total = 0;
-
-        for(DemographicType d : DemographicType.values()) {
-            int dem = getDemographics().getDemographicVotingData().get(d)[0];
-            int rep = getDemographics().getDemographicVotingData().get(d)[1];
-
-            if(dem != Math.max(dem,rep)) {
-                total += dem;
-            }
-        }
-        return total;
+        int diff = getDemographics().demVotes - getDemographics().repVotes;
+        return diff < 0 ? diff : 0;
     }
 
     public int wastedRepVotes() {
-        int total = 0;
-        for(DemographicType d : DemographicType.values()) {
-//            System.out.println(this.getPopulation());
-            int dem = getDemographics().getDemographicVotingData().get(d)[0];
-//            System.out.println("\t" + dem);
-            int rep = getDemographics().getDemographicVotingData().get(d)[1];
-//            System.out.println("\t" + rep);
-//            int oth = getDemographics().getDemographicVotingData().get(d)[2];
-//            System.out.println("\t" + oth);
-
-            if(rep != Math.max(dem,rep)) {
-                total += rep;
-            }
-//            System.out.println("\ttotale:" + total);
-        }
-        return total;
+        int diff = getDemographics().repVotes - getDemographics().demVotes;
+        return diff < 0 ? diff : 0;
     }
 
     @Override
