@@ -145,8 +145,12 @@ public class State {
         double maxJoin = 0;
 //        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
         for(Cluster c : getClusters()) {
+            System.out.println("there are clusters");
             for(Edge e : c.getEdges()) {
+                System.out.println("the cluster has an edge");
                 if(getClusters().contains(e.getNeighbor(c))) {//TODO this is never true
+                    System.out.println("I am here");
+                    System.out.println(c);
 //                    System.out.println("calc join of this cluster");
                     double join = e.getJoinability();
                     if(join > maxJoin) {
@@ -418,21 +422,13 @@ public class State {
                 Long precinctId = properties.path("OID_").asLong();
                 Precinct currentPrecinct = precincts.get(precinctId);
                 //System.out.println(currentPrecinct + " has neighbors " + neighbors.toString());
+                System.out.println(precinctId);
                 Iterator<JsonNode> neighborsIterator = neighbors.elements();
                 while(neighborsIterator.hasNext()){
                     Long neighborId = neighborsIterator.next().asLong();
                     Precinct neighborPrecinct = precincts.get(neighborId);
-                    Edge e = new Edge(currentPrecinct, neighborPrecinct);
-                    boolean noMatch = true;
-                    for(Edge edge : currentPrecinct.getEdges()){
-                        if(edge.equals(e)){
-                            noMatch = false;
-                            break;
-                        }
-                    }
-                    if(noMatch){
-                        currentPrecinct.addEdgeTo(neighborPrecinct);
-                    }
+                    currentPrecinct.addEdgeTo(neighborPrecinct);
+                    System.out.println("sdlkhfs");
                 }
             }
 
@@ -440,6 +436,9 @@ public class State {
 
             HashSet<Precinct> precinctSet = new HashSet<Precinct>();
             precinctSet.addAll(precincts.values());
+            System.out.println(precinctSet);
+            System.out.println(precinctSet.size());
+            System.exit(0);
             //System.out.println("Following precincts added: ");
             //for(Precinct p : precinctSet){
             //    System.out.println(" " + p + " has " + p.getEdges().size() + " edges.");

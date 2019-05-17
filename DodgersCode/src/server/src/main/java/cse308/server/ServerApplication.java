@@ -1,5 +1,6 @@
 package cse308.server;
 
+import model.State;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,6 +15,7 @@ public class ServerApplication {
      * @param args arguments
      */
     public static void main(String[] args) {
+        State s = State.getState("New Hampshire");
         SpringApplication.run(ServerApplication.class, args);
     }
 
