@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 public class Demographics {
     private final HashMap<DemographicType, Integer> demographicPopulation;
-    int demVotes;
-    int repVotes;
+    double demVotes;
+    double repVotes;
 
-    public Demographics(HashMap<DemographicType, Integer> demographicPopulation, int demVotes, int repVotes) {
+    public Demographics(HashMap<DemographicType, Integer> demographicPopulation, double demVotes, double repVotes) {
         this.demographicPopulation = demographicPopulation;
         this.demVotes = demVotes;
         this.repVotes = repVotes;
