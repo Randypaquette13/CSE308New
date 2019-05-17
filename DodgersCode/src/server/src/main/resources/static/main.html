@@ -227,6 +227,7 @@
                     <button type="button" class="btn btn-primary btn-sm">Stop</button>
                     <button type="button" class="btn btn-primary btn-sm">Pause</button>
                     <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
+                    <button type="button" id="btnBlack" class="btn btn-primary btn-sm">Show African American Distribution</button>
                 </div>
             </div>
         </div>
@@ -450,6 +451,10 @@
 
         });
 
+        $("#btnBlack").click(function(){
+            getBlackDistribution();
+        });
+
         function getSimulatedAnnealing(){
             var measureScoreLabel = [
                 "Schwartzberg Compactness",
@@ -529,6 +534,30 @@
                 );
             }
         }
+
+        function getBlackDistribution() {
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8080/getBlackDistribution",
+                dataType: "json",
+                contentType: "application/json",
+                success: function(e) {
+                    console.log("black");
+                    console.log(e);
+                    for(var i = 0; i<e.length;i++) {
+                        var numPop = e[i].africanPopulation * 2.5;
+                        var color = "#" + numPop+numPop+numPop;
+                        colorPrecinct(color,e[i].id);
+                    }
+                },
+                error: function(e) {
+                    //TODO throw error
+                    console.log("black error");
+                    console.log(e);
+                }
+            });
+        }
+
 
         // $("#btnSummary").click(function(){
         //     var measureScoreLabel = [

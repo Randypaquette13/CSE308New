@@ -86,12 +86,12 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d) {
-            System.out.println(this);
-            System.out.println(d);
-            System.out.println(d.getPopulation());
-            System.out.println("eff gap" + (1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation())));
-            System.out.println("dem votes wasted" + d.wastedDemVotes());
-            System.out.println("rep votes wasted" + d.wastedRepVotes());
+//            System.out.println(this);
+//            System.out.println(d);
+//            System.out.println(d.getPopulation());
+//            System.out.println("eff gap" + (1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation())));
+//            System.out.println("dem votes wasted" + d.wastedDemVotes());
+//            System.out.println("rep votes wasted" + d.wastedRepVotes());
             return 1.0 - (Math.abs(d.wastedDemVotes() - d.wastedRepVotes()) / (double)d.getPopulation());
         }
     },
