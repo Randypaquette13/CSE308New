@@ -89,6 +89,9 @@ public class Algorithm {
 //                System.out.println("found cluster pair: " + clusterPair);
                 Cluster c = state.combinePair(clusterPair.getC1(), clusterPair.getC2());
                 mergedClusters.add(c);
+                if(mergedClusters.size() + state.getClusters().size() == pref.getNumDistricts()){
+                    break;
+                }
             }
             (state.getClusters()).addAll(mergedClusters);
             s = state.getClusters().toString();
