@@ -329,12 +329,6 @@ public class State {
                 break;
         }
         try {
-            File file = new File(path);
-            System.out.println(file.exists());
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println();
             byte[] jsonData = Files.readAllBytes(Paths.get(path));
             ObjectMapper objectMapper  = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(jsonData); //gets root of object
