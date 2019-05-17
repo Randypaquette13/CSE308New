@@ -15,7 +15,7 @@ public class ServerApplication {
      * @param args arguments
      */
     public static void main(String[] args) {
-        State s = State.getState("New Hampshire");
+//        State s = State.getState("New Hampshire");
         SpringApplication.run(ServerApplication.class, args);
     }
 

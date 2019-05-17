@@ -145,12 +145,12 @@ public class State {
         double maxJoin = 0;
 //        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
         for(Cluster c : getClusters()) {
-            System.out.println("there are clusters");
+//            System.out.println("there are clusters");
             for(Edge e : c.getEdges()) {
-                System.out.println("the cluster has an edge");
+//                System.out.println("the cluster has an edge");
                 if(getClusters().contains(e.getNeighbor(c))) {//TODO this is never true
-                    System.out.println("I am here");
-                    System.out.println(c);
+//                    System.out.println("I am here");
+//                    System.out.println(c);
 //                    System.out.println("calc join of this cluster");
                     double join = e.getJoinability();
                     if(join > maxJoin) {
@@ -321,15 +321,15 @@ public class State {
             case "Arizona":
                 demVotesMarker = "PRS08_DEM";
                 repVotesMarker = "PRS08_REP";
-                path = "src/server/src/main/resources/static/ArizonaData/ArizonaPrecinctData.json";
+                path = "src/server/src/main/resources/static/ArizonaData/AZPrecinctData.json";
                 break;
             case "New Hampshire":
                 demVotesMarker = "PRES_DEM08";
                 repVotesMarker = "PRES_REP08";
-                path = "src/server/src/main/resources/static/NewHampshireData/NewHampshirePrecinctData.json";
+                path = "src/server/src/main/resources/static/NewHampshireData/NHPrecinctData.json";
                 break;
             case "Maryland":
-                path = "src/server/src/main/resources/static/MarylandData/MarylandPrecinctData.json";
+                path = "src/server/src/main/resources/static/MarylandData/MDPrecinctData.json";
                 break;
         }
         try {
@@ -421,14 +421,13 @@ public class State {
                 JsonNode neighbors = properties.path("neighbors");
                 Long precinctId = properties.path("OID_").asLong();
                 Precinct currentPrecinct = precincts.get(precinctId);
-                //System.out.println(currentPrecinct + " has neighbors " + neighbors.toString());
-                System.out.println(precinctId);
+//                System.out.println(currentPrecinct + " has neighbors " + neighbors.toString());
+//                System.out.println(precinctId);
                 Iterator<JsonNode> neighborsIterator = neighbors.elements();
                 while(neighborsIterator.hasNext()){
                     Long neighborId = neighborsIterator.next().asLong();
                     Precinct neighborPrecinct = precincts.get(neighborId);
                     currentPrecinct.addEdgeTo(neighborPrecinct);
-                    System.out.println("sdlkhfs");
                 }
             }
 
@@ -436,9 +435,6 @@ public class State {
 
             HashSet<Precinct> precinctSet = new HashSet<Precinct>();
             precinctSet.addAll(precincts.values());
-            System.out.println(precinctSet);
-            System.out.println(precinctSet.size());
-            System.exit(0);
             //System.out.println("Following precincts added: ");
             //for(Precinct p : precinctSet){
             //    System.out.println(" " + p + " has " + p.getEdges().size() + " edges.");
