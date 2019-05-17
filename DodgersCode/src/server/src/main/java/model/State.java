@@ -153,6 +153,7 @@ public class State {
 //                    System.out.println(c);
 //                    System.out.println("calc join of this cluster");
                     double join = e.getJoinability();
+                    System.out.println(join);
                     if(join > maxJoin) {
                         niceCluster = c;
                         niceEdge = e;
@@ -162,6 +163,7 @@ public class State {
                 }
             }
         }
+        System.out.println(pairs.size());
         if(niceCluster != null && niceEdge != null) {
             ClusterPair bestPair = null;
             int bestScore = Integer.MAX_VALUE;

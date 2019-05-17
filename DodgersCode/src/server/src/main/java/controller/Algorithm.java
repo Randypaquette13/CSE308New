@@ -79,6 +79,7 @@ public class Algorithm {
             Collection<Cluster> mergedClusters = new LinkedList<>();
             while(!state.getClusters().isEmpty()) {
 //                System.out.println(state.getClusters());
+                System.out.println("GETTING CLUSTER PAIR");
                 final ClusterPair clusterPair = state.findCandidateClusterPair(targetPop);
                 System.out.println(clusterPair);
                 if(clusterPair == null){

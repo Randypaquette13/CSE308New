@@ -631,7 +631,7 @@
                       ArizonaStateLayer =  L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -664,7 +664,7 @@
                         MarylandStateLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -696,7 +696,7 @@
                         New_HampshireLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
