@@ -370,7 +370,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     success: function(e) {
-                        console.log(e);//e is a double array of clusters where e[0] is the first cluster and e[0][0] is its id
+                        console.log("heyyyyy", e);//e is a double array of clusters where e[0] is the first cluster and e[0][0] is its id
                         console.log(e.length);
                         //16777215
                         districtColors = {};
@@ -408,10 +408,8 @@
 
             }else{
                 data = {
-
                     //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
                     //CONVEX_HULL_BATCH", "GRAPH_COMPACTNESS_BATCH", "EFFICIENCY_GAP_BATCH"
-
                     "stateName": $("#state").text(),
                     "schwartzbergCompactnessMax": parseFloat($("#bs_SCHWARTZBERG_BATCH").text()),
                     "schwartzbergCompactnessMin": parseFloat($("#be_SCHWARTZBERG_BATCH").text()),
@@ -438,56 +436,19 @@
                     type: 'POST',
                     url: "http://localhost:8080/runBatchProcessing",
                     data: JSON.stringify(data),
-                    error: function(e) {
-                        if(e.status === 200) {
-                            getGraphPartitionData();
-                        }else{
-                            alert("Running Error!");
-                        }
-                    },
                     dataType: "json",
-                    contentType: "application/json"
-                });
+                    contentType: "application/json",
+                    success: function (e) {
+                        console.log("imherenow", e);
+                        console.log(e.length);
 
+                        getBatchSummary(e);
+
+                    }
+                })
             }
-            // if we have single run, we send data to runGraphPartitioning
-            // if we have batch run, we send data to runBatchProcessing
-        });
 
-        // function getGraphPartitionData () {
-        //     $.ajax({
-        //         type: 'GET',
-        //         url: "http://localhost:8080/graphPartitioning2",
-        //         error: function(e) {
-        //             console.log("everyone is useless");
-        //             console.log(e.data);
-        //             if(e.status === 200){
-        //                 if(e.data !== null && e.data.length > 0){
-        //                     if(e.data === "done" ){
-        //                         getSimulatedAnnealing();
-        //                         return;
-        //                     }else{
-        //                         graphPartitionData=e.data;
-        //                         var result = graphPartitionData.map((x=>{
-        //                             x.split(",,").map(y=>{
-        //                                 convertedResult.push({
-        //                                     color:y.split(" ")[0],
-        //                                     data: y.split(" ")[1]
-        //                                 });
-        //                             });
-        //                         }));
-        //                         getGraphPartitionData();
-        //                     }
-        //                     // [C0 P2,P3,P0,, C1 P4,P1,P5,]
-        //                 }else{
-        //                     alert("Graph Partition Algo Error!");
-        //                 }
-        //             }
-        //         },
-        //         dataType: "json",
-        //         contentType: "application/json"
-        //     });
-        // }
+        });
 
         function getSimulatedAnnealing(){
             var measureScoreLabel = [
@@ -529,41 +490,109 @@
                                  </p>
                                  `);
                         }else{
-                            // if(batchSummary !== null && batchSummary.length > 0){
-                            //     $("#summaryModalContent").empty();
-                            //     batchSummary.map((x,index)=>{
-                            //         $("#summaryModalContent").append(`<p><b>${index}. </b>${x}</p>`);
-                            //     });
-                            // }
-
+                            console.log("bachEvent",e);
                         }
                     }
                 },
-
-
                 error: function(e) {
                     console.log("error somehow");
                     console.log(e);
-                    // if(e.status === 200){
-                    //     if(e.data !== null && e.data.length > 0){
-                    //
-                    //         if(e.data.message.toLowerCase().indexOf("move")){
-                    //             var simulatedAnnealingData = convertStrObj(e.data);
-                    //             getSimulatedAnnealing();
-                    //         }else{
-                    //             simulatedAnnealing = e.data;
-                    //             $("#summaryModalContent").empty();
-                    //             $("#summaryModalContent").append(`<p>${simulatedAnnealing}<p>`);
-                    //             return;
-                    //         }
-                    //     }else{
-                    //         alert("Simulated Annealing Algo Error!");
-                    //     }
-                    // }
                 }
             });
         }
+        function getBatchSummary(e){
+            var measureScoreLabel = [
+                    "Schwartzberg Compactness",
+                    "Reock Compactness",
+                    "Population Equality",
+                    "Polsby Popper",
+                    "Convex Hull Compactness",
+                    "Graph Compactness",
+                    "Efficiency Gap"
+                ];
 
+            if(e !== null && e.length > 0){
+                $("#summaryModalContent").empty();
+                $("#summaryModalContent").append(
+                    e.map((summary,index)=>(
+                        `<div style="margin-bottom:20px;border-bottom:1px solid gray;">
+                                            <h4>ID : ${index+1}</h4>
+                                            <p><strong>Objective FunctionScore : </strong>${JSON.stringify(summary.objectiveFunctionScore)}
+                                             <br/>
+                                             <strong>Measure Score : </strong><br/>
+                                             ${summary.measureScores.map((x,index)=> (
+                            `${measureScoreLabel[index]} : ${x}<br/>`
+                        )).join('')}
+                                             </p>
+                                         </div>`
+                    ))
+                );
+            }
+        }
+
+        // $("#btnSummary").click(function(){
+        //     var measureScoreLabel = [
+        //         "Schwartzberg Compactness",
+        //         "Reock Compactness",
+        //         "Population Equality",
+        //         "Polsby Popper",
+        //         "Convex Hull Compactness",
+        //         "Graph Compactness",
+        //         "Efficiency Gap"
+        //     ];
+        //     var e = [
+        //         {
+        //             objectiveFunctionScore: 0,
+        //             measureScores: [
+        //                                  0.8281337185698345,
+        //                                  0.4774648292756859,
+        //                                  0.6858054558323019,
+        //                                  0.8571428571428571,
+        //                                  1,
+        //                                  0.6666666666666667,
+        //                                  1,
+        //                             ]
+        //         },
+        //         {
+        //             objectiveFunctionScore: 1,
+        //             measureScores: [
+        //                 0.96545698345,
+        //                 0.1324545,
+        //                 0.988626,
+        //                 0.1234785163,
+        //                 1.985574,
+        //                 0.264852,
+        //                 1.689545,
+        //             ]
+        //         },
+        //         {
+        //             objectiveFunctionScore: 2,
+        //             measureScores: [
+        //                 0.234234,
+        //                 0.234234,
+        //                 0.234234,
+        //                 0.456456,
+        //                 1.241564,
+        //                 0.567567,
+        //                 1.36524841,
+        //             ]
+        //         }
+        //     ]
+        //     $("#summaryModalContent").empty();
+        //     $("#summaryModalContent").append(
+        //         e.map(summary=>(
+        //             `<div style="margin-bottom:20px;border-bottom:1px solid gray;">
+        //                                     <p><strong>Objective FunctionScore : </strong>${JSON.stringify(summary.objectiveFunctionScore)}
+        //                                      <br/>
+        //                                      <strong>Measure Score : </strong><br/>
+        //                                      ${summary.measureScores.map((x,index)=> (
+        //                 `${measureScoreLabel[index]} : ${x}<br/>`
+        //             )).join('')}
+        //                                      </p>
+        //                                  </div>`
+        //         ))
+        //     );
+        // });
         //==================================  Map  =============================================//
         // Variable
         var azFlag = false;
