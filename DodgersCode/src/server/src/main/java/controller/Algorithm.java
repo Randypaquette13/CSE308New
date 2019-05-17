@@ -85,7 +85,7 @@ public class Algorithm {
 //                    System.out.println(state.getClusters());
                     break;
                 }
-                System.out.println("found cluster pair: " + clusterPair);
+//                System.out.println("found cluster pair: " + clusterPair);
                 Cluster c = state.combinePair(clusterPair.getC1(), clusterPair.getC2());
                 mergedClusters.add(c);
             }
