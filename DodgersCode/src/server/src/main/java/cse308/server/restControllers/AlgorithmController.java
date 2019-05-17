@@ -69,7 +69,7 @@ public class AlgorithmController {
      */
     @RequestMapping("/runBatchProcessing")
     public List<Summary> doBatchProcessing(@RequestBody BatchedPreferencesDAO preferenceDAO) {
-        if(state==null){
+        if(state == null) {
             state = State.getState(preferenceDAO.getStateName());
         }
         final List<Summary> summaryBatch = new LinkedList<>();

@@ -21,4 +21,5 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile 'mysql:mysql-connector-java'
     compile group: 'org.locationtech.jts', name: 'jts-core', version: '1.16.1'
+    compile group: 'de.grundid.opendatalab', name: 'geojson-jackson', version: '1.0'
 }

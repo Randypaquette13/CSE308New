@@ -58,13 +58,13 @@ public class District extends Cluster {
         return mp.convexHull().getArea();
     }
 
-    public int wastedDemVotes() {
-        int diff = getDemographics().demVotes - getDemographics().repVotes;
+    public double wastedDemVotes() {
+        double diff = getDemographics().demVotes - getDemographics().repVotes;
         return diff < 0 ? diff : 0;
     }
 
-    public int wastedRepVotes() {
-        int diff = getDemographics().repVotes - getDemographics().demVotes;
+    public double wastedRepVotes() {
+        double diff = getDemographics().repVotes - getDemographics().demVotes;
         return diff < 0 ? diff : 0;
     }
 
