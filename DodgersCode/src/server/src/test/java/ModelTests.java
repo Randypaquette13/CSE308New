@@ -336,6 +336,7 @@ public class ModelTests {
     public void testJSONReading(){
         String path = ""; //place path to file here
         try {
+            StringBuilder errorPriecincts = new StringBuilder("Error with the following Precinct ids:");
             byte[] jsonData = Files.readAllBytes(Paths.get(path));
             ObjectMapper objectMapper  = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(jsonData); //gets root of object
@@ -346,9 +347,18 @@ public class ModelTests {
                 JsonNode featureZero = elements.next();
                 //extract from the geometry.coordinates object
                 JsonNode coordinates = featureZero.path("geometry").path("coordinates");
+                System.out.println(coordinates.toString());
+                JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
+                JsonNode polygonType = featureZero.path("geometry").path("type");
+                if(polygonType.asText().equals("MultiPolygon")){
+                    JsonNode precinctId = propertiesNode.path("OID_"); //precinct id
+                    System.out.println("OID_ : " + precinctId);
+                    errorPriecincts.append("\n" + precinctId.toString() + " - too many arrays.");
+                    continue;
+                }
                 Iterator<JsonNode> coordinatesAtZero = coordinates.elements(); //iterator to get the first element in coord array (only object)
                 ArrayList<Coordinate> coordinateList = new ArrayList<Coordinate>(); //will hold all the Coordinate objects
-                if(coordinatesAtZero.hasNext()){
+                while(coordinatesAtZero.hasNext()){
                     JsonNode coordArray = coordinatesAtZero.next(); //coordinates is an array with one entry that holds arrays
                     Iterator<JsonNode> coordIterator = coordArray.elements();
                     int i = 0;
@@ -366,7 +376,6 @@ public class ModelTests {
                 }
 
                 //extract from the properties object
-                JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
                 JsonNode neighbors = propertiesNode.path("neighbors"); //array of neighbors
                 System.out.println("neighbors : " + neighbors.toString());
                 JsonNode totalpop = propertiesNode.path("Total"); //total population
@@ -376,9 +385,9 @@ public class ModelTests {
                 JsonNode voteDem = propertiesNode.path("PRS08_DEM"); //dem votes in 08 election
                 System.out.println("PRS08_DEM : " + voteDem.toString());
                 JsonNode voteOther = propertiesNode.path("PRS08_OTH"); //other votes in 08 election
-                System.out.println("PRS08_DEM : " + voteOther.toString());
-                JsonNode voteRep = propertiesNode.path("PRS08_OTH"); //rep votes in 08 election
-                System.out.println("PRS08_DEM : " + voteRep.toString());
+                System.out.println("PRS08_OTH : " + voteOther.toString());
+                JsonNode voteRep = propertiesNode.path("PRS08_REP"); //rep votes in 08 election
+                System.out.println("PRS08_REP : " + voteRep.toString());
                 JsonNode hispanicPop = propertiesNode.path("Hispanic/Latino"); // hispanic population
                 System.out.println("Hispanic/Latino : " + hispanicPop.toString());
                 JsonNode asianPop = propertiesNode.path("Asian"); // asian population
@@ -391,6 +400,7 @@ public class ModelTests {
                 System.out.println("AI/AN : " + nativePop.toString());
                 JsonNode county = propertiesNode.path("COUNTY"); //county precinct is in.
                 System.out.println("COUNTY : " + county.toString());
+                System.out.println();
 
                 //population of demographics for Demographics object
                 HashMap<DemographicType, Integer> demographicPop = new HashMap<DemographicType, Integer>();
@@ -417,10 +427,17 @@ public class ModelTests {
                     }
                 }
 
-                Demographics d = new Demographics(demographicPop);
-                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
+                Demographics d = new Demographics(demographicPop, voteDem.asDouble(), voteRep.asDouble());
+                try {
+                    Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
+                    precinctSet.add(p);
+                }
+                catch(IllegalArgumentException e){
+                    errorPriecincts.append("\n" + precinctId.toString() + " - not a closed linestring.\ncoord: " +coordinateList.toString());
 
-                precinctSet.add(p);
+                }
+
+
                 //System.out.println("Precinct id: " + p.getId());
                 //System.out.println("Precinct pop: " + p.getPopulation());
                 //System.out.println("Precinct edges: " + p.getEdges());
@@ -431,6 +448,9 @@ public class ModelTests {
 //                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), null, null, county.toString());
 //                System.out.println("Precint is:  " + p);
             }
+            System.out.println(errorPriecincts.toString());
+            State s = new State(precinctSet);
+            System.out.println("State: " + s);
         }
         catch(IOException e){
             System.out.println("could not read");
