@@ -34,6 +34,9 @@ public class AlgorithmController {
         Preference p = preference.makePreference();
         if(state == null) {
             state = State.getState(p.getStateName());
+            if(state == null) {
+                System.out.println("MEGA FUCKED");
+            }
         }
 
         algorithm = new Algorithm(p, state);

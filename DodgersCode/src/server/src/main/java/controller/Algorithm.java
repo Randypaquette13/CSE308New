@@ -67,8 +67,8 @@ public class Algorithm {
     public String doGraphPartitioning() {
         String s;
         //you must reset the state so we dont have to make extra database calls
-        System.out.println("clusters size: " + state.getClusters().size());
-        System.out.println("target num dist: " + pref.getNumDistricts());
+//        System.out.println("clusters size: " + state.getClusters().size());
+//        System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
             int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
             int targetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
@@ -81,8 +81,8 @@ public class Algorithm {
 //                System.out.println(state.getClusters());
                 final ClusterPair clusterPair = state.findCandidateClusterPair(targetPop);
                 if(clusterPair == null){
-                    System.out.println("NO VALID CLUSTER PAIR");
-                    System.out.println(state.getClusters());
+//                    System.out.println("NO VALID CLUSTER PAIR");
+//                    System.out.println(state.getClusters());
                     break;
                 }
                 System.out.println("found cluster pair: " + clusterPair);
