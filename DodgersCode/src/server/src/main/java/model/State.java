@@ -223,7 +223,7 @@ public class State {
         return total;
     }
 
-    public static State getState(String stateName) {
+    public static State getStateOLD(String stateName) {
         switch (stateName){
             case "Arizona":
                 break;

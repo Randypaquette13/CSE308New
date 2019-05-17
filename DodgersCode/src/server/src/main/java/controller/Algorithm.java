@@ -151,6 +151,7 @@ public class Algorithm {
         }
         System.out.println("\tENDED SIM ANNEALING STEP");
         System.out.println(state.getDistrictSet());
+        System.out.println(lastObjFunVal);
         return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove);
     }
 }
