@@ -35,7 +35,8 @@ public class Cluster implements MapVertex {
         precinctSet = c.getPrecinctSet();
         edgeSet = c.getEdges();
         population = c.getPopulation();
-        demographics = c.getDemographics();
+        demographics = c.getDemographics().clone();
+        System.out.println("\tafter dist" + demographics.demVotes);
         id = c.id;
     }
 
@@ -72,7 +73,12 @@ public class Cluster implements MapVertex {
 //        });
 
         //set demographics to combined value
+        System.out.println(this);
+        System.out.println(c);
+        System.out.println(demographics.demVotes);
+        System.out.println(c.getDemographics().demVotes);
         demographics.add(c.getDemographics());
+        System.out.println("added:" + demographics.demVotes);
     }
 
     /**

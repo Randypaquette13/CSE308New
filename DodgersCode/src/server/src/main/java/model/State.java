@@ -265,14 +265,8 @@ public class State {
 
         State s = new State(hsp);
         s.reset();
-//        System.out.println("sanity" + p0.getPolygon().convexHull().getLength());
-        Polygon[] pss = new Polygon[3];
-        pss[0] = p0.getPolygon();
-        pss[1] = p3.getPolygon();
-        pss[2] = p2.getPolygon();
 
-        MultiPolygon mp = new MultiPolygon(pss, new GeometryFactory());
-//        System.out.println("Satnit" + mp.convexHull().getLength());
+        System.out.println(p0.getDemographics().demVotes);
         return s;
     }
 
