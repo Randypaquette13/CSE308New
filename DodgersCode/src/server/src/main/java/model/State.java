@@ -431,19 +431,7 @@ public class State {
                         }
                     }
                     if(noMatch){
-                        currentPrecinct.getEdges().add(e);
-                        //System.out.println(currentPrecinct + " added " + e);
-                    }
-                    noMatch = true;
-                    for(Edge edge : neighborPrecinct.getEdges()){
-                        if(edge.equals(e)){
-                            noMatch = false;
-                            break;
-                        }
-                    }
-                    if(noMatch){
-                        neighborPrecinct.getEdges().add(e);
-                        //System.out.println(neighborPrecinct + " added " + e);
+                        currentPrecinct.addEdgeTo(neighborPrecinct);
                     }
                 }
             }
