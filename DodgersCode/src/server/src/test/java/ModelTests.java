@@ -4,8 +4,13 @@ import controller.Algorithm;
 import controller.Move;
 import cse308.server.dao.JsonDistrictData;
 import model.*;
+import org.geojson.GeoJsonObject;
+import org.geojson.LngLatAlt;
 import org.junit.Test;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
+//import org.locationtech.jts.geom.Polygon;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -334,9 +339,9 @@ public class ModelTests {
 
     @Test
     public void testJSONReading(){
-        String path = ""; //place path to file here
+        String path = "C:\\Users\\Owner\\Desktop\\Final308Data\\AZPrecinctData.json"; //place path to file here
         try {
-            StringBuilder errorPriecincts = new StringBuilder("Error with the following Precinct ids:");
+            StringBuilder errorPrecincts = new StringBuilder("Error with the following Precinct ids:");
             byte[] jsonData = Files.readAllBytes(Paths.get(path));
             ObjectMapper objectMapper  = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(jsonData); //gets root of object
@@ -347,13 +352,19 @@ public class ModelTests {
                 JsonNode featureZero = elements.next();
                 //extract from the geometry.coordinates object
                 JsonNode coordinates = featureZero.path("geometry").path("coordinates");
+                //GeoJsonObject object = new ObjectMapper().readValue(jsonData, GeoJsonObject.class);
+                //object.accept(visitor);
+                //JsonNode geometry = featureZero.path("geometry");
+                //Polygon polygon = objectMapper.readValue(geometry.toString(), Polygon.class);
+                //System.out.println("polygon : " + polygon.getCoordinates());
+
                 System.out.println(coordinates.toString());
                 JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
                 JsonNode polygonType = featureZero.path("geometry").path("type");
                 if(polygonType.asText().equals("MultiPolygon")){
                     JsonNode precinctId = propertiesNode.path("OID_"); //precinct id
                     System.out.println("OID_ : " + precinctId);
-                    errorPriecincts.append("\n" + precinctId.toString() + " - too many arrays.");
+                    errorPrecincts.append("\n" + precinctId.toString() + " - Multipolygon.");
                     continue;
                 }
                 Iterator<JsonNode> coordinatesAtZero = coordinates.elements(); //iterator to get the first element in coord array (only object)
@@ -433,7 +444,7 @@ public class ModelTests {
                     precinctSet.add(p);
                 }
                 catch(IllegalArgumentException e){
-                    errorPriecincts.append("\n" + precinctId.toString() + " - not a closed linestring.\ncoord: " +coordinateList.toString());
+                    errorPrecincts.append("\n" + precinctId.toString() + " - not a closed linestring.\ncoord: " +coordinateList.toString());
 
                 }
 
@@ -448,7 +459,7 @@ public class ModelTests {
 //                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), null, null, county.toString());
 //                System.out.println("Precint is:  " + p);
             }
-            System.out.println(errorPriecincts.toString());
+            System.out.println(errorPrecincts.toString());
             State s = new State(precinctSet);
             System.out.println("State: " + s);
         }
