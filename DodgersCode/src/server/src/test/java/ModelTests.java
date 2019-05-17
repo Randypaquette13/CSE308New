@@ -338,6 +338,8 @@ public class ModelTests {
     @Test
     public void testJSONReading(){
         String path = ""; //place path to file here
+        String demVotesMarker = "PRES_DEM08";
+        String repVotesMarker = "PRES_REP08";
         try {
             StringBuilder errorPrecincts = new StringBuilder("Error with the following Precinct ids:");
             byte[] jsonData = Files.readAllBytes(Paths.get(path));
@@ -397,12 +399,12 @@ public class ModelTests {
                 System.out.println("Total : " + totalpop.toString());
                 JsonNode precinctId = propertiesNode.path("OID_"); //precinct id
                 System.out.println("OID_ : " + precinctId);
-                JsonNode voteDem = propertiesNode.path("PRS08_DEM"); //dem votes in 08 election
-                System.out.println("PRS08_DEM : " + voteDem.toString());
+                JsonNode voteDem = propertiesNode.path(demVotesMarker); //dem votes in 08 election
+                System.out.println(demVotesMarker + " : " + voteDem.toString());
                 JsonNode voteOther = propertiesNode.path("PRS08_OTH"); //other votes in 08 election
                 System.out.println("PRS08_OTH : " + voteOther.toString());
-                JsonNode voteRep = propertiesNode.path("PRS08_REP"); //rep votes in 08 election
-                System.out.println("PRS08_REP : " + voteRep.toString());
+                JsonNode voteRep = propertiesNode.path(repVotesMarker); //rep votes in 08 election
+                System.out.println(repVotesMarker + " : " + voteRep.toString());
                 JsonNode hispanicPop = propertiesNode.path("Hispanic/Latino"); // hispanic population
                 System.out.println("Hispanic/Latino : " + hispanicPop.toString());
                 JsonNode asianPop = propertiesNode.path("Asian"); // asian population
