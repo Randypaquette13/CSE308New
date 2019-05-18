@@ -23,6 +23,7 @@ public class AlgorithmController {
 
     private State state= null;
     private Algorithm algorithm;
+    private String currentState = null;
 
     /**
      * This method handles running the graph partitioning portion of the algorithm.
@@ -34,11 +35,15 @@ public class AlgorithmController {
         Preference p = preference.makePreference();
         if(state == null) {
             state = State.getState(p.getStateName());
+            currentState = preference.getStateName();
             if(state == null) {
                 System.out.println("MEGA FUCKED");
             }
-        } else {
+        } else if (currentState.equals(preference.getStateName())){
             state.reset();
+        }else{
+            state = State.getState(p.getStateName());
+            currentState = preference.getStateName();
         }
 
         algorithm = new Algorithm(p, state);
