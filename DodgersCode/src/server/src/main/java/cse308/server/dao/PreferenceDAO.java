@@ -42,25 +42,25 @@ public class PreferenceDAO {
         for(MeasureType m : MeasureType.values()){
             switch (m){
                 case SCHWARTZBERG_COMPACTNESS:
-                    hashmap.put(m, schwartzbergCompactness);
+                    hashmap.put(m, schwartzbergCompactness/100.0);
                     break;
                 case REOCK_COMPACTNESS:
-                    hashmap.put(m, reackCompactness);
+                    hashmap.put(m, reackCompactness/100.0);
                     break;
                 case POLSBY_POPPER_COMPACTNESS:
-                    hashmap.put(m, polsbyCompactness);
+                    hashmap.put(m, polsbyCompactness/100.0);
                     break;
                 case CONVEX_HULL_COMPACTNESS:
-                    hashmap.put(m, convexCompactness);
+                    hashmap.put(m, convexCompactness/100.0);
                     break;
                 case GRAPH_COMPACTNESS:
-                    hashmap.put(m, graphCompactness);
+                    hashmap.put(m, graphCompactness/100.0);
                     break;
                 case EFFICIENCY_GAP:
-                    hashmap.put(m, efficiencyGap);
+                    hashmap.put(m, efficiencyGap/100.0);
                     break;
                 case POPULATION_EQUALITY:
-                    hashmap.put(m, populationEquality);
+                    hashmap.put(m, populationEquality/100.0);
                     break;
             }
         }

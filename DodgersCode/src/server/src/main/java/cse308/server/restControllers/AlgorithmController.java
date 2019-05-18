@@ -23,6 +23,7 @@ public class AlgorithmController {
 
     private State state= null;
     private Algorithm algorithm;
+    private String currentState = null;
 
     /**
      * This method handles running the graph partitioning portion of the algorithm.
@@ -34,13 +35,18 @@ public class AlgorithmController {
         Preference p = preference.makePreference();
         if(state == null) {
             state = State.getState(p.getStateName());
+            currentState = preference.getStateName();
             if(state == null) {
                 System.out.println("MEGA FUCKED");
             }
-        } else {
+        } else if (currentState.equals(preference.getStateName())){
             state.reset();
+        }else{
+            state = State.getState(p.getStateName());
+            currentState = preference.getStateName();
         }
 
+        System.out.println(p.getWeights().values());
         algorithm = new Algorithm(p, state);
         if (preference.isGraphPartUpdate()) {
             if(state.isGPDone) {
@@ -95,7 +101,7 @@ public class AlgorithmController {
 
         state.getPrecinctSet().forEach(precinct -> {
 //            System.out.println(precinct.getDemographics());
-            output.add(new PrecinctAfricanDAO(precinct.getId(),(int)((double)precinct.getDemographics().getDemographicPopulation().get(DemographicType.AFRICAN_AMERICAN)/(double)precinct.getPopulation() * 100)));
+            output.add(new PrecinctAfricanDAO(precinct.getId(),(int)(((double)precinct.getDemographics().getDemographicPopulation().get(DemographicType.AFRICAN_AMERICAN)/(double)precinct.getPopulation()) * 100)));
         });
         return output;
     }
