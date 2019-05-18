@@ -226,7 +226,7 @@
                 <div class="form-group">
                     <button type="button" class="btn btn-primary btn-sm">Stop</button>
                     <button type="button" class="btn btn-primary btn-sm">Pause</button>
-                    <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
+                    <button type="button" id="btnRun" class="btn btn-primary btn-sm" disabled>Run</button>
                     <p></p>
                     <button type="button" id="btnBlack" class="btn btn-primary btn-sm">Show African American Distribution</button>
                 </div>
@@ -346,6 +346,72 @@
         });
 
         //=====================================  Run Button  =====================================//
+
+
+        $("#SCHWARTZBERG_COMPACTNESS").change(function(){
+            validSingleRun();
+        });
+
+        $("#REOCK_COMPACTNESS").change(function(){
+            validSingleRun();
+        });
+        $("#POPULATION_EQUALITY").change(function(){
+            validSingleRun();
+        });
+
+        $("#POLSBY_POPPER_COMPACTNESS").change(function(){
+            validSingleRun();
+        });
+
+        $("#CONVEX_HULL_COMPACTNESS").change(function(){
+            validSingleRun();
+        });
+
+        $("#GRAPH_COMPACTNESS").change(function(){
+            validSingleRun();
+        });
+
+        $("#GRAPH_COMPACTNESS").change(function(){
+            validSingleRun();
+        });
+
+        $("#EFFICIENCY_GAP").change(function(){
+            validSingleRun();
+        });
+        $("#num_districts").change(function(){
+            validSingleRun();
+        });
+
+        $("#NUM_DIST_GRAPH").change(function(){
+            validSingleRun();
+        });
+
+        $("#state").change(function(){
+            validSingleRun();
+        });
+
+        function validSingleRun(){
+            if(
+                (
+                    $("#SCHWARTZBERG_COMPACTNESS").val()*1 > 0 ||
+                    $("#REOCK_COMPACTNESS").val()*1>0 ||
+                    $("#POPULATION_EQUALITY").val()*1 > 0 ||
+                    $("#POLSBY_POPPER_COMPACTNESS").val()*1 > 0 ||
+                    $("#CONVEX_HULL_COMPACTNESS").val()*1>0 ||
+                    $("#GRAPH_COMPACTNESS").val()*1>0 ||
+                    $("#EFFICIENCY_GAP").val()*1> 0
+                ) &&
+                $("#NUM_DIST_GRAPH").val()*1 > 0 &&
+                $("#state").text() !== "" &&
+                $("#state").text() !== "Select State"
+            ){
+                $("#btnRun").attr("disabled",false);
+            }else{
+                $("#btnRun").attr("disabled",true);
+            }
+        }
+
+
         var districtColors;
         $("#btnRun").click(function(){
             if( (ArizonaStateLayer === null && $("#state").text() === "Arizona") ||
