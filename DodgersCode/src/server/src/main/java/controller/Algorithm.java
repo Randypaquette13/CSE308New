@@ -42,11 +42,15 @@ public class Algorithm {
      */
     private double calculateObjectiveFunction() {
         double objFunOutput = 0;
+        double totalWeight = 0;
         for(District d : state.getDistrictSet()) {
             for(MeasureType m : MeasureType.values()) {
-                objFunOutput += ((m.calculateMeasure(d, state) * pref.getWeight(m)) / (state.getDistrictSet().size() * MeasureType.values().length));
+                objFunOutput += (((m.calculateMeasure(d, state) * pref.getWeight(m)))/ (state.getDistrictSet().size()));
+                totalWeight += pref.getWeight(m);
             }
         }
+        totalWeight /= state.getDistrictSet().size();
+        objFunOutput /= totalWeight;
         return objFunOutput;
     }
 

@@ -119,6 +119,8 @@ public enum MeasureType {
 
             double targetPop = (double)totalPop / (double)numDistricts;//5
 
+            System.out.println("pop equal");
+            System.out.println((Math.abs(districtPop - targetPop)/(districtPop + targetPop)));
             return 1.0 - (Math.abs(districtPop - targetPop)/(districtPop + targetPop));//0
         }
     };
