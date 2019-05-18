@@ -384,6 +384,14 @@
             validSingleRun();
         });
 
+        $("#single").change(function(){
+            validSingleRun();
+        });
+
+         $("#batch").change(function(){
+            validSingleRun();
+        });
+
         function validSingleRun(){
             if(
                 (
@@ -403,6 +411,10 @@
                 $("#btnRun").attr("disabled",false);
             }else{
                 $("#btnRun").attr("disabled",true);
+            }
+
+            if(!$("#single").prop('checked')){
+                $("#btnRun").attr("disabled",false);
             }
         }
 
@@ -569,7 +581,7 @@
 
                     if(e.precinctID !== -1) {
                         colorPrecinct(districtColors[e.toID],e.precinctID);
-                        getSimulatedAnnealing(); 
+                        getSimulatedAnnealing();
                     } else {
                         //TODO SET SUMMARY HERE PERFECTTTTTT
                         console.log("districtColors",districtColors);
@@ -652,7 +664,6 @@
                         }
                         africanToggle = true;
                     }
-
                 },
                 error: function(e) {
                     //TODO throw error
