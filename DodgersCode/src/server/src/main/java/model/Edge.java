@@ -64,7 +64,7 @@ public class Edge {
 
     @Override
     public String toString() {
-        return ("#1:" + c1 + " #2:" + c2 + " join:" + getJoinability());
+        return ("\t#1:" + c1 + " #2:" + c2 + " join:" + getJoinability());
     }
 
     @Override
@@ -72,9 +72,15 @@ public class Edge {
         if(!(obj instanceof Edge)) {
             return false;
         }
-        if((getC1().equals(((Edge) obj).c1) || getC2().equals(((Edge) obj).c1)) && (getC1().equals(((Edge) obj).c2) || getC2().equals(((Edge) obj).c2))) {
-            return true;
-        } else return false;
+        if(getC1().equals(((Edge) obj).c1) && getC2().equals(((Edge) obj).c2)) return true;
+        if(getC2().equals(((Edge) obj).c1) && getC1().equals(((Edge) obj).c2)) return true;
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return c1.hashCode() + c2.hashCode();
     }
 
 }

@@ -2,6 +2,8 @@ package model;
 
 import java.util.*;
 
+import static java.lang.Math.toIntExact;
+
 public class Cluster implements MapVertex {
     private Set<Precinct> precinctSet;
     private Set<Edge> edgeSet;
@@ -59,15 +61,17 @@ public class Cluster implements MapVertex {
 
     public void absorbCluster(Cluster c) {
         precinctSet.addAll(c.getPrecinctSet());
+        HashSet<Edge> temp = new HashSet<>();
         for(Edge e : c.getEdges()) {
 //            if(!edgeSet.add(e)) {
 //                edgeSet.remove(e);
 //            }
             if(e.getNeighbor(c) != this) {
                 e.setNeighbor(c, this);
-                edgeSet.add(e);
+                temp.add(e);
             }
         }
+        c.getEdges().addAll(temp);
         population += c.getPopulation();
 
 //        getNeighbors().forEach(neighbor -> {
@@ -131,6 +135,20 @@ public class Cluster implements MapVertex {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Cluster)) {
+            return false;
+        } else {
+            return ((Cluster)obj).id == id;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return toIntExact(id);
     }
 }
 

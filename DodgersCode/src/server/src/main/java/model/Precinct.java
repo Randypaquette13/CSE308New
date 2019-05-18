@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.Math.toIntExact;
+
 public class Precinct implements MapVertex {
     private final long id;
     private final int population;
@@ -84,5 +86,19 @@ public class Precinct implements MapVertex {
     @Override
     public String toString() {
         return "P" + id;// + " population:" + population;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Precinct)) {
+            return false;
+        } else {
+            return ((Precinct)obj).id == id;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return toIntExact(id);
     }
 }

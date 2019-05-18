@@ -67,10 +67,10 @@ public class Algorithm {
     public String doGraphPartitioning() {
         String s;
         //you must reset the state so we dont have to make extra database calls
-        System.out.println("clusters size: " + state.getClusters().size());
+        System.out.println("\nclusters size: " + state.getClusters().size());
         System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
-            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
+            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2.0);
             int targetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
 //            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
 
@@ -141,7 +141,7 @@ public class Algorithm {
                         candidateMove = null;
                     } else {
                         final double currObjFunVal = calculateObjectiveFunction();
-                        System.out.println("last" + lastObjFunVal);
+                        System.out.println("last:" + lastObjFunVal);
                         System.out.println("curr:" + currObjFunVal);
                         if ((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
                             lastObjFunVal = currObjFunVal;

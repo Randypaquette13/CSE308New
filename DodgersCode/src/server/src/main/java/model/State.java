@@ -120,15 +120,22 @@ public class State {
         final District district = iter.next();
 
         for(Precinct precinct : district.getPrecinctSet()) {
-            for(Edge edge : precinct.getEdges()) {
-                final Precinct neighbor = (Precinct)edge.getNeighbor(precinct);
-                if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD && !neighbor.getDistrict().equals(district) && precinct.getDistrict().continuity(precinct)) {
-                    System.out.println("move this:" + precinct);
-//                    System.out.println("from this:" + precinct.getDistrict());
-//                    System.out.println("to this:" + neighbor.getDistrict());
-//                    System.out.println("joinability: " + edge.getJoinability());
-                    return new Move(district, neighbor.getDistrict(), precinct);
+            System.out.println("precinct to move" + precinct);
+            if (precinct.getDistrict().continuity(precinct)) {
+                System.out.println("continuitygood");
+
+                for (Edge edge : precinct.getEdges()) {
+                    final Precinct neighbor = (Precinct) edge.getNeighbor(precinct);
+                    if (edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD && !neighbor.getDistrict().equals(district)) {
+                        System.out.println("move this:" + precinct);
+    //                    System.out.println("from this:" + precinct.getDistrict());
+    //                    System.out.println("to this:" + neighbor.getDistrict());
+    //                    System.out.println("joinability: " + edge.getJoinability());
+                        return new Move(district, neighbor.getDistrict(), precinct);
+                    }
                 }
+            } else {
+                System.out.println("continuity bad");
             }
         }
 //        findCandidateMove()
@@ -142,7 +149,7 @@ public class State {
         LinkedList<ClusterPair> pairs = new LinkedList<>();
         Cluster niceCluster = null;
         Edge niceEdge = null;
-        double maxJoin = 0;
+        int bestScore = Integer.MAX_VALUE;
 //        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
 //        System.out.println("num clusters:" + getClusters().size());
         for(Cluster c : getClusters()) {
@@ -155,12 +162,14 @@ public class State {
 //                    System.out.println("I am here");
 //                    System.out.println(c);
 //                    System.out.println("calc join of this cluster");
-                    double join = e.getJoinability();
-//                    System.out.println(join);
-                    if(join > maxJoin) {
+
+
+                    int popScore = Math.abs(targetPop - (c.getPopulation() + ((Cluster)e.getNeighbor(c)).getPopulation()));
+                    if(popScore < bestScore) {
+                        bestScore = popScore;
                         niceCluster = c;
                         niceEdge = e;
-                        maxJoin = join;
+
                         pairs.add(new ClusterPair(niceCluster, (Cluster)niceEdge.getNeighbor(niceCluster)));
                     }
                 }
@@ -169,16 +178,28 @@ public class State {
 //        System.out.println("num candidate pairs" +pairs.size());
         if(niceCluster != null && niceEdge != null) {
             ClusterPair bestPair = null;
-            int bestScore = Integer.MAX_VALUE;
+            double maxJoin = 0;
             for(ClusterPair cp : pairs) {
-                int popScore = Math.abs(targetPop - (cp.getC1().getPopulation() + cp.getC2().getPopulation()));
-                if(popScore < bestScore) {
+                double join = -1;
+                for (Edge e : cp.getC1().getEdges()){
+                    if(e.getNeighbor(cp.getC1()).equals(cp.getC2())) {
+                        join = e.getJoinability();
+                    }
+                }
+                if(join == -1) {
+                    System.out.println("MASSIVE EDGE JOINABILITY ERROR");
+                }
+//                    System.out.println(join);
+                if(join > maxJoin) {
+                    maxJoin = join;
                     bestPair = cp;
                 }
             }
             if(bestPair != null) {
                 return bestPair;
             } else {
+                System.out.println("should never get here");
+                System.out.println(bestScore);
                 return new ClusterPair(niceCluster, (Cluster)niceEdge.getNeighbor(niceCluster));
             }
         } else {
@@ -280,7 +301,6 @@ public class State {
         State s = new State(hsp);
         s.reset();
 
-        System.out.println(p0.getDemographics().demVotes);
         return s;
     }
 
