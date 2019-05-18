@@ -111,7 +111,7 @@ public class State {
     public Move findCandidateMove() {
         //get a random district
         final Random r = new Random();
-        final int index = r.nextInt(districtSet.size());
+        int index = r.nextInt(districtSet.size());
 
         Iterator<District> iter = districtSet.iterator();
         for(int i = 0; i < index; i++) {
@@ -119,14 +119,22 @@ public class State {
         }
         final District district = iter.next();
 
+        index = r.nextInt(precinctSet.size());
+
+        Iterator<Precinct> iter2 = precinctSet.iterator();
+        for(int i = 0; i < index; i++) {
+            iter2.next();
+        }
+        Precinct p = iter2.next();
+
         for(Precinct precinct : district.getPrecinctSet()) {
             for(Edge edge : precinct.getEdges()) {
                 final Precinct neighbor = (Precinct)edge.getNeighbor(precinct);
                 if(edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD && !neighbor.getDistrict().equals(district) && precinct.getDistrict().continuity(precinct)) {
                     System.out.println("move this:" + precinct);
-                    System.out.println("from this:" + precinct.getDistrict());
-                    System.out.println("to this:" + neighbor.getDistrict());
-                    System.out.println("joinability: " + edge.getJoinability());
+//                    System.out.println("from this:" + precinct.getDistrict());
+//                    System.out.println("to this:" + neighbor.getDistrict());
+//                    System.out.println("joinability: " + edge.getJoinability());
                     return new Move(district, neighbor.getDistrict(), precinct);
                 }
             }
@@ -144,16 +152,19 @@ public class State {
         Edge niceEdge = null;
         double maxJoin = 0;
 //        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
+//        System.out.println("num clusters:" + getClusters().size());
         for(Cluster c : getClusters()) {
+//            System.out.println("num edges:" + c.getEdges().size());
 //            System.out.println("there are clusters");
             for(Edge e : c.getEdges()) {
 //                System.out.println("the cluster has an edge");
-                if(getClusters().contains(e.getNeighbor(c))) {//TODO this is never true
+//                System.out.println(e.getNeighbor(c));
+                if(getClusters().contains(e.getNeighbor(c))) {
 //                    System.out.println("I am here");
 //                    System.out.println(c);
 //                    System.out.println("calc join of this cluster");
                     double join = e.getJoinability();
-                    System.out.println(join);
+//                    System.out.println(join);
                     if(join > maxJoin) {
                         niceCluster = c;
                         niceEdge = e;
@@ -163,7 +174,7 @@ public class State {
                 }
             }
         }
-        System.out.println(pairs.size());
+//        System.out.println("num candidate pairs" +pairs.size());
         if(niceCluster != null && niceEdge != null) {
             ClusterPair bestPair = null;
             int bestScore = Integer.MAX_VALUE;

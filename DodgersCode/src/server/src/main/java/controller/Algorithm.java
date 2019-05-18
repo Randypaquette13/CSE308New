@@ -70,18 +70,20 @@ public class Algorithm {
         System.out.println("clusters size: " + state.getClusters().size());
         System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
-            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
+            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2) ;
             int targetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
 //            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
 
             ((List<Cluster>) state.getClusters()).sort(Comparator.comparingInt(Cluster::getPopulation));
 
             Collection<Cluster> mergedClusters = new LinkedList<>();
-            while(!state.getClusters().isEmpty()) {
+            int steps = 0;
+            System.out.println("trying to get candidate again");
+            while(!state.getClusters().isEmpty() && steps < state.getClusters().size()) {
 //                System.out.println(state.getClusters());
-                System.out.println("GETTING CLUSTER PAIR");
+//                System.out.println("GETTING CLUSTER PAIR");
                 final ClusterPair clusterPair = state.findCandidateClusterPair(targetPop);
-                System.out.println(clusterPair);
+//                System.out.println(clusterPair);
                 if(clusterPair == null){
 //                    System.out.println("NO VALID CLUSTER PAIR");
 //                    System.out.println(state.getClusters());
@@ -93,8 +95,11 @@ public class Algorithm {
                 if(mergedClusters.size() + state.getClusters().size() == pref.getNumDistricts()){
                     break;
                 }
+                steps++;
             }
+            System.out.println("merged this turn: " + mergedClusters.size());
             (state.getClusters()).addAll(mergedClusters);
+            System.out.println("total: " + state.getClusters().size());
             s = state.getClusters().toString();
         } else {
             s = "done";
@@ -127,20 +132,22 @@ public class Algorithm {
                     final int newMajMinDistNum = state.numMaxMinDists();
 
                     if (newMajMinDistNum < pref.getMinMajMinDistricts() && oldMajMinDistNum > newMajMinDistNum) {//if it is less than min and it went down
-                        System.out.println("undoing move");
+                        System.out.println("undoing move MIN DIST");
                         state.undoMove();
                         candidateMove = null;
                     } else if (newMajMinDistNum > pref.getMaxMajMinDistricts() && oldMajMinDistNum < newMajMinDistNum) {//if it is greater than max and it went up
-                        System.out.println("undoing move");
+                        System.out.println("undoing move MAX DIST");
                         state.undoMove();
                         candidateMove = null;
                     } else {
                         final double currObjFunVal = calculateObjectiveFunction();
+                        System.out.println("last" + lastObjFunVal);
+                        System.out.println("curr:" + currObjFunVal);
                         if ((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
                             lastObjFunVal = currObjFunVal;
                             System.out.println("VALID MOVE ACCEPTED");
                         } else {
-                            System.out.println("undoing move");
+                            System.out.println("undoing move because OBJECTIVE FUNCTION");
                             state.undoMove();
                             candidateMove = null;
                         }

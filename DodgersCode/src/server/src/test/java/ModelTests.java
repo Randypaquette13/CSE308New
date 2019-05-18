@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.Algorithm;
 import controller.Move;
 import cse308.server.dao.JsonDistrictData;
+import cse308.server.dao.PreferenceDAO;
 import model.*;
 import org.geojson.GeoJsonObject;
 import org.geojson.LngLatAlt;
@@ -523,7 +524,7 @@ public class ModelTests {
 
     }
 
-    public MultiPolygon handleMultiPolygon(JsonNode coordinates){
+    public MultiPolygon handleMultiPolygon(JsonNode coordinates){//TODO why is this here
         GeometryFactory geoFactory = new GeometryFactory();
         ArrayList<Polygon> polygons = new ArrayList<Polygon>();
         Iterator<JsonNode> coordinateIterator = coordinates.elements();
@@ -548,4 +549,16 @@ public class ModelTests {
         }
         return geoFactory.createMultiPolygon(polygons.toArray(new Polygon[0]));
     }
+
+    @Test
+    public void testFullState() {
+        State state = State.getState("New Hampshire");
+        Algorithm algorithm = new Algorithm(new PreferenceDAO(1,1,1,1,1,1,1,0,2,2,false,"New Hampshire").makePreference(),state);
+        String gps = algorithm.doGraphPartitioning();
+        while(!"done".equals(gps)) {
+            gps = algorithm.doGraphPartitioning();
+        }
+        System.out.println(state.getClustersSimple());
+    }
+
 }

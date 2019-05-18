@@ -43,7 +43,8 @@ public class Edge {
         }
 
 //        System.out.println("Joinability:" + joinability);
-        return joinability;
+//        return joinability;
+        return 1.0;
     }
 
     public MapVertex getNeighbor(MapVertex mv) {
@@ -51,6 +52,13 @@ public class Edge {
             return c2;
         } else {
             return c1;
+        }
+    }
+    public void setNeighbor(MapVertex neighbor, MapVertex toSet) {
+        if(neighbor.equals(c1)) {
+            c2 = toSet;
+        } else {
+            c1 = toSet;
         }
     }
 

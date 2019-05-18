@@ -60,8 +60,12 @@ public class Cluster implements MapVertex {
     public void absorbCluster(Cluster c) {
         precinctSet.addAll(c.getPrecinctSet());
         for(Edge e : c.getEdges()) {
-            if(!edgeSet.add(e)) {
-                edgeSet.remove(e);
+//            if(!edgeSet.add(e)) {
+//                edgeSet.remove(e);
+//            }
+            if(e.getNeighbor(c) != this) {
+                e.setNeighbor(c, this);
+                edgeSet.add(e);
             }
         }
         population += c.getPopulation();
@@ -73,12 +77,12 @@ public class Cluster implements MapVertex {
 //        });
 
         //set demographics to combined value
-        System.out.println(this);
-        System.out.println(c);
-        System.out.println(demographics.demVotes);
-        System.out.println(c.getDemographics().demVotes);
+//        System.out.println(this);
+//        System.out.println(c);
+//        System.out.println(demographics.demVotes);
+//        System.out.println(c.getDemographics().demVotes);
         demographics.add(c.getDemographics());
-        System.out.println("added:" + demographics.demVotes);
+//        System.out.println("added:" + demographics.demVotes);
     }
 
     /**
