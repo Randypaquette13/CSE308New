@@ -224,8 +224,6 @@
                     <input type="text" class="form-control" value="" id="NUM_DIST_GRAPH">
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-sm">Stop</button>
-                    <button type="button" class="btn btn-primary btn-sm">Pause</button>
                     <button type="button" id="btnRun" class="btn btn-primary btn-sm" disabled>Run</button>
                     <p></p>
                     <button type="button" id="btnBlack" class="btn btn-primary btn-sm">Show African American Distribution</button>
@@ -364,10 +362,6 @@
         });
 
         $("#CONVEX_HULL_COMPACTNESS").change(function(){
-            validSingleRun();
-        });
-
-        $("#GRAPH_COMPACTNESS").change(function(){
             validSingleRun();
         });
 
