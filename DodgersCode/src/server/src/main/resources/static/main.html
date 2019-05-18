@@ -384,6 +384,14 @@
             validSingleRun();
         });
 
+        $("#single").change(function(){
+            validSingleRun();
+        });
+
+         $("#batch").change(function(){
+            validSingleRun();
+        });
+
         function validSingleRun(){
             if(
                 (
@@ -404,6 +412,10 @@
             }else{
                 $("#btnRun").attr("disabled",true);
             }
+
+            if(!$("#single").prop('checked')){
+                $("#btnRun").attr("disabled",false);
+            }
         }
 
 
@@ -412,6 +424,7 @@
             if( (ArizonaStateLayer === null && $("#state").text() === "Arizona") ||
                 (New_HampshireLayer === null && $("#state").text() === "New Hampshire") ||
                 (MarylandStateLayer === null && $("#state").text() === "Maryland")  ) {
+                console.log("im inside1");
                 if($("#state").text() === "Arizona"){
                     azFlag = true;
                     mlFlag = false;
@@ -432,6 +445,7 @@
             }else {
                 var data = null;
                 if ($("#single").prop('checked')) {
+                    console.log("im inside2");
                     graphPartGetter()
                 } else {
                     data = {
@@ -497,6 +511,7 @@
                 contentType: "application/json",
                 success: function (e) {
                     if ($("#btnRun").text() === "Run") {
+                        console.log("im inside3");
                         districtColors = {};
                         for (i = 0; i < e.length; i++) {
                             // var num = Math.floor(Math.random() * 16777215)
