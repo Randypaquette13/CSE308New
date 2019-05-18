@@ -36,7 +36,7 @@ public class Cluster implements MapVertex {
         edgeSet = c.getEdges();
         population = c.getPopulation();
         demographics = c.getDemographics().clone();
-        System.out.println("\tafter dist" + demographics.demVotes);
+//        System.out.println("\tafter dist" + demographics.demVotes);
         id = c.id;
     }
 
