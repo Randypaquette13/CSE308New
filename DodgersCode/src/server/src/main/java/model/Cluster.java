@@ -61,17 +61,18 @@ public class Cluster implements MapVertex {
 
     public void absorbCluster(Cluster c) {
         precinctSet.addAll(c.getPrecinctSet());
-        HashSet<Edge> temp = new HashSet<>();
+//        HashSet<Edge> temp = new HashSet<>();
         for(Edge e : c.getEdges()) {
 //            if(!edgeSet.add(e)) {
 //                edgeSet.remove(e);
 //            }
             if(e.getNeighbor(c) != this) {
                 e.setNeighbor(c, this);
-                temp.add(e);
+                edgeSet.add(e);
+//                temp.add(e);
             }
         }
-        c.getEdges().addAll(temp);
+//        c.getEdges().addAll(temp);
         population += c.getPopulation();
 
 //        getNeighbors().forEach(neighbor -> {
@@ -146,9 +147,9 @@ public class Cluster implements MapVertex {
 //        }
 //    }
 
-    @Override
-    public int hashCode() {
-        return toIntExact(id);
-    }
+//    @Override
+//    public int hashCode() {
+//        return toIntExact(id);
+//    }
 }
 

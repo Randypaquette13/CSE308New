@@ -88,17 +88,17 @@ public class Precinct implements MapVertex {
         return "P" + id;// + " population:" + population;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof Precinct)) {
-            return false;
-        } else {
-            return ((Precinct)obj).id == id;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return toIntExact(id);
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if(!(obj instanceof Precinct)) {
+//            return false;
+//        } else {
+//            return ((Precinct)obj).id == id;
+//        }
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return toIntExact(id);
+//    }
 }

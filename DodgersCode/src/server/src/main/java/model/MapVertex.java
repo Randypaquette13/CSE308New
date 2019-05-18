@@ -9,5 +9,4 @@ public interface MapVertex {
     Set<Edge> getEdges();
     List<MapVertex> getNeighbors();
     void addEdgeTo(MapVertex p);
-    boolean equals(Object obj);
 }
