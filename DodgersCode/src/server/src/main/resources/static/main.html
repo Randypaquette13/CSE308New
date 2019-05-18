@@ -407,7 +407,6 @@
         }
 
 
-        var districtColors;
         $("#btnRun").click(function(){
             if( (ArizonaStateLayer === null && $("#state").text() === "Arizona") ||
                 (New_HampshireLayer === null && $("#state").text() === "New Hampshire") ||
@@ -432,7 +431,12 @@
             }else {
                 var data = null;
                 if ($("#single").prop('checked')) {
-                    graphPartGetter()
+                    if ($("#btnRun").text() === "Run") {
+                        graphPartGetter()
+                    } else {
+                        $("#btnRun").text("Run");
+                        getSimulatedAnnealing()
+                    }
                 } else {
                     data = {
                         //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
@@ -473,6 +477,8 @@
             }
         });
 
+        var districtColors;
+        var precinctColors;
         function graphPartGetter() {
             data = {
                 "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
@@ -496,26 +502,25 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (e) {
-                    if ($("#btnRun").text() === "Run") {
-                        districtColors = {};
-                        for (i = 0; i < e.length; i++) {
-                            // var num = Math.floor(Math.random() * 16777215)
-                            var color1 = getRandomColorReal();
-                            e[i][0];//the id of the cluster
-                            districtColors[e[i][0]] = color1;
+                    districtColors = {};
+                    precinctColors = {};
+                    console.log(e);
+                    for (i = 0; i < e.length; i++) {
+                        // var num = Math.floor(Math.random() * 16777215)
+                        var color1 = getRandomColorReal();
+                        e[i][0];//the id of the cluster
+                        districtColors[e[i][0]] = color1;
 
-                            for (j = 1; j < e[i].length; j++) {
-                                colorPrecinct(color1, e[i][j]);
-                            }
-                            if (!data.graphPartUpdate.valueOf()) {
-                                $("#btnRun").text("Simulated Annealing");
-                            } else {
-                                graphPartGetter();
-                            }
+                        for (j = 1; j < e[i].length; j++) {
+                            precinctColors[e[i][j]] = color1;
+                            colorPrecinct(color1, e[i][j]);
                         }
-                    } else {
-                        $("#btnRun").text("Run");
-                        getSimulatedAnnealing()
+                        if (!data.graphPartUpdate.valueOf()) {
+                            $("#btnRun").text("Simulated Annealing");
+                            console.log(districtColors);
+                        } else {
+                            graphPartGetter();
+                        }
                     }
                 },
                 error: function (e) {
@@ -524,6 +529,7 @@
                         //change button
                         if ($("#btnRun").text() === "Run") {
                             $("#btnRun").text("Simulated Annealing");
+                            console.log(districtColors);
                         } else {
                             $("#btnRun").text("Run");
                             getSimulatedAnnealing();
@@ -563,7 +569,7 @@
 
                     if(e.precinctID !== -1) {
                         colorPrecinct(districtColors[e.toID],e.precinctID);
-                        getSimulatedAnnealing();
+                        getSimulatedAnnealing(); 
                     } else {
                         //TODO SET SUMMARY HERE PERFECTTTTTT
                         console.log("districtColors",districtColors);
@@ -621,25 +627,40 @@
             }
         }
 
+        var africanToggle = true;
         function getBlackDistribution() {
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: "http://localhost:8080/getBlackDistribution",
-                dataType: "json",
-                contentType: "application/json",
+                data: $("#state").text(),
+                contentType: "text/plain",
                 success: function(e) {
-                    console.log("black");
-                    console.log(e);
-                    for(var i = 0; i<e.length;i++) {
-                        var numPop = e[i].africanPopulation * 2.5;
-                        var color = "#" + numPop+numPop+numPop;
-                        colorPrecinct(color,e[i].id);
+                    // console.log("black");
+                    // console.log(e);
+                    if(africanToggle) {
+                        for(var i = 0; i<e.length;i++) {
+                            var numPop = e[i].africanPopulation * 2.5;
+                            var color = "#" + numPop+numPop+numPop;
+                            colorPrecinct(color,e[i].id);
+                        }
+                        africanToggle = false;
+                    } else {
+                        // console.log("recoloring");
+                        // console.log(precinctColors);
+                        for(i in precinctColors) {
+                            colorPrecinct(precinctColors[i],i);
+                        }
+                        africanToggle = true;
                     }
+
                 },
                 error: function(e) {
                     //TODO throw error
-                    console.log("black error");
-                    console.log(e);
+                    // console.log("black error");
+                    // console.log(e);
+                    for(var i = 0; i < precinctColors.length;i++) {
+                        colorPrecinct(precinctColors[i],i);
+                    }
                 }
             });
         }

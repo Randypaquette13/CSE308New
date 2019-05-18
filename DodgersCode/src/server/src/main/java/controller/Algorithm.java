@@ -70,7 +70,7 @@ public class Algorithm {
         System.out.println("\nclusters size: " + state.getClusters().size());
         System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
-            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
+            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2.0);
             int targetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
 //            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
 
@@ -148,7 +148,7 @@ public class Algorithm {
                             lastObjFunVal = currObjFunVal;
                             System.out.println("VALID MOVE ACCEPTED");
                         } else {
-                            System.out.println("undoing move because OBJECTIVE FUNCTION");
+                            System.out.println("undoing move because OBJECTIVE FUNCTION" + annealingSteps);
                             state.undoMove();
                             candidateMove = null;
                         }
@@ -165,6 +165,7 @@ public class Algorithm {
         System.out.println("\tENDED SIM ANNEALING STEP");
         System.out.println(state.getDistrictSet());
         System.out.println(lastObjFunVal);
+        System.out.println(state.getClusters());
         return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove);
     }
 }

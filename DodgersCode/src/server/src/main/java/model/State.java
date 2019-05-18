@@ -119,10 +119,16 @@ public class State {
         }
         final District district = iter.next();
 
-        for(Precinct precinct : district.getPrecinctSet()) {
-            System.out.println("precinct to move" + precinct);
+        Iterator<Precinct> piter = district.getPrecinctSet().iterator();
+        index = r.nextInt(district.getPrecinctSet().size());
+        for(int i = 0; i < index; i++) {
+            piter.next();
+        }
+        while(piter.hasNext()) {
+            Precinct precinct = piter.next();
+//            System.out.println("precinct to move" + precinct);
             if (precinct.getDistrict().continuity(precinct)) {
-                System.out.println("continuitygood");
+//                System.out.println("continuitygood");
 
                 for (Edge edge : precinct.getEdges()) {
                     final Precinct neighbor = (Precinct) edge.getNeighbor(precinct);

@@ -1,10 +1,7 @@
 package cse308.server.restControllers;
 
 import controller.Algorithm;
-import cse308.server.dao.BatchedPreferencesDAO;
-import cse308.server.dao.PrecinctAfricanDAO;
-import cse308.server.dao.PreferenceDAO;
-import cse308.server.dao.SummaryDAO;
+import cse308.server.dao.*;
 import model.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +61,7 @@ public class AlgorithmController {
             while(!"done".equals(gps)) {
                 gps = algorithm.doGraphPartitioning();
             }
+            System.out.println(state.toFancyString());
             return state.getClustersSimple();
         }
     }
@@ -96,8 +94,11 @@ public class AlgorithmController {
     }
 
     @RequestMapping("/getBlackDistribution")
-    public List<PrecinctAfricanDAO> getBlackDistribution() {
+    public List<PrecinctAfricanDAO> getBlackDistribution(String stateName) {
+        System.out.println(stateName);
+        System.out.println();
         if(state == null) {
+//            state = State.getState(stateName.getStateName());
             return null;
         }
         LinkedList<PrecinctAfricanDAO> output = new LinkedList<>();
