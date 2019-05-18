@@ -64,25 +64,25 @@ public class BatchedPreferencesDAO {
             for(MeasureType m : MeasureType.values()){
                 switch (m){
                     case SCHWARTZBERG_COMPACTNESS:
-                        hashmap.put(m, (Math.random() * (schwartzbergCompactnessMax-schwartzbergCompactnessMin)) + schwartzbergCompactnessMin);
+                        hashmap.put(m, ((Math.random() * (schwartzbergCompactnessMax-schwartzbergCompactnessMin)) + schwartzbergCompactnessMin)/100.0);
                         break;
                     case REOCK_COMPACTNESS:
-                        hashmap.put(m, (Math.random() * (reackCompactnessMax-reackCompactnessMin)) + reackCompactnessMin);
+                        hashmap.put(m, ((Math.random() * (reackCompactnessMax-reackCompactnessMin)) + reackCompactnessMin)/100.0);
                         break;
                     case POLSBY_POPPER_COMPACTNESS:
-                        hashmap.put(m, (Math.random() * (polsbyCompactnessMax-polsbyCompactnessMin)) + polsbyCompactnessMin);
+                        hashmap.put(m, ((Math.random() * (polsbyCompactnessMax-polsbyCompactnessMin)) + polsbyCompactnessMin)/100.0);
                         break;
                     case CONVEX_HULL_COMPACTNESS:
-                        hashmap.put(m, (Math.random() * (convexCompactnessMax-convexCompactnessMin)) + convexCompactnessMin);
+                        hashmap.put(m, ((Math.random() * (convexCompactnessMax-convexCompactnessMin)) + convexCompactnessMin)/100.0);
                         break;
                     case GRAPH_COMPACTNESS:
-                        hashmap.put(m, (Math.random() * (graphCompactnessMax-graphCompactnessMin)) + graphCompactnessMin);
+                        hashmap.put(m, ((Math.random() * (graphCompactnessMax-graphCompactnessMin)) + graphCompactnessMin)/100.0);
                         break;
                     case EFFICIENCY_GAP:
-                        hashmap.put(m, (Math.random() * (efficiencyGapMax-efficiencyGapMin)) + efficiencyGapMin);
+                        hashmap.put(m, ((Math.random() * (efficiencyGapMax-efficiencyGapMin)) + efficiencyGapMin)/100.0);
                         break;
                     case POPULATION_EQUALITY:
-                        hashmap.put(m, (Math.random() * (populationEqualityMax-populationEqualityMin)) + populationEqualityMin);
+                        hashmap.put(m, ((Math.random() * (populationEqualityMax-populationEqualityMin)) + populationEqualityMin)/100.0);
                         break;
                 }
             }
