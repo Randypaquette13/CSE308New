@@ -563,7 +563,8 @@
                     console.log("black");
                     console.log(e);
                     for(var i = 0; i<e.length;i++) {
-                        var numPop = e[i].africanPopulation * 2.5;
+                        var numPop = (e[i].africanPopulation * 2);
+                        console.log(numPop)
                         var color = "#" + numPop+numPop+numPop;
                         colorPrecinct(color,e[i].id);
                     }
