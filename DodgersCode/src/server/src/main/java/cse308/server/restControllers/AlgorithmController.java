@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class specifies the endpoints and behavior used to run the algorithm.
@@ -46,7 +43,6 @@ public class AlgorithmController {
             currentState = preference.getStateName();
         }
 
-        System.out.println(p.getWeights().values());
         algorithm = new Algorithm(p, state);
         if (preference.isGraphPartUpdate()) {
             if(state.isGPDone) {

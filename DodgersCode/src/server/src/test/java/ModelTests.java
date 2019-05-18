@@ -561,4 +561,14 @@ public class ModelTests {
         System.out.println(state.getClustersSimple());
     }
 
+    @Test
+    public void testEdge() {
+        State s = State.getStateOLD("sldkjf");
+        ArrayList<Cluster> clusters = new ArrayList<>(s.getClusters());
+        clusters.sort(Comparator.comparingLong(a -> a.id));
+        System.out.println(clusters);
+        System.out.println(clusters.get(2).getEdges());
+        System.out.println(clusters.get(2).getEdges().size());
+    }
+
 }
