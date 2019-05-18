@@ -44,7 +44,7 @@ public class Algorithm {
         double objFunOutput = 0;
         for(District d : state.getDistrictSet()) {
             for(MeasureType m : MeasureType.values()) {
-                objFunOutput += ((m.calculateMeasure(d) * pref.getWeight(m)) / (state.getDistrictSet().size() * MeasureType.values().length));
+                objFunOutput += ((m.calculateMeasure(d, state) * pref.getWeight(m)) / (state.getDistrictSet().size() * MeasureType.values().length));
             }
         }
         return objFunOutput;
@@ -55,7 +55,7 @@ public class Algorithm {
 
         for(District d : state.getDistrictSet()) {
             for(int ii = 0; ii < MeasureType.values().length; ii++) {
-                measureScores[ii] += MeasureType.values()[ii].calculateMeasure(d);
+                measureScores[ii] += MeasureType.values()[ii].calculateMeasure(d, state);
             }
         }
         for(int ii = 0; ii < measureScores.length; ii++) {
@@ -142,26 +142,27 @@ public class Algorithm {
                         candidateMove = null;
                     } else {
                         final double currObjFunVal = calculateObjectiveFunction();
-                        System.out.println("last:" + lastObjFunVal);
+//                        System.out.println("last:" + lastObjFunVal);
                         System.out.println("curr:" + currObjFunVal);
                         if ((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
                             lastObjFunVal = currObjFunVal;
                             System.out.println("VALID MOVE ACCEPTED");
                         } else {
-                            System.out.println("undoing move because OBJECTIVE FUNCTION" + annealingSteps);
+//                            System.out.println("undoing move because OBJECTIVE FUNCTION" + annealingSteps);
                             state.undoMove();
                             candidateMove = null;
                         }
                     }
 
                 } else {
-                    System.out.println("NO CANDIDATE MOVE FOUND... try again");
+//                    System.out.println("NO CANDIDATE MOVE FOUND... try again");
                 }
                 annealingSteps++;
             }
         } else {
             System.out.println("SIM END CONDITION MET");
         }
+        System.out.println(annealingSteps);
         System.out.println("\tENDED SIM ANNEALING STEP");
         System.out.println(state.getDistrictSet());
         System.out.println(lastObjFunVal);

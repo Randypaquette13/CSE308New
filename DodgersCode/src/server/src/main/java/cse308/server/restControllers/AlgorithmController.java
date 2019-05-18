@@ -34,21 +34,16 @@ public class AlgorithmController {
                 System.out.println("MEGA FUCKED");
             }
         } else if ((state.isGPDone) && currentState.equals(preference.getStateName())){
-            state.reset();
-        }else{
-            state = State.getState(p.getStateName());
-            currentState = preference.getStateName();
+//            state.reset();
         }
+//        else if (state.isGPDone){
+//            state = State.getState(p.getStateName());
+//            currentState = preference.getStateName();
+//        }
 
         algorithm = new Algorithm(p, state);
         if (preference.isGraphPartUpdate()) {
-            System.out.println("another turn\n\n\n\n");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+            System.out.println("TRYING GP WITH UPDATES");
             if(state.isGPDone) {
                 return null;
             }

@@ -141,7 +141,7 @@ public class State {
                     }
                 }
             } else {
-                System.out.println("continuity bad");
+//                System.out.println("continuity bad");
             }
         }
 //        findCandidateMove()
@@ -156,8 +156,8 @@ public class State {
         Cluster niceCluster = null;
         Edge niceEdge = null;
         int bestScore = Integer.MAX_VALUE;
-//        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
-//        System.out.println("num clusters:" + getClusters().size());
+        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
+        System.out.println("num clusters:" + getClusters().size());
         for(Cluster c : getClusters()) {
 //            System.out.println("num edges:" + c.getEdges().size());
 //            System.out.println("there are clusters");
@@ -184,6 +184,11 @@ public class State {
                     }
                 }
             }
+        }
+
+        if(bestScore > 4*(targetPop)) {
+            System.out.println(targetPop);
+            return null;
         }
 //        System.out.println("num candidate pairs" +pairs.size());
         if(niceCluster != null && niceEdge != null) {

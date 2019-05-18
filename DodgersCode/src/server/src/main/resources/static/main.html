@@ -516,6 +516,7 @@
                 success: function (e) {
                     districtColors = {};
                     precinctColors = {};
+                    console.log("returned from gp post");
                     console.log(e);
                     for (i = 0; i < e.length; i++) {
                         // var num = Math.floor(Math.random() * 16777215)
@@ -527,12 +528,12 @@
                             precinctColors[e[i][j]] = color1;
                             colorPrecinct(color1, e[i][j]);
                         }
-                        if (!data.graphPartUpdate.valueOf()) {
-                            $("#btnRun").text("Simulated Annealing");
-                            console.log(districtColors);
-                        } else {
-                            graphPartGetter();
-                        }
+                    }
+                    if (!data.graphPartUpdate.valueOf()) {
+                        $("#btnRun").text("Simulated Annealing");
+                        console.log(districtColors);
+                    } else {
+                        graphPartGetter();
                     }
                 },
                 error: function (e) {
