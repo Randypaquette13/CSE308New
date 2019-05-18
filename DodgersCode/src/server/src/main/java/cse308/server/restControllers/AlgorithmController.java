@@ -61,6 +61,7 @@ public class AlgorithmController {
             while(!"done".equals(gps)) {
                 gps = algorithm.doGraphPartitioning();
             }
+            state.isGPDone = true;
             System.out.println(state.toFancyString());
             return state.getClustersSimple();
         }
