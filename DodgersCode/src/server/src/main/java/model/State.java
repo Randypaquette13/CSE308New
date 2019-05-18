@@ -119,14 +119,6 @@ public class State {
         }
         final District district = iter.next();
 
-        index = r.nextInt(precinctSet.size());
-
-        Iterator<Precinct> iter2 = precinctSet.iterator();
-        for(int i = 0; i < index; i++) {
-            iter2.next();
-        }
-        Precinct p = iter2.next();
-
         for(Precinct precinct : district.getPrecinctSet()) {
             for(Edge edge : precinct.getEdges()) {
                 final Precinct neighbor = (Precinct)edge.getNeighbor(precinct);

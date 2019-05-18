@@ -37,6 +37,8 @@ public class AlgorithmController {
             if(state == null) {
                 System.out.println("MEGA FUCKED");
             }
+        } else {
+            state.reset();
         }
 
         algorithm = new Algorithm(p, state);
