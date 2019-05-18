@@ -436,65 +436,7 @@
             }else {
                 var data = null;
                 if ($("#single").prop('checked')) {
-                    data = {
-                        "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
-                        "reackCompactness": parseFloat($("#REOCK_COMPACTNESS").val()),
-                        "populationEquality": parseFloat($("#POPULATION_EQUALITY").val()),
-                        "polsbyCompactness": parseFloat($("#POLSBY_POPPER_COMPACTNESS").val()),
-                        "convexCompactness": parseFloat($("#CONVEX_HULL_COMPACTNESS").val()),
-                        "graphCompactness": parseFloat($("#GRAPH_COMPACTNESS").val()),
-                        "efficiencyGap": parseFloat($("#EFFICIENCY_GAP").val()),
-                        "minMajMinDistricts": parseInt($("#min_majority").text()),
-                        "maxMajMinDistricts": parseInt($("#max_majority").text()),
-                        "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
-                        "graphPartUpdate": $("#graphPartUpdate").prop("checked"),
-                        "stateName": $("#state").text()
-                    }
-                    console.log("data", data);
-                    $.ajax({
-                        type: 'POST',
-                        url: "http://localhost:8080/runGraphPartitioning",
-                        data: JSON.stringify(data),
-                        dataType: "json",
-                        contentType: "application/json",
-                        success: function (e) {
-                            if ($("#btnRun").text() === "Run") {
-                                districtColors = {};
-                                for (i = 0; i < e.length; i++) {
-                                    // var num = Math.floor(Math.random() * 16777215)
-                                    var color1 = getRandomColorReal();
-                                    e[i][0];//the id of the cluster
-                                    districtColors[e[i][0]] = color1;
-
-                                    for (j = 1; j < e[i].length; j++) {
-                                        colorPrecinct(color1, e[i][j]);
-                                    }
-                                    if (!data.graphPartUpdate.valueOf()) {
-                                        $("#btnRun").text("Simulated Annealing");
-                                    }
-                                }
-                            } else {
-                                $("#btnRun").text("Run");
-                                getSimulatedAnnealing()
-                            }
-                        },
-                        error: function (e) {
-                            console.log("error graph partition");
-                            if (e.status === 200) {
-                                //change button
-                                if ($("#btnRun").text() === "Run") {
-                                    $("#btnRun").text("Simulated Annealing");
-                                } else {
-                                    $("#btnRun").text("Run");
-                                    getSimulatedAnnealing();
-                                }
-
-
-                            } else {
-                                alert("Running Error!");
-                            }
-                        }
-                    });
+                    graphPartGetter()
                 } else {
                     data = {
                         //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
@@ -534,6 +476,70 @@
                 }
             }
         });
+
+        function graphPartGetter() {
+            data = {
+                "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
+                "reackCompactness": parseFloat($("#REOCK_COMPACTNESS").val()),
+                "populationEquality": parseFloat($("#POPULATION_EQUALITY").val()),
+                "polsbyCompactness": parseFloat($("#POLSBY_POPPER_COMPACTNESS").val()),
+                "convexCompactness": parseFloat($("#CONVEX_HULL_COMPACTNESS").val()),
+                "graphCompactness": parseFloat($("#GRAPH_COMPACTNESS").val()),
+                "efficiencyGap": parseFloat($("#EFFICIENCY_GAP").val()),
+                "minMajMinDistricts": parseInt($("#min_majority").text()),
+                "maxMajMinDistricts": parseInt($("#max_majority").text()),
+                "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
+                "graphPartUpdate": $("#graphPartUpdate").prop("checked"),
+                "stateName": $("#state").text()
+            }
+            console.log("data", data);
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/runGraphPartitioning",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (e) {
+                    if ($("#btnRun").text() === "Run") {
+                        districtColors = {};
+                        for (i = 0; i < e.length; i++) {
+                            // var num = Math.floor(Math.random() * 16777215)
+                            var color1 = getRandomColorReal();
+                            e[i][0];//the id of the cluster
+                            districtColors[e[i][0]] = color1;
+
+                            for (j = 1; j < e[i].length; j++) {
+                                colorPrecinct(color1, e[i][j]);
+                            }
+                            if (!data.graphPartUpdate.valueOf()) {
+                                $("#btnRun").text("Simulated Annealing");
+                            } else {
+                                graphPartGetter();
+                            }
+                        }
+                    } else {
+                        $("#btnRun").text("Run");
+                        getSimulatedAnnealing()
+                    }
+                },
+                error: function (e) {
+                    console.log("error graph partition");
+                    if (e.status === 200) {
+                        //change button
+                        if ($("#btnRun").text() === "Run") {
+                            $("#btnRun").text("Simulated Annealing");
+                        } else {
+                            $("#btnRun").text("Run");
+                            getSimulatedAnnealing();
+                        }
+
+
+                    } else {
+                        alert("Running Error!");
+                    }
+                }
+            });
+        }
 
         $("#btnBlack").click(function(){
             getBlackDistribution();

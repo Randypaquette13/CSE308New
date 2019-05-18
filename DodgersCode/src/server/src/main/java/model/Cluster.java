@@ -137,14 +137,14 @@ public class Cluster implements MapVertex {
         return sb.toString();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof Cluster)) {
-            return false;
-        } else {
-            return ((Cluster)obj).id == id;
-        }
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if(!(obj instanceof Cluster)) {
+//            return false;
+//        } else {
+//            return ((Cluster)obj).id == id;
+//        }
+//    }
 
     @Override
     public int hashCode() {
