@@ -155,11 +155,15 @@ public class State {
         for(Cluster c : getClusters()) {
 //            System.out.println("num edges:" + c.getEdges().size());
 //            System.out.println("there are clusters");
-            for(Edge e : c.getEdges()) {
+            HashSet<Edge> edges = new HashSet<>(c.getEdges());
+            for(Edge e : edges) {
+//                System.out.println(targetPop);
 //                System.out.println("the cluster has an edge");
+//                System.out.println(getClusters().contains(e.getNeighbor(c)));
 //                System.out.println(e.getNeighbor(c));
-                if(getClusters().contains(e.getNeighbor(c))) {
-//                    System.out.println("I am here");
+//                System.out.println(getClusters());
+                if(getClusters().contains((Cluster) e.getNeighbor(c))) {//this is never true TODO
+//                    System.out.println("Neighbor can be combined with");
 //                    System.out.println(c);
 //                    System.out.println("calc join of this cluster");
 

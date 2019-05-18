@@ -85,7 +85,7 @@ public class Algorithm {
                 final ClusterPair clusterPair = state.findCandidateClusterPair(targetPop);
 //                System.out.println(clusterPair);
                 if(clusterPair == null){
-//                    System.out.println("NO VALID CLUSTER PAIR");
+                    System.out.println("NO VALID CLUSTER PAIR");
 //                    System.out.println(state.getClusters());
                     break;
                 }
@@ -97,6 +97,7 @@ public class Algorithm {
                 }
                 steps++;
             }
+            System.out.println("steps:" + steps);
             System.out.println("merged this turn: " + mergedClusters.size());
             (state.getClusters()).addAll(mergedClusters);
             System.out.println("total: " + state.getClusters().size());
