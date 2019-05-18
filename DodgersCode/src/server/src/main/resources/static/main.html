@@ -400,10 +400,11 @@
                     $("#CONVEX_HULL_COMPACTNESS").val()*1>0 ||
                     $("#GRAPH_COMPACTNESS").val()*1>0 ||
                     $("#EFFICIENCY_GAP").val()*1> 0
-                ) &&
-                $("#NUM_DIST_GRAPH").val()*1 > 0 &&
-                $("#state").text() !== "" &&
-                $("#state").text() !== "Select State"
+                ) && (
+                    $("#NUM_DIST_GRAPH").val()*1 > 0 &&
+                    $("#state").text() !== "" &&
+                    $("#state").text().trim() !== "Select State"
+                )
             ){
                 $("#btnRun").attr("disabled",false);
             }else{
@@ -433,6 +434,7 @@
                     nhFlag = true;
                     loadState(43.452492,-71.563896,"NH");
                 }
+                setTimeout(function(){ $("#btnRun").click() }, 7000);
             }else {
                 var data = null;
                 if ($("#single").prop('checked')) {
@@ -635,8 +637,7 @@
                     console.log("black");
                     console.log(e);
                     for(var i = 0; i<e.length;i++) {
-                        var numPop = (e[i].africanPopulation * 2);
-                        console.log(numPop)
+                        var numPop = e[i].africanPopulation * 2.5;
                         var color = "#" + numPop+numPop+numPop;
                         colorPrecinct(color,e[i].id);
                     }
@@ -870,6 +871,7 @@
 
         // Change state, change in dropdown as well
         $("#stateDropdown a").click(function(){
+
             azFlag = false;
             mlFlag = false;
             nhFlag = false;
@@ -877,6 +879,7 @@
             MarylandStateLayer = null;
             New_HampshireLayer = null;
             $(this).parent().prev().text($(this).text());
+            validSingleRun();
             loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
         });
 
