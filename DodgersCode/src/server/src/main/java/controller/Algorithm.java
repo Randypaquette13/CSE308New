@@ -70,7 +70,7 @@ public class Algorithm {
         System.out.println("clusters size: " + state.getClusters().size());
         System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
-            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2) ;
+            int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2);
             int targetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
 //            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
 
