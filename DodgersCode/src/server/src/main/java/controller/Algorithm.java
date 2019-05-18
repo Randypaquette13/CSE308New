@@ -79,15 +79,20 @@ public class Algorithm {
             Collection<Cluster> mergedClusters = new LinkedList<>();
             while(!state.getClusters().isEmpty()) {
 //                System.out.println(state.getClusters());
+                System.out.println("GETTING CLUSTER PAIR");
                 final ClusterPair clusterPair = state.findCandidateClusterPair(targetPop);
+                System.out.println(clusterPair);
                 if(clusterPair == null){
-                    System.out.println("NO VALID CLUSTER PAIR");
-                    System.out.println(state.getClusters());
+//                    System.out.println("NO VALID CLUSTER PAIR");
+//                    System.out.println(state.getClusters());
                     break;
                 }
-                System.out.println("found cluster pair: " + clusterPair);
+//                System.out.println("found cluster pair: " + clusterPair);
                 Cluster c = state.combinePair(clusterPair.getC1(), clusterPair.getC2());
                 mergedClusters.add(c);
+                if(mergedClusters.size() + state.getClusters().size() == pref.getNumDistricts()){
+                    break;
+                }
             }
             (state.getClusters()).addAll(mergedClusters);
             s = state.getClusters().toString();
@@ -151,6 +156,7 @@ public class Algorithm {
         }
         System.out.println("\tENDED SIM ANNEALING STEP");
         System.out.println(state.getDistrictSet());
+        System.out.println(lastObjFunVal);
         return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove);
     }
 }

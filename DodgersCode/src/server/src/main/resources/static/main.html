@@ -227,6 +227,8 @@
                     <button type="button" class="btn btn-primary btn-sm">Stop</button>
                     <button type="button" class="btn btn-primary btn-sm">Pause</button>
                     <button type="button" id="btnRun" class="btn btn-primary btn-sm">Run</button>
+                    <p></p>
+                    <button type="button" id="btnBlack" class="btn btn-primary btn-sm">Show African American Distribution</button>
                 </div>
             </div>
         </div>
@@ -365,68 +367,69 @@
                     nhFlag = true;
                     loadState(43.452492,-71.563896,"NH");
                 }
-            }else{
+            }else {
                 var data = null;
-                if($("#single").prop('checked')){
+                if ($("#single").prop('checked')) {
                     data = {
                         "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
                         "reackCompactness": parseFloat($("#REOCK_COMPACTNESS").val()),
                         "populationEquality": parseFloat($("#POPULATION_EQUALITY").val()),
                         "polsbyCompactness": parseFloat($("#POLSBY_POPPER_COMPACTNESS").val()),
                         "convexCompactness": parseFloat($("#CONVEX_HULL_COMPACTNESS").val()),
-                        "graphCompactness": parseFloat( $("#GRAPH_COMPACTNESS").val()),
+                        "graphCompactness": parseFloat($("#GRAPH_COMPACTNESS").val()),
                         "efficiencyGap": parseFloat($("#EFFICIENCY_GAP").val()),
                         "minMajMinDistricts": parseInt($("#min_majority").text()),
                         "maxMajMinDistricts": parseInt($("#max_majority").text()),
                         "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
-                        "graphPartUpdate":$("#graphPartUpdate").prop("checked"),
+                        "graphPartUpdate": $("#graphPartUpdate").prop("checked"),
                         "stateName": $("#state").text()
                     }
-                    console.log("data",data);
+                    console.log("data", data);
                     $.ajax({
                         type: 'POST',
                         url: "http://localhost:8080/runGraphPartitioning",
                         data: JSON.stringify(data),
                         dataType: "json",
                         contentType: "application/json",
-                        success: function(e) {
-                            console.log("heyyyyy", e);//e is a double array of clusters where e[0] is the first cluster and e[0][0] is its id
-                            console.log(e.length);
-                            //16777215
-                            districtColors = {};
-                            for(i = 0; i < e.length;i++) {
-                                // var num = Math.floor(Math.random() * 16777215)
-                                var color1 = getRandomColorReal();
-                                console.log("the color is:");
-                                console.log(color1);
-                                e[i][0];//the id of the cluster
-                                districtColors[e[i][0]] = color1;
+                        success: function (e) {
+                            if ($("#btnRun").text() === "Run") {
+                                districtColors = {};
+                                for (i = 0; i < e.length; i++) {
+                                    // var num = Math.floor(Math.random() * 16777215)
+                                    var color1 = getRandomColorReal();
+                                    e[i][0];//the id of the cluster
+                                    districtColors[e[i][0]] = color1;
 
-                                for(j = 1; j<e[i].length;j++) {
-                                    colorPrecinct(color1,e[i][j]);
+                                    for (j = 1; j < e[i].length; j++) {
+                                        colorPrecinct(color1, e[i][j]);
+                                    }
+                                    if (!data.graphPartUpdate.valueOf()) {
+                                        $("#btnRun").text("Simulated Annealing");
+                                    }
                                 }
+                            } else {
+                                $("#btnRun").text("Run");
+                                getSimulatedAnnealing()
                             }
-
-                            console.log(e[1][0]);
-
-                            if(!data.graphPartUpdate.valueOf()) {
-                                getSimulatedAnnealing();
-                            }
-
                         },
-                        error: function(e) {
-                            console.log("here");
-                            console.log(e.responseText);
-                            console.log("above");
-                            if(e.status === 200) {
-                                getSimulatedAnnealing();
-                            }else{
+                        error: function (e) {
+                            console.log("error graph partition");
+                            if (e.status === 200) {
+                                //change button
+                                if ($("#btnRun").text() === "Run") {
+                                    $("#btnRun").text("Simulated Annealing");
+                                } else {
+                                    $("#btnRun").text("Run");
+                                    getSimulatedAnnealing();
+                                }
+
+
+                            } else {
                                 alert("Running Error!");
                             }
                         }
                     });
-
-                }else{
+                } else {
                     data = {
                         //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
                         //CONVEX_HULL_BATCH", "GRAPH_COMPACTNESS_BATCH", "EFFICIENCY_GAP_BATCH"
@@ -441,17 +444,17 @@
                         "polsbyCompactnessMin": parseFloat($("#be_POLSBY_POPPER_BATCH").text()),
                         "convexCompactnessMax": parseFloat($("#bs_CONVEX_HULL_BATCH").text()),
                         "convexCompactnessMin": parseFloat($("#be_CONVEX_HULL_BATCH").text()),
-                        "graphCompactnessMax": parseFloat( $("#bs_GRAPH_COMPACTNESS_BATCH").text()),
-                        "graphCompactnessMin": parseFloat( $("#be_GRAPH_COMPACTNESS_BATCH").text()),
+                        "graphCompactnessMax": parseFloat($("#bs_GRAPH_COMPACTNESS_BATCH").text()),
+                        "graphCompactnessMin": parseFloat($("#be_GRAPH_COMPACTNESS_BATCH").text()),
                         "efficiencyGapMax": parseFloat($("#bs_EFFICIENCY_GAP_BATCH").text()),
                         "efficiencyGapMin": parseFloat($("#be_EFFICIENCY_GAP_BATCH").text()),
-                        "graphPartUpdate":$("#graphPartUpdate").prop("checked"),
+                        "graphPartUpdate": $("#graphPartUpdate").prop("checked"),
                         "maxMajMinDistricts": parseInt($("#max_majority").text()),
                         "minMajMinDistricts": parseInt($("#min_majority").text()),
                         "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
                         "numRuns": parseInt($("#numR").val())
                     }
-                    console.log("data",data);
+                    console.log("data", data);
                     $.ajax({
                         type: 'POST',
                         url: "http://localhost:8080/runBatchProcessing",
@@ -459,16 +462,15 @@
                         dataType: "json",
                         contentType: "application/json",
                         success: function (e) {
-                            console.log("imherenow", e);
-                            console.log(e.length);
-
                             getBatchSummary(e);
-
                         }
                     })
                 }
             }
+        });
 
+        $("#btnBlack").click(function(){
+            getBlackDistribution();
         });
 
         function getSimulatedAnnealing(){
@@ -551,69 +553,29 @@
             }
         }
 
-        // $("#btnSummary").click(function(){
-        //     var measureScoreLabel = [
-        //         "Schwartzberg Compactness",
-        //         "Reock Compactness",
-        //         "Population Equality",
-        //         "Polsby Popper",
-        //         "Convex Hull Compactness",
-        //         "Graph Compactness",
-        //         "Efficiency Gap"
-        //     ];
-        //     var e = [
-        //         {
-        //             objectiveFunctionScore: 0,
-        //             measureScores: [
-        //                                  0.8281337185698345,
-        //                                  0.4774648292756859,
-        //                                  0.6858054558323019,
-        //                                  0.8571428571428571,
-        //                                  1,
-        //                                  0.6666666666666667,
-        //                                  1,
-        //                             ]
-        //         },
-        //         {
-        //             objectiveFunctionScore: 1,
-        //             measureScores: [
-        //                 0.96545698345,
-        //                 0.1324545,
-        //                 0.988626,
-        //                 0.1234785163,
-        //                 1.985574,
-        //                 0.264852,
-        //                 1.689545,
-        //             ]
-        //         },
-        //         {
-        //             objectiveFunctionScore: 2,
-        //             measureScores: [
-        //                 0.234234,
-        //                 0.234234,
-        //                 0.234234,
-        //                 0.456456,
-        //                 1.241564,
-        //                 0.567567,
-        //                 1.36524841,
-        //             ]
-        //         }
-        //     ]
-        //     $("#summaryModalContent").empty();
-        //     $("#summaryModalContent").append(
-        //         e.map(summary=>(
-        //             `<div style="margin-bottom:20px;border-bottom:1px solid gray;">
-        //                                     <p><strong>Objective FunctionScore : </strong>${JSON.stringify(summary.objectiveFunctionScore)}
-        //                                      <br/>
-        //                                      <strong>Measure Score : </strong><br/>
-        //                                      ${summary.measureScores.map((x,index)=> (
-        //                 `${measureScoreLabel[index]} : ${x}<br/>`
-        //             )).join('')}
-        //                                      </p>
-        //                                  </div>`
-        //         ))
-        //     );
-        // });
+        function getBlackDistribution() {
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:8080/getBlackDistribution",
+                dataType: "json",
+                contentType: "application/json",
+                success: function(e) {
+                    console.log("black");
+                    console.log(e);
+                    for(var i = 0; i<e.length;i++) {
+                        var numPop = e[i].africanPopulation * 2.5;
+                        var color = "#" + numPop+numPop+numPop;
+                        colorPrecinct(color,e[i].id);
+                    }
+                },
+                error: function(e) {
+                    //TODO throw error
+                    console.log("black error");
+                    console.log(e);
+                }
+            });
+        }
+
         //==================================  Map  =============================================//
         // Variable
         var azFlag = false;
@@ -688,7 +650,7 @@
                         ArizonaStateLayer =  L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -721,7 +683,7 @@
                         MarylandStateLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -753,7 +715,7 @@
                         New_HampshireLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
@@ -846,7 +808,6 @@
         });
 
         function colorPrecinct(color, precinctId) {
-            console.log($("#state").text());
             if($("#state").text() === "New Hampshire" && New_HampshireLayer !== null){
                 New_HampshireLayer.eachLayer(function (layer) {
                     if(layer.feature.properties.OID_== precinctId) {
@@ -857,8 +818,6 @@
                             color: 'white',
                             fillOpacity: 1
                         });
-
-                        console.log("ok found");
                     }
                 });
             }else if($("#state").text() === "Arizona" && ArizonaStateLayer !== null){
@@ -871,8 +830,6 @@
                             color: 'white',
                             fillOpacity: 1
                         });
-
-                        console.log("ok found");
                     }
                 });
             }else if($("#state").text() === "Maryland" && MarylandStateLayer !== null){
@@ -885,8 +842,6 @@
                             color: 'white',
                             fillOpacity: 1
                         });
-
-                        console.log("ok found");
                     }
                 });
             }else{

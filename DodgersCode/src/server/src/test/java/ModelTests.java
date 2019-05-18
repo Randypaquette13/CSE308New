@@ -4,8 +4,11 @@ import controller.Algorithm;
 import controller.Move;
 import cse308.server.dao.JsonDistrictData;
 import model.*;
+import org.geojson.GeoJsonObject;
+import org.geojson.LngLatAlt;
 import org.junit.Test;
-import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.*;
+//import org.locationtech.jts.geom.Polygon;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -335,44 +338,58 @@ public class ModelTests {
     @Test
     public void testJSONReading(){
         String path = ""; //place path to file here
+        String demVotesMarker = "PRES_DEM08";
+        String repVotesMarker = "PRES_REP08";
         try {
-            StringBuilder errorPriecincts = new StringBuilder("Error with the following Precinct ids:");
+            StringBuilder errorPrecincts = new StringBuilder("Error with the following Precinct ids:");
             byte[] jsonData = Files.readAllBytes(Paths.get(path));
             ObjectMapper objectMapper  = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(jsonData); //gets root of object
             JsonNode featuresNode = rootNode.path("features"); //gets array titled "features"
             Iterator<JsonNode> elements = featuresNode.elements();
-            HashSet<Precinct> precinctSet = new HashSet<Precinct>();
-            while(elements.hasNext()){
+            HashMap<Long, Precinct> precincts = new HashMap<Long, Precinct>();
+            while(elements.hasNext()){ //change to while
                 JsonNode featureZero = elements.next();
                 //extract from the geometry.coordinates object
                 JsonNode coordinates = featureZero.path("geometry").path("coordinates");
+                //GeoJsonObject object = new ObjectMapper().readValue(jsonData, GeoJsonObject.class);
+                //object.accept(visitor);
+                //JsonNode geometry = featureZero.path("geometry");
+                //Polygon polygon = objectMapper.readValue(geometry.toString(), Polygon.class);
+                //System.out.println("polygon : " + polygon.getCoordinates());
+
                 System.out.println(coordinates.toString());
                 JsonNode propertiesNode = featureZero.path("properties"); //get the properties object from features.
                 JsonNode polygonType = featureZero.path("geometry").path("type");
-                if(polygonType.asText().equals("MultiPolygon")){
-                    JsonNode precinctId = propertiesNode.path("OID_"); //precinct id
-                    System.out.println("OID_ : " + precinctId);
-                    errorPriecincts.append("\n" + precinctId.toString() + " - too many arrays.");
-                    continue;
-                }
-                Iterator<JsonNode> coordinatesAtZero = coordinates.elements(); //iterator to get the first element in coord array (only object)
                 ArrayList<Coordinate> coordinateList = new ArrayList<Coordinate>(); //will hold all the Coordinate objects
-                while(coordinatesAtZero.hasNext()){
-                    JsonNode coordArray = coordinatesAtZero.next(); //coordinates is an array with one entry that holds arrays
-                    Iterator<JsonNode> coordIterator = coordArray.elements();
-                    int i = 0;
-                    while(coordIterator.hasNext()){
-                        JsonNode coordinate = coordIterator.next(); //get the next coordinate array.
-                        //System.out.println("Coordinate at " + i++ + " is " + coordinate.toString());
-                        Iterator<JsonNode> coordValue = coordinate.elements(); //to get the two values from the coordinate
-                        double coord1 = coordValue.next().asDouble();
-                        double coord2 = coordValue.next().asDouble();
-                        Coordinate coord = new Coordinate(coord1, coord2); //read the two values into a Coordinate obj
-                        //System.out.println("Coord is " + coord.toString());
-                        coordinateList.add(coord);
+                if(polygonType.asText().equals("MultiPolygon")){
+
+                    MultiPolygon m = handleMultiPolygon(coordinates);
+                    Geometry g = m.convexHull();
+                    coordinateList.addAll(Arrays.asList(g.getCoordinates()));
+                    JsonNode precinctId = propertiesNode.path("OID_"); //precinct id
+                    //System.out.println("OID_ : " + precinctId);
+                    //errorPrecincts.append("\n" + precinctId.toString() + " - Multipolygon.");
+                    //continue;
+                }
+                else{
+                    Iterator<JsonNode> coordinatesAtZero = coordinates.elements(); //iterator to get the first element in coord array (only object)
+                    if(coordinatesAtZero.hasNext()) {
+                        JsonNode coordArray = coordinatesAtZero.next(); //coordinates is an array with one entry that holds arrays
+                        Iterator<JsonNode> coordIterator = coordArray.elements();
+                        int i = 0;
+                        while (coordIterator.hasNext()) {
+                            JsonNode coordinate = coordIterator.next(); //get the next coordinate array.
+                            //System.out.println("Coordinate at " + i++ + " is " + coordinate.toString());
+                            Iterator<JsonNode> coordValue = coordinate.elements(); //to get the two values from the coordinate
+                            double coord1 = coordValue.next().asDouble();
+                            double coord2 = coordValue.next().asDouble();
+                            Coordinate coord = new Coordinate(coord1, coord2); //read the two values into a Coordinate obj
+                            //System.out.println("Coord is " + coord.toString());
+                            coordinateList.add(coord);
+                        }
+                        System.out.println("Arraylist:\n" + coordinateList);
                     }
-                    System.out.println("Arraylist:\n" + coordinateList);
                 }
 
                 //extract from the properties object
@@ -382,12 +399,12 @@ public class ModelTests {
                 System.out.println("Total : " + totalpop.toString());
                 JsonNode precinctId = propertiesNode.path("OID_"); //precinct id
                 System.out.println("OID_ : " + precinctId);
-                JsonNode voteDem = propertiesNode.path("PRS08_DEM"); //dem votes in 08 election
-                System.out.println("PRS08_DEM : " + voteDem.toString());
+                JsonNode voteDem = propertiesNode.path(demVotesMarker); //dem votes in 08 election
+                System.out.println(demVotesMarker + " : " + voteDem.toString());
                 JsonNode voteOther = propertiesNode.path("PRS08_OTH"); //other votes in 08 election
                 System.out.println("PRS08_OTH : " + voteOther.toString());
-                JsonNode voteRep = propertiesNode.path("PRS08_REP"); //rep votes in 08 election
-                System.out.println("PRS08_REP : " + voteRep.toString());
+                JsonNode voteRep = propertiesNode.path(repVotesMarker); //rep votes in 08 election
+                System.out.println(repVotesMarker + " : " + voteRep.toString());
                 JsonNode hispanicPop = propertiesNode.path("Hispanic/Latino"); // hispanic population
                 System.out.println("Hispanic/Latino : " + hispanicPop.toString());
                 JsonNode asianPop = propertiesNode.path("Asian"); // asian population
@@ -430,10 +447,10 @@ public class ModelTests {
                 Demographics d = new Demographics(demographicPop, voteDem.asDouble(), voteRep.asDouble());
                 try {
                     Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d, county.toString(), coordinateList.toArray(new Coordinate[0]));
-                    precinctSet.add(p);
+                    precincts.put(p.getId(), p);
                 }
                 catch(IllegalArgumentException e){
-                    errorPriecincts.append("\n" + precinctId.toString() + " - not a closed linestring.\ncoord: " +coordinateList.toString());
+                    errorPrecincts.append("\n" + precinctId.toString() + " - not a closed linestring.\ncoord: " +coordinateList.toString());
 
                 }
 
@@ -448,7 +465,54 @@ public class ModelTests {
 //                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), null, null, county.toString());
 //                System.out.println("Precint is:  " + p);
             }
-            System.out.println(errorPriecincts.toString());
+            //now loop once again to create edges
+            Iterator<JsonNode> featuresIterator = featuresNode.elements();
+            while(featuresIterator.hasNext()){ //change to while
+                JsonNode features = featuresIterator.next();
+                JsonNode properties = features.path("properties");
+                JsonNode neighbors = properties.path("neighbors");
+                Long precinctId = properties.path("OID_").asLong();
+                Precinct currentPrecinct = precincts.get(precinctId);
+                System.out.println(currentPrecinct + " has neighbors " + neighbors.toString());
+                Iterator<JsonNode> neighborsIterator = neighbors.elements();
+                while(neighborsIterator.hasNext()){
+                    Long neighborId = neighborsIterator.next().asLong();
+                    Precinct neighborPrecinct = precincts.get(neighborId);
+                    Edge e = new Edge(currentPrecinct, neighborPrecinct);
+                    boolean noMatch = true;
+                    for(Edge edge : currentPrecinct.getEdges()){
+                        if(edge.equals(e)){
+                            noMatch = false;
+                            break;
+                        }
+                    }
+                    if(noMatch){
+                        currentPrecinct.getEdges().add(e);
+                        System.out.println(currentPrecinct + " added " + e);
+                    }
+                    noMatch = true;
+                    for(Edge edge : neighborPrecinct.getEdges()){
+                        if(edge.equals(e)){
+                            noMatch = false;
+                            break;
+                        }
+                    }
+                    if(noMatch){
+                        neighborPrecinct.getEdges().add(e);
+                        System.out.println(neighborPrecinct + " added " + e);
+                    }
+                }
+            }
+
+
+
+            HashSet<Precinct> precinctSet = new HashSet<Precinct>();
+            precinctSet.addAll(precincts.values());
+            System.out.println("Following precincts added: ");
+            for(Precinct p : precinctSet){
+                System.out.println(" " + p + " has " + p.getEdges().size() + " edges.");
+            }
+            System.out.println(errorPrecincts.toString());
             State s = new State(precinctSet);
             System.out.println("State: " + s);
         }
@@ -457,5 +521,31 @@ public class ModelTests {
             fail();
         }
 
+    }
+
+    public MultiPolygon handleMultiPolygon(JsonNode coordinates){
+        GeometryFactory geoFactory = new GeometryFactory();
+        ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+        Iterator<JsonNode> coordinateIterator = coordinates.elements();
+        while(coordinateIterator.hasNext()){
+            JsonNode polygonNode = coordinateIterator.next();
+            Iterator<JsonNode> polygonIterator = polygonNode.elements();
+            if(polygonIterator.hasNext()){
+                ArrayList<Coordinate> polygonCoordinates = new ArrayList<Coordinate>();
+                JsonNode polygonCoordinate = polygonIterator.next();
+                Iterator<JsonNode> polygonCoordinateIterator = polygonCoordinate.elements();
+                while(polygonCoordinateIterator.hasNext()){
+                    JsonNode points = polygonCoordinateIterator.next();
+                    Iterator<JsonNode> pointsIterator = points.elements();
+                    double point1 = pointsIterator.next().asDouble();
+                    double point2 = pointsIterator.next().asDouble();
+                    Coordinate c = new Coordinate(point1, point2);
+                    polygonCoordinates.add(c);
+                }
+                Polygon p = geoFactory.createPolygon(polygonCoordinates.toArray(new Coordinate[0]));
+                polygons.add(p);
+            }
+        }
+        return geoFactory.createMultiPolygon(polygons.toArray(new Polygon[0]));
     }
 }

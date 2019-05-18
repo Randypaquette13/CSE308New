@@ -2,16 +2,16 @@ package cse308.server.restControllers;
 
 import controller.Algorithm;
 import cse308.server.dao.BatchedPreferencesDAO;
+import cse308.server.dao.PrecinctAfricanDAO;
 import cse308.server.dao.PreferenceDAO;
 import cse308.server.dao.SummaryDAO;
-import model.Preference;
-import model.State;
-import model.Summary;
+import model.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +34,9 @@ public class AlgorithmController {
         Preference p = preference.makePreference();
         if(state == null) {
             state = State.getState(p.getStateName());
+            if(state == null) {
+                System.out.println("MEGA FUCKED");
+            }
         }
 
         algorithm = new Algorithm(p, state);
@@ -79,5 +82,19 @@ public class AlgorithmController {
             summaryBatch.add(algorithm.doJob());
         }
         return summaryBatch;
+    }
+
+    @RequestMapping("/getBlackDistribution")
+    public List<PrecinctAfricanDAO> getBlackDistribution() {
+        if(state == null) {
+            return null;
+        }
+        LinkedList<PrecinctAfricanDAO> output = new LinkedList<>();
+
+        state.getPrecinctSet().forEach(precinct -> {
+//            System.out.println(precinct.getDemographics());
+            output.add(new PrecinctAfricanDAO(precinct.getId(),(int)((double)precinct.getDemographics().getDemographicPopulation().get(DemographicType.AFRICAN_AMERICAN)/(double)precinct.getPopulation() * 100)));
+        });
+        return output;
     }
 }
