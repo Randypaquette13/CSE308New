@@ -52,7 +52,7 @@
         <div class="d-flex flex-column h-100 w-100">
             <div class="h-100 w-100" id="map"></div>
         </div>
-        <div class="flex-grow-1 p-3" style="overflow-y: auto; max-width: 370px; width: 100%;">
+        <div class="flex-grow-1 p-3" style="overflow-y: auto; max-width: 425px; width: 100%;">
             <div class="section">
                 <div class="form-group dropdown show ">
                     <button id="state" class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
@@ -348,106 +348,125 @@
         //=====================================  Run Button  =====================================//
         var districtColors;
         $("#btnRun").click(function(){
-            var data = null;
-            if($("#single").prop('checked')){
-                data = {
-                    "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
-                    "reackCompactness": parseFloat($("#REOCK_COMPACTNESS").val()),
-                    "populationEquality": parseFloat($("#POPULATION_EQUALITY").val()),
-                    "polsbyCompactness": parseFloat($("#POLSBY_POPPER_COMPACTNESS").val()),
-                    "convexCompactness": parseFloat($("#CONVEX_HULL_COMPACTNESS").val()),
-                    "graphCompactness": parseFloat( $("#GRAPH_COMPACTNESS").val()),
-                    "efficiencyGap": parseFloat($("#EFFICIENCY_GAP").val()),
-                    "minMajMinDistricts": parseInt($("#min_majority").text()),
-                    "maxMajMinDistricts": parseInt($("#max_majority").text()),
-                    "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
-                    "graphPartUpdate":$("#graphPartUpdate").prop("checked"),
-                    "stateName": $("#state").text()
+            if( (ArizonaStateLayer === null && $("#state").text() === "Arizona") ||
+                (New_HampshireLayer === null && $("#state").text() === "New Hampshire") ||
+                (MarylandStateLayer === null && $("#state").text() === "Maryland")  ) {
+                if($("#state").text() === "Arizona"){
+                    azFlag = true;
+                    mlFlag = false;
+                    nhFlag = false;
+                    loadState(33.729759,-111.431221,"AZ");
+                }else if( $("#state").text() === "Maryland"){
+                    azFlag = false;
+                    mlFlag = true;
+                    nhFlag = false;
+                    loadState(39.063946,-76.802101,"ML");
+                }else{
+                    azFlag = false;
+                    mlFlag = false;
+                    nhFlag = true;
+                    loadState(43.452492,-71.563896,"NH");
                 }
-                console.log("data",data);
-                $.ajax({
-                    type: 'POST',
-                    url: "http://localhost:8080/runGraphPartitioning",
-                    data: JSON.stringify(data),
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function(e) {
-                        if($("#btnRun").text() === "Run") {
-                            districtColors = {};
-                            for(i = 0; i < e.length;i++) {
-                                // var num = Math.floor(Math.random() * 16777215)
-                                var color1 = getRandomColorReal();
-                                e[i][0];//the id of the cluster
-                                districtColors[e[i][0]] = color1;
+            }else {
+                var data = null;
+                if ($("#single").prop('checked')) {
+                    data = {
+                        "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
+                        "reackCompactness": parseFloat($("#REOCK_COMPACTNESS").val()),
+                        "populationEquality": parseFloat($("#POPULATION_EQUALITY").val()),
+                        "polsbyCompactness": parseFloat($("#POLSBY_POPPER_COMPACTNESS").val()),
+                        "convexCompactness": parseFloat($("#CONVEX_HULL_COMPACTNESS").val()),
+                        "graphCompactness": parseFloat($("#GRAPH_COMPACTNESS").val()),
+                        "efficiencyGap": parseFloat($("#EFFICIENCY_GAP").val()),
+                        "minMajMinDistricts": parseInt($("#min_majority").text()),
+                        "maxMajMinDistricts": parseInt($("#max_majority").text()),
+                        "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
+                        "graphPartUpdate": $("#graphPartUpdate").prop("checked"),
+                        "stateName": $("#state").text()
+                    }
+                    console.log("data", data);
+                    $.ajax({
+                        type: 'POST',
+                        url: "http://localhost:8080/runGraphPartitioning",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (e) {
+                            if ($("#btnRun").text() === "Run") {
+                                districtColors = {};
+                                for (i = 0; i < e.length; i++) {
+                                    // var num = Math.floor(Math.random() * 16777215)
+                                    var color1 = getRandomColorReal();
+                                    e[i][0];//the id of the cluster
+                                    districtColors[e[i][0]] = color1;
 
-                                for(j = 1; j<e[i].length;j++) {
-                                    colorPrecinct(color1,e[i][j]);
+                                    for (j = 1; j < e[i].length; j++) {
+                                        colorPrecinct(color1, e[i][j]);
+                                    }
+                                    if (!data.graphPartUpdate.valueOf()) {
+                                        $("#btnRun").text("Simulated Annealing");
+                                    }
                                 }
-                                if(!data.graphPartUpdate.valueOf()) {
-                                    $("#btnRun").text("Simulated Annealing");
-                                }
-                            }
-                        } else {
-                            $("#btnRun").text("Run");
-                            getSimulatedAnnealing()
-                        }
-                    },
-                    error: function(e) {
-                        console.log("error graph partition");
-                        if(e.status === 200) {
-                            //change button
-                            if($("#btnRun").text() === "Run") {
-                                $("#btnRun").text("Simulated Annealing");
                             } else {
                                 $("#btnRun").text("Run");
-                                getSimulatedAnnealing();
+                                getSimulatedAnnealing()
                             }
+                        },
+                        error: function (e) {
+                            console.log("error graph partition");
+                            if (e.status === 200) {
+                                //change button
+                                if ($("#btnRun").text() === "Run") {
+                                    $("#btnRun").text("Simulated Annealing");
+                                } else {
+                                    $("#btnRun").text("Run");
+                                    getSimulatedAnnealing();
+                                }
 
 
-                        }else{
-                            alert("Running Error!");
+                            } else {
+                                alert("Running Error!");
+                            }
                         }
+                    });
+                } else {
+                    data = {
+                        //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
+                        //CONVEX_HULL_BATCH", "GRAPH_COMPACTNESS_BATCH", "EFFICIENCY_GAP_BATCH"
+                        "stateName": $("#state").text(),
+                        "schwartzbergCompactnessMax": parseFloat($("#bs_SCHWARTZBERG_BATCH").text()),
+                        "schwartzbergCompactnessMin": parseFloat($("#be_SCHWARTZBERG_BATCH").text()),
+                        "reackCompactnessMax": parseFloat($("#bs_REOCK_BATCH").text()),
+                        "reackCompactnessMin": parseFloat($("#be_REOCK_BATCH").text()),
+                        "populationEqualityMax": parseFloat($("#bs_POPULATION_EQUALITY_BATCH").text()),
+                        "populationEqualityMin": parseFloat($("#be_POPULATION_EQUALITY_BATCH").text()),
+                        "polsbyCompactnessMax": parseFloat($("#bs_POLSBY_POPPER_BATCH").text()),
+                        "polsbyCompactnessMin": parseFloat($("#be_POLSBY_POPPER_BATCH").text()),
+                        "convexCompactnessMax": parseFloat($("#bs_CONVEX_HULL_BATCH").text()),
+                        "convexCompactnessMin": parseFloat($("#be_CONVEX_HULL_BATCH").text()),
+                        "graphCompactnessMax": parseFloat($("#bs_GRAPH_COMPACTNESS_BATCH").text()),
+                        "graphCompactnessMin": parseFloat($("#be_GRAPH_COMPACTNESS_BATCH").text()),
+                        "efficiencyGapMax": parseFloat($("#bs_EFFICIENCY_GAP_BATCH").text()),
+                        "efficiencyGapMin": parseFloat($("#be_EFFICIENCY_GAP_BATCH").text()),
+                        "graphPartUpdate": $("#graphPartUpdate").prop("checked"),
+                        "maxMajMinDistricts": parseInt($("#max_majority").text()),
+                        "minMajMinDistricts": parseInt($("#min_majority").text()),
+                        "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
+                        "numRuns": parseInt($("#numR").val())
                     }
-                });
-
-            }else{
-                data = {
-                    //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
-                    //CONVEX_HULL_BATCH", "GRAPH_COMPACTNESS_BATCH", "EFFICIENCY_GAP_BATCH"
-                    "stateName": $("#state").text(),
-                    "schwartzbergCompactnessMax": parseFloat($("#bs_SCHWARTZBERG_BATCH").text()),
-                    "schwartzbergCompactnessMin": parseFloat($("#be_SCHWARTZBERG_BATCH").text()),
-                    "reackCompactnessMax": parseFloat($("#bs_REOCK_BATCH").text()),
-                    "reackCompactnessMin": parseFloat($("#be_REOCK_BATCH").text()),
-                    "populationEqualityMax": parseFloat($("#bs_POPULATION_EQUALITY_BATCH").text()),
-                    "populationEqualityMin": parseFloat($("#be_POPULATION_EQUALITY_BATCH").text()),
-                    "polsbyCompactnessMax": parseFloat($("#bs_POLSBY_POPPER_BATCH").text()),
-                    "polsbyCompactnessMin": parseFloat($("#be_POLSBY_POPPER_BATCH").text()),
-                    "convexCompactnessMax": parseFloat($("#bs_CONVEX_HULL_BATCH").text()),
-                    "convexCompactnessMin": parseFloat($("#be_CONVEX_HULL_BATCH").text()),
-                    "graphCompactnessMax": parseFloat( $("#bs_GRAPH_COMPACTNESS_BATCH").text()),
-                    "graphCompactnessMin": parseFloat( $("#be_GRAPH_COMPACTNESS_BATCH").text()),
-                    "efficiencyGapMax": parseFloat($("#bs_EFFICIENCY_GAP_BATCH").text()),
-                    "efficiencyGapMin": parseFloat($("#be_EFFICIENCY_GAP_BATCH").text()),
-                    "graphPartUpdate":$("#graphPartUpdate").prop("checked"),
-                    "maxMajMinDistricts": parseInt($("#max_majority").text()),
-                    "minMajMinDistricts": parseInt($("#min_majority").text()),
-                    "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
-                    "numRuns": parseInt($("#numR").val())
+                    console.log("data", data);
+                    $.ajax({
+                        type: 'POST',
+                        url: "http://localhost:8080/runBatchProcessing",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (e) {
+                            getBatchSummary(e);
+                        }
+                    })
                 }
-                console.log("data",data);
-                $.ajax({
-                    type: 'POST',
-                    url: "http://localhost:8080/runBatchProcessing",
-                    data: JSON.stringify(data),
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function (e) {
-                        getBatchSummary(e);
-                    }
-                })
             }
-
         });
 
         $("#btnBlack").click(function(){
@@ -489,7 +508,7 @@
                                  <br/>
                                  <strong>Measure Score : </strong><br/>
                                  ${e.measureScores.map((x,index)=> (
-                                     `${measureScoreLabel[index]} : ${x}<br/>`
+                                    `${measureScoreLabel[index]} : ${x}<br/>`
                                 )).join('')}
                                  </p>
                                  `);
@@ -506,14 +525,14 @@
         }
         function getBatchSummary(e){
             var measureScoreLabel = [
-                    "Schwartzberg Compactness",
-                    "Reock Compactness",
-                    "Population Equality",
-                    "Polsby Popper",
-                    "Convex Hull Compactness",
-                    "Graph Compactness",
-                    "Efficiency Gap"
-                ];
+                "Schwartzberg Compactness",
+                "Reock Compactness",
+                "Population Equality",
+                "Polsby Popper",
+                "Convex Hull Compactness",
+                "Graph Compactness",
+                "Efficiency Gap"
+            ];
 
             if(e !== null && e.length > 0){
                 $("#summaryModalContent").empty();
@@ -628,7 +647,7 @@
                 });
                 if(azFlag){
                     $.getJSON('./ArizonaData/AZPrecinctData.json', function (data) {
-                      ArizonaStateLayer =  L.geoJSON(data,{
+                        ArizonaStateLayer =  L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
                             return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
@@ -778,6 +797,12 @@
 
         // Change state, change in dropdown as well
         $("#stateDropdown a").click(function(){
+            azFlag = false;
+            mlFlag = false;
+            nhFlag = false;
+            ArizonaStateLayer = null;
+            MarylandStateLayer = null;
+            New_HampshireLayer = null;
             $(this).parent().prev().text($(this).text());
             loadState( $(this).attr("latitude")*1,$(this).attr("longitude")*1,$(this).attr("state"));
         });
@@ -820,7 +845,7 @@
                     }
                 });
             }else{
-              alert("error!");
+                alert("error!");
             }
         }
     });
