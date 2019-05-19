@@ -483,6 +483,7 @@
                         contentType: "application/json",
                         success: function (e) {
                             getBatchSummary(e);
+                            alert("Finished Simulated Annealing");
                         }
                     })
                 }
@@ -615,6 +616,7 @@
                         }else{
                             console.log("bachEvent",e);
                         }
+                        alert("Finished Simulated Annealing");
                     }
                 },
                 error: function(e) {
