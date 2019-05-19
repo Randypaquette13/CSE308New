@@ -5,6 +5,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -104,5 +105,21 @@ public class District extends Cluster {
         }
         return true;
 
+    }
+
+
+    public HashSet<Precinct> calculateBorderPrecincts(){
+        HashSet<Precinct> borderPrecincts = new HashSet<Precinct>();
+        System.out.println("Precinct set: " + getPrecinctSet());
+        for(Precinct currentPrecinct : getPrecinctSet()){
+            for(Edge e : currentPrecinct.getEdges()){
+                Precinct neighbor = (Precinct)e.getNeighbor(currentPrecinct);
+                if(!neighbor.getDistrict().equals(currentPrecinct.getDistrict())){
+                    borderPrecincts.add(currentPrecinct);
+                }
+            }
+        }
+        //System.out.println("Border Precincts: " + borderPrecincts);
+        return borderPrecincts;
     }
 }
