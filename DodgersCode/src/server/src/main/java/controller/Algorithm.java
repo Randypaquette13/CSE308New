@@ -101,10 +101,10 @@ public class Algorithm {
                 }
                 steps++;
             }
-            System.out.println("steps:" + steps);
-            System.out.println("merged this turn: " + mergedClusters.size());
+//            System.out.println("steps:" + steps);
+//            System.out.println("merged this turn: " + mergedClusters.size());
             (state.getClusters()).addAll(mergedClusters);
-            System.out.println("total: " + state.getClusters().size());
+            System.out.println("total clusters: " + state.getClusters().size());
             s = state.getClusters().toString();
         } else {
             s = "done";
