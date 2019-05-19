@@ -133,7 +133,7 @@ public class State {
                 for (Edge edge : precinct.getEdges()) {
                     final Precinct neighbor = (Precinct) edge.getNeighbor(precinct);
                     if (edge.getJoinability() > Configuration.ANNEALING_JOINABILITY_THRESHOLD && !neighbor.getDistrict().equals(district)) {
-                        System.out.println("move this:" + precinct);
+//                        System.out.println("move this:" + precinct);
     //                    System.out.println("from this:" + precinct.getDistrict());
     //                    System.out.println("to this:" + neighbor.getDistrict());
     //                    System.out.println("joinability: " + edge.getJoinability());
@@ -156,7 +156,7 @@ public class State {
         Cluster niceCluster = null;
         Edge niceEdge = null;
         int bestScore = Integer.MAX_VALUE;
-        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
+//        System.out.println("TRYING TO FIND CANDIDATE CLUSTER PAIR");
         System.out.println("num clusters:" + getClusters().size());
         for(Cluster c : getClusters()) {
 //            System.out.println("num edges:" + c.getEdges().size());
@@ -186,10 +186,10 @@ public class State {
             }
         }
 
-        if(bestScore > 4*(targetPop)) {
-            System.out.println(targetPop);
-            return null;
-        }
+//        if(bestScore > (targetPop * targetPop/10)) {
+////            System.out.println(targetPop);
+//            return null;
+//        }
 //        System.out.println("num candidate pairs" +pairs.size());
         if(niceCluster != null && niceEdge != null) {
             ClusterPair bestPair = null;
@@ -202,7 +202,7 @@ public class State {
                     }
                 }
                 if(join == -1) {
-                    System.out.println("MASSIVE EDGE JOINABILITY ERROR");
+//                    System.out.println("MASSIVE EDGE JOINABILITY ERROR");
                 }
 //                    System.out.println(join);
                 if(join > maxJoin) {
@@ -213,8 +213,8 @@ public class State {
             if(bestPair != null) {
                 return bestPair;
             } else {
-                System.out.println("should never get here");
-                System.out.println(bestScore);
+//                System.out.println("should never get here");
+//                System.out.println(bestScore);
                 return new ClusterPair(niceCluster, (Cluster)niceEdge.getNeighbor(niceCluster));
             }
         } else {

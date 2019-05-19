@@ -9,6 +9,7 @@ public class Algorithm {
     private State state;
     private int annealingSteps = 0;
     private double lastObjFunVal = 0;
+    private int lastTargetNumberOfClusters = -1;
 
     public Algorithm(Preference pref, State state) {
         this.pref = pref;
@@ -80,9 +81,26 @@ public class Algorithm {
 
             ((List<Cluster>) state.getClusters()).sort(Comparator.comparingInt(Cluster::getPopulation));
 
+            if(targetNumClusters == lastTargetNumberOfClusters) {
+                Cluster combineC = ((List<Cluster>) state.getClusters()).get(state.getClusters().size()-1);
+                Iterator<Edge> eiter = combineC.getEdges().iterator();
+                final Random r = new Random();
+                int index = r.nextInt(combineC.getEdges().size());
+                for(int i = 0; i < index; i++) {
+                    eiter.next();
+                }
+                Edge toEdge = eiter.next();
+                Cluster c = state.combinePair(combineC, (Cluster)toEdge.getNeighbor(combineC));
+                state.getClusters().add(c);
+                return state.getClusters().toString();
+            } else {
+                lastTargetNumberOfClusters = targetNumClusters;
+            }
+
+
             Collection<Cluster> mergedClusters = new LinkedList<>();
             int steps = 0;
-            System.out.println("trying to get candidate again");
+//            System.out.println("trying to get candidate again");
             while(!state.getClusters().isEmpty() && steps < state.getClusters().size()) {
 //                System.out.println(state.getClusters());
 //                System.out.println("GETTING CLUSTER PAIR");
@@ -147,7 +165,7 @@ public class Algorithm {
                     } else {
                         final double currObjFunVal = calculateObjectiveFunction();
 //                        System.out.println("last:" + lastObjFunVal);
-                        System.out.println("curr:" + currObjFunVal);
+//                        System.out.println("curr:" + currObjFunVal);
                         if ((currObjFunVal - lastObjFunVal) > Configuration.OBJECTIVE_FUNCTION_MIN_CHANGE) {
                             lastObjFunVal = currObjFunVal;
                             System.out.println("VALID MOVE ACCEPTED");
@@ -162,11 +180,12 @@ public class Algorithm {
 //                    System.out.println("NO CANDIDATE MOVE FOUND... try again");
                 }
                 annealingSteps++;
+                System.out.println(annealingSteps);
             }
         } else {
             System.out.println("SIM END CONDITION MET");
         }
-        System.out.println(annealingSteps);
+//        System.out.println(annealingSteps);
         System.out.println("\tENDED SIM ANNEALING STEP");
         System.out.println(state.getDistrictSet());
         System.out.println(lastObjFunVal);
