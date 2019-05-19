@@ -89,7 +89,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_COMPACTNESS">Polsby Popper</label>
+                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_COMPACTNESS">Polsby Popper Compactness</label>
                     <div class="flex-row">
                         <input type="text" id="POLSBY_POPPER_COMPACTNESS" data-slider-step="0.1">
                         <span id="v_POLSBY_POPPER_COMPACTNESS" class="ml-3">0.0</span>
@@ -143,7 +143,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_BATCH">Polsby Popper</label>
+                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_BATCH">Polsby Popper Compactness</label>
                     <div class="flex-row">
                         <span id="bs_POLSBY_POPPER_BATCH" class="mr-3">0.0</span>
                         <input type="text" id="POLSBY_POPPER_BATCH" data-slider-step="0.1">
@@ -236,7 +236,7 @@
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sumarry Data</h5>
+                    <h5 class="modal-title">Sumarries Data</h5>
                     <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
                 <div class="modal-body" id="summaryModalContent">
@@ -491,6 +491,11 @@
 
         var districtColors;
         var precinctColors;
+        var contrastingColors;
+
+        contrastingColors = ['#ff1500','#ff7300','#4f09ff','#77ff15','#a1003e','#0bfff3','#ff18fb','#89b3af','#914901',
+            '#948302','#569601','#0d9299','#2b259c','#87169e','#f2c911','#a65642','#a88344','#abaa54','#7fad75',
+            '#7d94b0','#8a0015','#9f94b5','#b882a1','#ba7168','#000000','#9abf4f','#942a9c','#9e3200','#baac44']
         function graphPartGetter() {
             data = {
                 "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
@@ -514,13 +519,19 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (e) {
+                    colorCounter = 0
                     districtColors = {};
                     precinctColors = {};
                     console.log("returned from gp post");
                     console.log(e);
                     for (i = 0; i < e.length; i++) {
                         // var num = Math.floor(Math.random() * 16777215)
-                        var color1 = getRandomColorReal();
+                        if(colorCounter != contrastingColors.length) {
+                            var color1 = contrastingColors[colorCounter];
+                            colorCounter++;
+                        }
+                        else{var color1 = getRandomColorReal();}
+
                         e[i][0];//the id of the cluster
                         districtColors[e[i][0]] = color1;
 
@@ -565,7 +576,7 @@
                 "Schwartzberg Compactness",
                 "Reock Compactness",
                 "Population Equality",
-                "Polsby Popper",
+                "Polsby Popper Compactness",
                 "Convex Hull Compactness",
                 "Graph Compactness",
                 "Efficiency Gap"
@@ -615,7 +626,7 @@
                 "Schwartzberg Compactness",
                 "Reock Compactness",
                 "Population Equality",
-                "Polsby Popper",
+                "Polsby Popper Compactness",
                 "Convex Hull Compactness",
                 "Graph Compactness",
                 "Efficiency Gap"
