@@ -25,6 +25,7 @@ public class BatchedPreferencesDAO {
     private boolean graphPartUpdate;
     private int maxMajMinDistricts;
     private int minMajMinDistricts;
+    private int numRuns;
     private int numDistricts;
     private String stateName;
 
@@ -33,7 +34,7 @@ public class BatchedPreferencesDAO {
                                double populationEqualityMin, double polsbyCompactnessMax, double polsbyCompactnessMin,
                                double convexCompactnessMax, double convexCompactnessMin, double graphCompactnessMax,
                                double graphCompactnessMin, double efficiencyGapMax, double efficiencyGapMin,
-                               boolean graphPartUpdate, int maxMajMinDistricts, int minMajMinDistricts,
+                               boolean graphPartUpdate, int maxMajMinDistricts, int minMajMinDistricts, int numRuns,
                                int numDistricts, String stateName) {
         this.schwartzbergCompactnessMax = schwartzbergCompactnessMax;
         this.schwartzbergCompactnessMin = schwartzbergCompactnessMin;
@@ -52,6 +53,7 @@ public class BatchedPreferencesDAO {
         this.graphPartUpdate = graphPartUpdate;
         this.maxMajMinDistricts = maxMajMinDistricts;
         this.minMajMinDistricts = minMajMinDistricts;
+        this.numRuns = numRuns;
         this.numDistricts = numDistricts;
         this.stateName = stateName;
     }
@@ -59,7 +61,7 @@ public class BatchedPreferencesDAO {
     public List<Preference> makePreferences(){
         LinkedList<Preference> preferences = new LinkedList<>();
 
-        for(int i=0; i < numDistricts; i++ ) {
+        for(int i=0; i < numRuns; i++ ) {
             HashMap<MeasureType, Double> hashmap = new HashMap<MeasureType, Double>();
             for(MeasureType m : MeasureType.values()){
                 switch (m){
@@ -229,6 +231,14 @@ public class BatchedPreferencesDAO {
 
     public void setMinMajMinDistricts(int minMajMinDistricts) {
         this.minMajMinDistricts = minMajMinDistricts;
+    }
+
+    public int getNumRuns() {
+        return numRuns;
+    }
+
+    public void setNumRuns(int numRuns) {
+        this.numRuns = numRuns;
     }
 
     public int getNumDistricts() {

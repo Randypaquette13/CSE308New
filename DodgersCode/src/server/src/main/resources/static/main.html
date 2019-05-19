@@ -453,7 +453,6 @@
                     data = {
                         //SCHWARTZBERG_BATCH","REOCK_BATCH","POPULATION_EQUALITY_BATCH","POLSBY_POPPER_BATCH"," +
                         //CONVEX_HULL_BATCH", "GRAPH_COMPACTNESS_BATCH", "EFFICIENCY_GAP_BATCH"
-                        "stateName": $("#state").text(),
                         "schwartzbergCompactnessMax": parseFloat($("#bs_SCHWARTZBERG_BATCH").text()),
                         "schwartzbergCompactnessMin": parseFloat($("#be_SCHWARTZBERG_BATCH").text()),
                         "reackCompactnessMax": parseFloat($("#bs_REOCK_BATCH").text()),
@@ -471,8 +470,9 @@
                         "graphPartUpdate": $("#graphPartUpdate").prop("checked"),
                         "maxMajMinDistricts": parseInt($("#max_majority").text()),
                         "minMajMinDistricts": parseInt($("#min_majority").text()),
+                        "numRuns": parseInt($("#numR").val()),
                         "numDistricts": parseInt($("#NUM_DIST_GRAPH").val()),
-                        "numRuns": parseInt($("#numR").val())
+                        "stateName": $("#state").text(),
                     }
                     console.log("data", data);
                     $.ajax({

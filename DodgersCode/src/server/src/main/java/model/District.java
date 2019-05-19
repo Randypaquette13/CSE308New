@@ -56,7 +56,7 @@ public class District extends Cluster {
 
     public double getConvexHull() {
         MultiPolygon mp = computeMulti();
-        return mp.convexHull().getArea();
+        return mp.getEnvelope().getArea();
     }
 
     public double wastedDemVotes() {
