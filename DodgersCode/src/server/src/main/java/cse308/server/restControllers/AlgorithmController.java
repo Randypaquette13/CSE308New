@@ -31,7 +31,7 @@ public class AlgorithmController {
             state = State.getState(p.getStateName());
             currentState = preference.getStateName();
             if(state == null) {
-                System.out.println("MEGA FUCKED");
+                System.out.println("state not read");
             }
         } else if ((state.isGPDone) && currentState.equals(preference.getStateName())){
 //            state.reset();
@@ -91,8 +91,8 @@ public class AlgorithmController {
 
     @RequestMapping("/getBlackDistribution")
     public List<PrecinctAfricanDAO> getBlackDistribution(String stateName) {
-        System.out.println(stateName);
-        System.out.println();
+//        System.out.println(stateName);
+//        System.out.println();
         if(state == null) {
 //            state = State.getState(stateName.getStateName());
             return null;

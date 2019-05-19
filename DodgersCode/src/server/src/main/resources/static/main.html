@@ -492,6 +492,11 @@
 
         var districtColors;
         var precinctColors;
+        var contrastingColors;
+
+        contrastingColors = ['#ff1500','#ff7300','#4f09ff','#77ff15','#a1003e','#0bfff3','#ff18fb','#89b3af','#914901',
+            '#948302','#569601','#0d9299','#2b259c','#87169e','#f2c911','#a65642','#a88344','#abaa54','#7fad75',
+            '#7d94b0','#8a0015','#9f94b5','#b882a1','#ba7168','#000000','#9abf4f','#942a9c','#9e3200','#baac44']
         function graphPartGetter() {
             data = {
                 "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
@@ -515,13 +520,19 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (e) {
+                    colorCounter = 0
                     districtColors = {};
                     precinctColors = {};
                     console.log("returned from gp post");
                     console.log(e);
                     for (i = 0; i < e.length; i++) {
                         // var num = Math.floor(Math.random() * 16777215)
-                        var color1 = getRandomColorReal();
+                        if(colorCounter != contrastingColors.length) {
+                            var color1 = contrastingColors[colorCounter];
+                            colorCounter++;
+                        }
+                        else{var color1 = getRandomColorReal();}
+
                         e[i][0];//the id of the cluster
                         districtColors[e[i][0]] = color1;
 
