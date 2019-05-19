@@ -143,7 +143,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_BATCH">Polsby Popper Compactness</label>
+                    <label class="col-form-label col-form-label-sm" for="POLSBY_POPPER_BATCH">Polsby Popper</label>
                     <div class="flex-row">
                         <span id="bs_POLSBY_POPPER_BATCH" class="mr-3">0.0</span>
                         <input type="text" id="POLSBY_POPPER_BATCH" data-slider-step="0.1">
@@ -236,7 +236,7 @@
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sumarries Data</h5>
+                    <h5 class="modal-title">Summary Data</h5>
                     <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
                 <div class="modal-body" id="summaryModalContent">
@@ -575,11 +575,11 @@
             var measureScoreLabel = [
                 "Schwartzberg Compactness",
                 "Reock Compactness",
-                "Population Equality",
                 "Polsby Popper Compactness",
                 "Convex Hull Compactness",
                 "Graph Compactness",
-                "Efficiency Gap"
+                "Efficiency Gap",
+                "Population Equality",
             ];
 
             $.ajax({
@@ -598,6 +598,7 @@
                         //TODO SET SUMMARY HERE PERFECTTTTTT
                         console.log("districtColors",districtColors);
                         console.log("event",e);
+
                         var checked = $("#single").prop('checked');
                         if(checked){
                             $("#summaryModalContent").empty();
@@ -609,6 +610,7 @@
                                     `${measureScoreLabel[index]} : ${x}<br/>`
                                 )).join('')}
                                  </p>
+                                 <p><strong> Number of Majority / Minority Districts : </strong>${JSON.stringify(e.majMinDistricts)} </p>
                                  `);
                         }else{
                             console.log("bachEvent",e);
@@ -622,14 +624,15 @@
             });
         }
         function getBatchSummary(e){
+            console.log("this is what i get", e);
             var measureScoreLabel = [
                 "Schwartzberg Compactness",
                 "Reock Compactness",
-                "Population Equality",
                 "Polsby Popper Compactness",
                 "Convex Hull Compactness",
                 "Graph Compactness",
-                "Efficiency Gap"
+                "Efficiency Gap",
+                "Population Equality",
             ];
 
             if(e !== null && e.length > 0){
@@ -644,12 +647,14 @@
                                              ${summary.measureScores.map((x,index)=> (
                             `${measureScoreLabel[index]} : ${x}<br/>`
                         )).join('')}
+                                <p><strong> Number of Majority / Minority Districts : </strong>${JSON.stringify(summary.majMinDistricts)}
                                              </p>
                                          </div>`
                     ))
                 );
             }
         }
+
 
         var africanToggle = true;
         function getBlackDistribution() {
@@ -740,7 +745,9 @@
                 maxZoom: 17,
                 minZoom: 2
             }).addTo(map);
-
+            function numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
             if(fileName == "AZ"){
                 L.geoJSON(states, {
                     onEachFeature: onEachFeature
@@ -750,11 +757,11 @@
                         style: hooverStyle,
                         onEachFeature: onEachAzFeature
                     }).bindTooltip(function(layer){
-                        return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                        return "Total Population:" + numberWithCommas(layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                             "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                             "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                             "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
-                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"]);
                     }).addTo(map);
                 });
                 if(azFlag){
@@ -762,13 +769,13 @@
                         ArizonaStateLayer =  L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ numberWithCommas(layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
                                 "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"] +
                                 "<br/>Republican:" +layer.feature.properties.PRS08_REP +
-                                "<br/>Democratic:" +layer.feature.properties.PRS08_DEM;
+                                "<br/>Democratic:" +layer.feature.properties.PRS08_DEM);
                         }).addTo(map);
                     });
                 }
@@ -783,11 +790,11 @@
                         style: hooverStyle,
                         onEachFeature: onEachMlFeature
                     }).bindTooltip(function(layer){
-                        return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                        return "Total Population:" +numberWithCommas(layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                             "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                             "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                             "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
-                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"]);
                     }).addTo(map);
                 });
                 if(mlFlag){
@@ -795,11 +802,11 @@
                         MarylandStateLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ numberWithCommas(layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
-                                "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                                "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"]);
                         }).addTo(map);
                     });
                 }
@@ -814,11 +821,11 @@
                         style: hooverStyle,
                         onEachFeature: onEachNhFeature
                     }).bindTooltip(function(layer){
-                        return "Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                        return "Total Population:" +numberWithCommas(layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                             "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                             "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                             "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
-                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"];
+                            "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"]);
                     }).addTo(map);
                 });
                 if(nhFlag){
@@ -827,13 +834,13 @@
                         New_HampshireLayer = L.geoJSON(data,{
                             style:style,
                         }).bindTooltip(function(layer){
-                            return "ID: "+ layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
+                            return "ID: "+ numberWithCommas(layer.feature.properties.OID_ + "</br>Total Population:" +layer.feature.properties.Total+"<br/>White:"+layer.feature.properties.White+
                                 "<br/>Black:"+layer.feature.properties.Black + "<br/>Asian:"+layer.feature.properties.Asian+
                                 "<br/>AI/AN:" +layer.feature.properties["AI/AN"] +
                                 "<br/>NH/OPI:" +layer.feature.properties["NH/OPI"] +
                                 "<br/>Hispanic/Latino:" +layer.feature.properties["Hispanic/Latino"] +
                                 "<br/>Republican:" +layer.feature.properties.PRES_REP08 +
-                                "<br/>Democratic:" +layer.feature.properties.PRES_DEM08;
+                                "<br/>Democratic:" +layer.feature.properties.PRES_DEM08);
                         }).addTo(map);
                     });
                 }

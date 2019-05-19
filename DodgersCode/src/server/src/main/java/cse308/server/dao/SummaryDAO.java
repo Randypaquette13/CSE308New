@@ -5,12 +5,14 @@ public class SummaryDAO {
     private long precinctID;
     private double objectiveFunctionScore; //The total function score
     private double[] measureScores; //individual scores
+    private int MajMinDistricts;
 
-    public SummaryDAO(long toID, long precinctID, double objectiveFunctionScore, double[] measureScores) {
+    public SummaryDAO(long toID, long precinctID, double objectiveFunctionScore, double[] measureScores, int MajMinDistricts) {
         this.toID = toID;
         this.precinctID = precinctID;
         this.objectiveFunctionScore = objectiveFunctionScore;
         this.measureScores = measureScores;
+        this.MajMinDistricts = MajMinDistricts;
     }
 
     public long getToID() {
@@ -44,4 +46,13 @@ public class SummaryDAO {
     public void setMeasureScores(double[] measureScores) {
         this.measureScores = measureScores;
     }
+
+    public int getMajMinDistricts() {
+        return MajMinDistricts;
+    }
+
+    public void setMajMinDistricts(int MajMinDistricts) {
+        this.MajMinDistricts = MajMinDistricts;
+    }
+
 }

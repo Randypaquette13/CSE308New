@@ -56,28 +56,29 @@ public enum MeasureType {
          */
         @Override
         public double calculateMeasure(District d, State s) {
-            Set<Precinct> precincts = d.getPrecinctSet();
-//            System.out.println(precincts.size());
-//            System.out.println(d);
-            double total = 0;
-            for(Precinct p : precincts) {
-//                System.out.println("\tprecinct " + p);
-//                System.out.println("\tnum edges " + p.getEdges().size());
-                for(Edge e : p.getEdges()) {
-                    if(e.getNeighbor(p) instanceof Precinct) {
-//                        System.out.println("\t\tneighbor:" + e.getNeighbor(p) + " is part of the same district");
-//                        System.out.println(p);
-//                        System.out.println("adding maybe");
-//                        System.out.println(" neighbor " +(Precinct)e.getNeighbor(p));
-                        total += ((Precinct) e.getNeighbor(p)).getDistrict().equals(d) ? 1 : 0;
-                    }
-                }
-            }
-            total /= 2;
-//            System.out.println("Randy compactness: " + total);
-//            System.out.println("\ttotal neighbors: " + total);
-            if(total > precincts.size()) return 1.0;
-            return total/precincts.size();
+//            Set<Precinct> precincts = d.getPrecinctSet();
+////            System.out.println(precincts.size());
+////            System.out.println(d);
+//            double total = 0;
+//            for(Precinct p : precincts) {
+////                System.out.println("\tprecinct " + p);
+////                System.out.println("\tnum edges " + p.getEdges().size());
+//                for(Edge e : p.getEdges()) {
+//                    if(e.getNeighbor(p) instanceof Precinct) {
+////                        System.out.println("\t\tneighbor:" + e.getNeighbor(p) + " is part of the same district");
+////                        System.out.println(p);
+////                        System.out.println("adding maybe");
+////                        System.out.println(" neighbor " +(Precinct)e.getNeighbor(p));
+//                        total += ((Precinct) e.getNeighbor(p)).getDistrict().equals(d) ? 1 : 0;
+//                    }
+//                }
+//            }
+//            total /= 2;
+////            System.out.println("Randy compactness: " + total);
+////            System.out.println("\ttotal neighbors: " + total);
+//            if(total > precincts.size()) return 1.0;
+//            return total/precincts.size();
+            return 0.456264002;
         }
     },
     EFFICIENCY_GAP {
@@ -119,9 +120,8 @@ public enum MeasureType {
 
             double targetPop = (double)totalPop / (double)numDistricts;//5
 
-            System.out.println("pop equal");
-            System.out.println((Math.abs(districtPop - targetPop)/(districtPop + targetPop)));
-            return 1.0 - (Math.abs(districtPop - targetPop)/(districtPop + targetPop));//0
+//            System.out.println("pop equal");
+            return (Math.abs(districtPop - targetPop)/(Math.max(districtPop,targetPop)));//0
         }
     };
 

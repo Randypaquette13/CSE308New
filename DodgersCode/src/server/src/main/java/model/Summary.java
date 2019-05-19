@@ -12,12 +12,14 @@ public class Summary implements Serializable {
     private final Move move;
     private static long numSummaries = 0;
     private final long id;
+    private int MajMinDistricts;
 
-    public Summary(double objectiveFunctionScore, double[] measureScores, Move move) {
+    public Summary(double objectiveFunctionScore, double[] measureScores, Move move, int MajMinDistricts) {
         this.objectiveFunctionScore = objectiveFunctionScore;
         this.measureScores = measureScores;
         this.move = move;
         id = numSummaries++;
+        this.MajMinDistricts = MajMinDistricts;
     }
 
     public double getObjectiveFunctionScore() {
@@ -31,6 +33,8 @@ public class Summary implements Serializable {
     public Move getMove() {
         return move;
     }
+
+    public int getMajMinDistricts(){return MajMinDistricts;}
 
     @Override
     public String toString() {
@@ -52,8 +56,8 @@ public class Summary implements Serializable {
 
     public SummaryDAO toDAO() {
         if(move != null) {
-            return new SummaryDAO(move.getTo().id, move.getPrecinct().getId(), objectiveFunctionScore, measureScores);
+            return new SummaryDAO(move.getTo().id, move.getPrecinct().getId(), objectiveFunctionScore, measureScores, MajMinDistricts);
         }
-        return new SummaryDAO(-1, -1, objectiveFunctionScore, measureScores);
+        return new SummaryDAO(-1, -1, objectiveFunctionScore, measureScores, MajMinDistricts);
     }
 }
