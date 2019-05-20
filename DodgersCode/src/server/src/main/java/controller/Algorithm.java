@@ -121,7 +121,6 @@ public class Algorithm {
 //                System.exit(0);
             }
 
-
             int steps = 0;
 //            System.out.println("trying to get candidate again");
             while(!state.getClusters().isEmpty() && steps < state.getClusters().size()) {

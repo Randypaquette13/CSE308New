@@ -74,9 +74,9 @@ public class State {
      * first and second cluster is removed. Returns the combined cluster.
      */
     public Cluster combinePair(Cluster c1, Cluster c2) {
-        c1.absorbCluster(c2);
         clusters.remove(c2);
         clusters.remove(c1);
+        c1.absorbCluster(c2);
         return c1;
     }
 
@@ -448,8 +448,15 @@ public class State {
                 }
 
                 Demographics d = new Demographics(demographicPop, voteDem.asDouble(), voteRep.asDouble());
-                Precinct p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d,
-                        county.toString(), coordinateList.toArray(new Coordinate[0]));
+                Precinct p;
+                if(totalpop.asInt() != 0) {
+                    p = new Precinct(precinctId.asLong(), totalpop.asInt(), new HashSet<Edge>(), d,
+                            county.toString(), coordinateList.toArray(new Coordinate[0]));
+                } else {
+                    p = new Precinct(precinctId.asLong(), 1243, new HashSet<Edge>(), d,
+                            county.toString(), coordinateList.toArray(new Coordinate[0]));
+                }
+
                 precincts.put(p.getId(), p);
 
             }
@@ -475,6 +482,11 @@ public class State {
 
             HashSet<Precinct> precinctSet = new HashSet<Precinct>();
             precinctSet.addAll(precincts.values());
+            precinctSet.forEach(pp -> {
+                if(pp.getPopulation() == 0) {
+
+                }
+            });
             //System.out.println("Following precincts added: ");
             //for(Precinct p : precinctSet){
             //    System.out.println(" " + p + " has " + p.getEdges().size() + " edges.");
