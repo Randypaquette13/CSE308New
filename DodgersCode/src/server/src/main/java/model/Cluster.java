@@ -68,7 +68,9 @@ public class Cluster implements MapVertex {
 //            }
             if(e.getNeighbor(c) != this) {
                 e.setNeighbor(c, this);
-                edgeSet.add(e);
+                if(c.id != this.id) {
+                    edgeSet.add(e);
+                }
 //                temp.add(e);
             }
         }
@@ -89,6 +91,25 @@ public class Cluster implements MapVertex {
         demographics.add(c.getDemographics());
 //        System.out.println("added:" + demographics.demVotes);
     }
+//        public void absorbCluster(Cluster c) {
+//        precinctSet.addAll(c.getPrecinctSet());
+////        HashSet<Edge> temp = new HashSet<>();
+//        Iterator<Edge> eiter = c.getEdges().iterator();
+//        while(eiter.hasNext()) {
+//            Edge e = eiter.next();
+////            if(!edgeSet.add(e)) {
+////                edgeSet.remove(e);
+////            }
+//            if(e.getNeighbor(c) != this) {
+//
+//                if(edgeSet.stream().anyMatch(e1->e1.getNeighbor(this) == e.getNeighbor(c))) {
+//
+//                } else {
+//                    e.setNeighbor(c, this);
+//                    edgeSet.add(e);
+//                }
+//            }
+//        }
 
     /**
      * a certain minority has a majority population in the district
@@ -120,9 +141,11 @@ public class Cluster implements MapVertex {
 
     @Override
     public void addEdgeTo(MapVertex p) {
-        Edge e1 = new Edge(this,p);
-        getEdges().add(e1);
-        p.getEdges().add(e1);
+        if(this != p) {
+            Edge e1 = new Edge(this,p);
+            getEdges().add(e1);
+            p.getEdges().add(e1);
+        }
     }
 
     @Override

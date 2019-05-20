@@ -64,7 +64,7 @@ public class Edge {
 
     @Override
     public String toString() {
-        return ("\t#1:" + c1 + " #2:" + c2 + " join:" + getJoinability());
+        return ("\t#1:" + ((Cluster)c1).id + " #2:" + ((Cluster)c2).id);
     }
 
 //    @Override

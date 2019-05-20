@@ -20,7 +20,7 @@ public class Algorithm {
      * This is just an example of how to run the algorithm
      */
     public Summary doJob() {
-        state.reset();
+//        state.reset();
         String gps = doGraphPartitioning();
         while(!"done".equals(gps)) {
             gps = doGraphPartitioning();
@@ -76,13 +76,21 @@ public class Algorithm {
         System.out.println("target num dist: " + pref.getNumDistricts());
         if(state.getClusters().size() != pref.getNumDistricts()) {
             int targetNumClusters = (int)Math.ceil(state.getClusters().size() / 2.0);
-            int targetPop = (int)Math.ceil(state.getPopulation() / targetNumClusters);
+            int targetPop = (int)Math.ceil((double)state.getPopulation() / (double)targetNumClusters);
 //            int minTargetPop = 0;   //TODO: load percentage to ignore from config file
 
+            Collection<Cluster> mergedClusters = new LinkedList<>();
             ((List<Cluster>) state.getClusters()).sort(Comparator.comparingInt(Cluster::getPopulation));
 
+//            System.out.println("target c: " + targetNumClusters);
+//            System.out.println("last iter c: " + lastTargetNumberOfClusters);
             if(targetNumClusters == lastTargetNumberOfClusters) {
-                Cluster combineC = ((List<Cluster>) state.getClusters()).get(state.getClusters().size()-1);
+                System.out.println("forcing move of smallest cluster");
+                Cluster combineC = ((List<Cluster>) state.getClusters()).get(0);
+                System.out.println("id: " + combineC.id);
+                System.out.println("population: " + combineC.getPopulation());
+                System.out.println("num edges" + combineC.getEdges().size());
+                System.out.println(combineC.getEdges());
                 Iterator<Edge> eiter = combineC.getEdges().iterator();
                 final Random r = new Random();
                 int index = r.nextInt(combineC.getEdges().size());
@@ -95,10 +103,25 @@ public class Algorithm {
                 return state.getClusters().toString();
             } else {
                 lastTargetNumberOfClusters = targetNumClusters;
+                System.out.println("No force needed");
+                System.out.println(lastTargetNumberOfClusters);
+//                mergedClusters.add(((List<Cluster>) state.getClusters()).get(state.getClusters().size()-1));
+//                ((List<Cluster>) state.getClusters()).remove(state.getClusters().size()-1);
+//                System.out.println(state.getClusters().size());
+                Iterator<Cluster> citer = state.getClusters().iterator();
+                while(citer.hasNext()) {
+                    Cluster c = citer.next();
+                    if(c.getPopulation() > targetPop) {
+                        mergedClusters.add(c);
+//                        state.getClusters().remove(c);
+                        citer.remove();
+                    }
+                }
+//                System.out.println(state.getClusters().size());
+//                System.exit(0);
             }
 
 
-            Collection<Cluster> mergedClusters = new LinkedList<>();
             int steps = 0;
 //            System.out.println("trying to get candidate again");
             while(!state.getClusters().isEmpty() && steps < state.getClusters().size()) {

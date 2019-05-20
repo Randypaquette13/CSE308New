@@ -18,6 +18,7 @@ public class AlgorithmController {
     private State state= null;
     private Algorithm algorithm;
     private String currentState = null;
+    boolean nState = false;
 
     /**
      * This method handles running the graph partitioning portion of the algorithm.
@@ -30,20 +31,40 @@ public class AlgorithmController {
         if(state == null) {
             state = State.getState(p.getStateName());
             currentState = preference.getStateName();
+            algorithm = new Algorithm(p, state);
             if(state == null) {
                 System.out.println("state not read");
             }
-        } else if ((state.isGPDone) && currentState.equals(preference.getStateName())){
+        } else if ((state.isGPDone) && currentState.equals(preference.getStateName()) && !nState){
 //            state.reset();
+//            state = State.getState(p.getStateName());
+            nState = true;
+            System.out.println("NEW STATE");
+            if(!preference.isGraphPartUpdate()) {
+                state = State.getState(p.getStateName());
+                algorithm = new Algorithm(p, state);
+                nState = false;
+            } else {
+                return null;
+            }
+        } else if(nState) {
+            nState = false;
+            state = State.getState(p.getStateName());
+            algorithm = new Algorithm(p, state);
         }
 //        else if (state.isGPDone){
 //            state = State.getState(p.getStateName());
 //            currentState = preference.getStateName();
 //        }
 
-        algorithm = new Algorithm(p, state);
+
         if (preference.isGraphPartUpdate()) {
             System.out.println("TRYING GP WITH UPDATES");
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             if(state.isGPDone) {
                 return null;
             }
@@ -77,13 +98,13 @@ public class AlgorithmController {
      */
     @RequestMapping("/runBatchProcessing")
     public List<Summary> doBatchProcessing(@RequestBody BatchedPreferencesDAO preferenceDAO) {
-        if(state == null) {
-            state = State.getState(preferenceDAO.getStateName());
-        }
+//        if(state == null) {
+//            state = State.getState(preferenceDAO.getStateName());
+//        }
         final List<Summary> summaryBatch = new LinkedList<>();
         List<Preference> preferences = preferenceDAO.makePreferences();
         for(Preference preference : preferences) {
-            final Algorithm algorithm = new Algorithm(preference, state);
+            final Algorithm algorithm = new Algorithm(preference, State.getState(preferenceDAO.getStateName()));
             summaryBatch.add(algorithm.doJob());
         }
         return summaryBatch;

@@ -58,16 +58,16 @@ public class State {
         clusters = newClusters;
     }
 
-    /**
-     * Used to reset the state before every call to Algorithm.doJob() in AlgorithmController
-     */
-    public void reset() {
-        districtSet = new HashSet<>();
-        //precinctSet stays the same
-        clusters = new LinkedList<>();
-        precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
-        isGPDone = false;
-    }
+//    /**
+//     * Used to reset the state before every call to Algorithm.doJob() in AlgorithmController
+//     */
+//    public void reset() {
+//        districtSet = new HashSet<>();
+//        //precinctSet stays the same
+//        clusters = new LinkedList<>();
+//        precinctSet.forEach(precinct -> clusters.add(new Cluster(precinct)));
+//        isGPDone = false;
+//    }
 
     /**
      * Combines two clusters for graph partitioning. The first cluster absorbs the second and both the
@@ -314,7 +314,7 @@ public class State {
         hsp.add(p5);
 
         State s = new State(hsp);
-        s.reset();
+//        s.reset();
 
         return s;
     }

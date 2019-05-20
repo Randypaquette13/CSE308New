@@ -225,6 +225,8 @@
                 </div>
                 <div class="form-group">
                     <button type="button" id="btnRun" class="btn btn-primary btn-sm" disabled>Run</button>
+                    <button type="button" id="leftHist" class="btn btn-primary btn-sm" disabled><</button>
+                    <button type="button" id="rightHist" class="btn btn-primary btn-sm" disabled>></button>
                     <p></p>
                     <button type="button" id="btnBlack" class="btn btn-primary btn-sm">Show African American Distribution</button>
                 </div>
@@ -490,14 +492,39 @@
             }
         });
 
+        var indexHistory = 0;
+        $("#leftHist").click(function () {
+            $("#rightHist").attr("disabled",false);
+            indexHistory--;
+            if(indexHistory == 0) {
+                $("#leftHist").attr("disabled",true);
+            }
+            for(i in precinctHistory[indexHistory]) {
+                colorPrecinct(precinctHistory[indexHistory][i],i);
+            }
+        })
+        $("#rightHist").click(function () {
+            $("#leftHist").attr("disabled",false);
+            indexHistory++;
+            if(indexHistory == historyIndex) {
+                $("#rightHist").attr("disabled",true);
+            }
+            for(i in precinctHistory[indexHistory]) {
+                colorPrecinct(precinctHistory[indexHistory][i],i);
+            }
+        })
         var districtColors;
         var precinctColors;
+        var precinctHistory = [];
+        var historyIndex = 0;
         var contrastingColors;
 
         contrastingColors = ['#ff1500','#4f09ff','#22aa15','#a1003e','#0bfff3','#ff18fb','#89b3af','#914901',
             '#948302','#569601','#0d9299','#2b259c','#87169e','#f2c911','#a65642','#a88344','#abaa54','#7fad75',
             '#7d94b0','#8a0015','#9f94b5','#b882a1','#ba7168','#000000','#9abf4f','#942a9c','#9e3200','#baac44','#ff7300']
         function graphPartGetter() {
+            $("#leftHist").attr("disabled",true);
+            $("#rightHist").attr("disabled",true);
             data = {
                 "schwartzbergCompactness": parseFloat($("#SCHWARTZBERG_COMPACTNESS").val()),
                 "reackCompactness": parseFloat($("#REOCK_COMPACTNESS").val()),
@@ -541,9 +568,13 @@
                             colorPrecinct(color1, e[i][j]);
                         }
                     }
+                    precinctHistory[++historyIndex] = precinctColors;
+                    indexHistory++;
                     if (!data.graphPartUpdate.valueOf()) {
                         $("#btnRun").text("Simulated Annealing");
                         console.log(districtColors);
+                        $("#leftHist").attr("disabled",false);
+                        // $("#rightHist").attr("disabled",false);
                     } else {
                         graphPartGetter();
                     }
@@ -554,6 +585,8 @@
                         //change button
                         if ($("#btnRun").text() === "Run") {
                             $("#btnRun").text("Simulated Annealing");
+                            $("#leftHist").attr("disabled",false);
+                            // $("#rightHist").attr("disabled",false);
                             console.log(districtColors);
                         } else {
                             $("#btnRun").text("Run");
@@ -573,6 +606,8 @@
         });
 
         function getSimulatedAnnealing(){
+            $("#leftHist").attr("disabled",true);
+            $("#rightHist").attr("disabled",true);
             var measureScoreLabel = [
                 "Schwartzberg Compactness",
                 "Reock Compactness",

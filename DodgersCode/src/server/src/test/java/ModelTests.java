@@ -93,7 +93,7 @@ public class ModelTests {
 //        System.out.println(s);
         s.combinePair(clusters.get(0),clusters.get(1));
 //        System.out.println(s);
-        s.reset();
+//        s.reset();
 //        System.out.println(s);
 
         clusters = new ArrayList<>();
