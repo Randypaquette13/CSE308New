@@ -86,26 +86,30 @@ public class District extends Cluster {
         LinkedList<Precinct> precincts = new LinkedList<>();//precincts in this district that are adj to p
         for(Edge e : p.getEdges()) {
             final Precinct neighbor = (Precinct)e.getNeighbor(p);
-            if(neighbor.getDistrict().equals(p.getDistrict())) {
+            if(neighbor.getDistrict().id == p.getDistrict().id) {
                 precincts.add(neighbor);
             }
         }
 
-        for(Precinct precinct : precincts) {
-            if(getEdges().stream().anyMatch(e -> {
-                if(e.getNeighbor(precinct) instanceof Precinct) {
-                    final Precinct neighbor = (Precinct) e.getNeighbor(precinct);
-                    return !precincts.contains(neighbor);
-                } else {
-                    return false;
-                }
-            })) {
-                return false;
+        //for all precincts, each precinct must touch all other precincts
+//        return precincts.stream().allMatch(precinct -> precincts.stream().anyMatch(precinct1 -> precinct.hasEdgeTo(precinct1)));
+        return precincts.stream().allMatch(precinct -> precincts.stream().allMatch(precinct1 -> {
+            if(precinct.getId() == precinct1.getId()) {
+                return true;
+            } else {
+                return precinct.hasPathTo(precinct1, new LinkedList<>());
             }
-        }
-        return true;
-
+        }));
+        //every precinct must have a path to every member
+//        return precincts.stream().allMatch(precinct -> getPrecinctSet().stream().allMatch(member -> {
+//                if(member.getId() == precinct.getId()) {
+//                    return true;
+//                } else {
+//                    return precinct.hasPathTo(member, new LinkedList<>());
+//                }
+//            }));
     }
+//    return precincts.stream().allMatch(precinct -> precinct.getNeighborIDs(new LinkedList<>()).size() == getPrecinctSet().size());
 
 
     public HashSet<Precinct> calculateBorderPrecincts(){

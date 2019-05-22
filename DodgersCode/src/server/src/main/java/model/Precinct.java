@@ -76,6 +76,16 @@ public class Precinct implements MapVertex {
         }
         return neighbors;
     }
+    public List<Long> getNeighborIDs(LinkedList<Long> ids) {
+        for(Edge e : edgeSet) {
+            Precinct p = ((Precinct)e.getNeighbor(this));
+            if(p.getDistrict().id == this.getDistrict().id && !ids.contains(p.id)) {
+                ids.add(p.id);
+                ids.addAll(p.getNeighborIDs(ids));
+            }
+        }
+        return ids;
+    }
 
     public void addEdgeTo(MapVertex p) {
         Edge e1 = new Edge(this,p);
@@ -86,6 +96,35 @@ public class Precinct implements MapVertex {
     @Override
     public String toString() {
         return "P" + id;// + " population:" + population;
+    }
+
+    public boolean hasEdgeTo(Precinct p) {
+        if(p.id == id) {
+            return false;
+        }
+        return edgeSet.stream().anyMatch(edge -> ((Precinct)edge.getNeighbor(this)).getId() == p.getId());
+    }
+
+    public boolean hasPathTo(Precinct p, LinkedList<Long> placesYouBeen) {
+        if(p.id == id) {
+            return false;
+        }
+        return edgeSet.stream().anyMatch(edge -> {
+            Precinct newP = ((Precinct)edge.getNeighbor(this));
+            if(newP.getId() == p.getId()) {
+                return true;
+            }
+            if(p.getDistrict().id == this.getDistrict().id) {
+                if(!placesYouBeen.contains(newP.id)) {
+                    placesYouBeen.add(newP.id);
+                    return newP.hasPathTo(p,placesYouBeen);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        });
     }
 
 //    @Override

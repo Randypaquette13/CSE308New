@@ -692,6 +692,15 @@
             }
         }
 
+        function decimalToHexString(number)
+        {
+            if (number < 0)
+            {
+                number = 0xFFFFFFFF + number + 1;
+            }
+
+            return number.toString(16).toUpperCase();
+        }
 
         var africanToggle = true;
         function getBlackDistribution() {
@@ -704,10 +713,13 @@
                     // console.log("black");
                     // console.log(e);
                     if(africanToggle) {
+                        console.log(e);
                         for(var i = 0; i<e.length;i++) {
-                            var numPop = e[i].africanPopulation * 2.5;
-                            var color = "#" + numPop+numPop+numPop;
-                            colorPrecinct(color,e[i].id);
+                            var numPop = 255 - (e[i].africanPopulation * 20);
+                            // console.log(numPop);
+                            var color = "#" + decimalToHexString(numPop)+""+decimalToHexString(numPop)+""+decimalToHexString(numPop);
+                            // console.log(color);
+                            colorPrecinct(color,e[vi].id);
                         }
                         africanToggle = false;
                     } else {
