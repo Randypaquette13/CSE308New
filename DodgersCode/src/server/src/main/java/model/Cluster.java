@@ -66,7 +66,7 @@ public class Cluster implements MapVertex {
 //            if(!edgeSet.add(e)) {
 //                edgeSet.remove(e);
 //            }
-            if(e.getNeighbor(c) != this) {
+            if(((Cluster) e.getNeighbor(c)).id != this.id) {
                 e.setNeighbor(c, this);
                 if(c.id != this.id) {
                     edgeSet.add(e);
@@ -75,7 +75,10 @@ public class Cluster implements MapVertex {
             }
         }
 //        c.getEdges().addAll(temp);
-        population += c.getPopulation();
+        population = 0;
+        for(Precinct p : precinctSet) {
+            population += p.getPopulation();
+        }
 
 //        getNeighbors().forEach(neighbor -> {
 //            if(c.getNeighbors().contains(neighbor)) {

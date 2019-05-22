@@ -59,7 +59,7 @@ public class AlgorithmController {
 
 
         if (preference.isGraphPartUpdate()) {
-            System.out.println("TRYING GP WITH UPDATES");
+            System.out.println("---------GP STEP----------");
 //            try {
 //                Thread.sleep(100);
 //            } catch (InterruptedException e) {

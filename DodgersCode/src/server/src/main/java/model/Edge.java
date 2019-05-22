@@ -56,9 +56,9 @@ public class Edge {
     }
     public void setNeighbor(MapVertex neighbor, MapVertex toSet) {
         if(neighbor.equals(c1)) {
-            c2 = toSet;
-        } else {
             c1 = toSet;
+        } else {
+            c2 = toSet;
         }
     }
 

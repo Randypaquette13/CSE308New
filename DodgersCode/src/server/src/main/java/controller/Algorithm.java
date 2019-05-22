@@ -69,7 +69,7 @@ public class Algorithm {
         return measureScores;
     }
 
-    public String doGraphPartitioning() {
+    public String doGraphPartitioning2() {
         String s;
         //you must reset the state so we dont have to make extra database calls
         System.out.println("\nclusters size: " + state.getClusters().size());
@@ -126,7 +126,7 @@ public class Algorithm {
             while(!state.getClusters().isEmpty() && steps < state.getClusters().size()) {
 //                System.out.println(state.getClusters());
 //                System.out.println("GETTING CLUSTER PAIR");
-                final ClusterPair clusterPair = state.findCandidateClusterPair(targetPop);
+                final ClusterPair clusterPair = state.findCandidateClusterPair2(targetPop);
 //                System.out.println(clusterPair);
                 if(clusterPair == null){
                     System.out.println("NO VALID CLUSTER PAIR");
@@ -150,6 +150,52 @@ public class Algorithm {
             s = "done";
         }
         return s;
+    }
+
+    public String doGraphPartitioning() {
+        String s;
+        System.out.println(state.getClusters().size());
+        if (state.getClusters().size() != pref.getNumDistricts()) {
+            int targetNumClusters = (int) Math.ceil(state.getClusters().size() / 2.0);
+            int targetPop = (int) Math.ceil((double) state.getPopulation() / (double) targetNumClusters);
+
+            Collection<Cluster> mergedClusters = new LinkedList<>();
+            ((List<Cluster>) state.getClusters()).sort(Comparator.comparingInt(Cluster::getPopulation));
+
+            System.out.println("target num clusters: " + targetNumClusters);
+            System.out.println("target Pop: " + targetPop);
+            int gpSteps = 0;
+            if(targetNumClusters > 10) {
+                while (!state.getClusters().isEmpty() && gpSteps < state.getClusters().size()) {
+                    final ClusterPair candidatePair = state.findCandidateClusterPair(targetPop);
+
+                    if (candidatePair != null) {
+                        mergedClusters.add(state.combinePair(candidatePair.getC1(), candidatePair.getC2()));
+                    } else {
+                        System.out.println("NO VALID PAIR FOUND");
+                    }
+                    gpSteps++;
+                }
+                if (mergedClusters.size() != 0) {
+                    ((List<Cluster>) state.getClusters()).addAll(mergedClusters);
+                } else {
+                    System.out.println("none found");
+                }
+            } else {
+                final ClusterPair candidatePair = state.findCandidateClusterPair(targetPop);
+                if (candidatePair != null) {
+                    state.getClusters().add(state.combinePair(candidatePair.getC1(), candidatePair.getC2()));
+                } else {
+                    System.out.println("NO VALID PAIR FOUND");
+                }
+            }
+
+            s = state.getClusters().toString();
+        } else {
+            s = "done";
+        }
+        return s;
+
     }
 
     public Summary doSimulatedAnnealing() {

@@ -74,8 +74,13 @@ public class State {
      * first and second cluster is removed. Returns the combined cluster.
      */
     public Cluster combinePair(Cluster c1, Cluster c2) {
+        int size = getClusters().size();
         clusters.remove(c2);
         clusters.remove(c1);
+        if(getClusters().size() != size - 2){
+            System.out.println("it's the bad one");
+            System.exit(0);
+        }
         c1.absorbCluster(c2);
         return c1;
     }
@@ -151,7 +156,7 @@ public class State {
     /**
      * Get a new candidate pair for graph partitioning. Returns null if no candidate pair is found
      */
-    public ClusterPair findCandidateClusterPair(int targetPop) {
+    public ClusterPair findCandidateClusterPair2(int targetPop) {
         LinkedList<ClusterPair> pairs = new LinkedList<>();
         Cluster niceCluster = null;
         Edge niceEdge = null;
@@ -161,8 +166,8 @@ public class State {
         for(Cluster c : getClusters()) {
 //            System.out.println("num edges:" + c.getEdges().size());
 //            System.out.println("there are clusters");
-            HashSet<Edge> edges = new HashSet<>(c.getEdges());
-            for(Edge e : edges) {
+//            HashSet<Edge> edges = new HashSet<>(c.getEdges());
+            for(Edge e : c.getEdges()) {
 //                System.out.println(targetPop);
 //                System.out.println("the cluster has an edge");
 //                System.out.println(getClusters().contains(e.getNeighbor(c)));
@@ -220,6 +225,38 @@ public class State {
         } else {
             return null;
         }
+    }
+
+    public ClusterPair findCandidateClusterPair(int targetPop) {
+        LinkedList<ClusterPair> pairs = new LinkedList<>();
+        Cluster bestCluster = null;
+        Edge bestEdge = null;
+        int bestScore = Integer.MAX_VALUE;
+
+        Iterator<Cluster> citer = getClusters().iterator();
+        while (citer.hasNext()) {
+            Cluster c = citer.next();
+            Iterator<Edge> eiter = c.getEdges().iterator();
+            while (eiter.hasNext()) {
+                Edge e = eiter.next();
+                if(getClusters().contains((Cluster) e.getNeighbor(c))) {
+                    int popScore = Math.abs((c.getPopulation() + ((Cluster)e.getNeighbor(c)).getPopulation()) - targetPop);
+                    if(popScore < bestScore) {
+                        bestScore = popScore;
+                        bestCluster = c;
+                        bestEdge = e;
+
+                        pairs.add(new ClusterPair(c, (Cluster)e.getNeighbor(c)));
+                    }
+                }
+            }
+        }
+        System.out.println("best score: " + bestScore);
+        System.out.println(bestCluster);
+//        System.out.println((Cluster)bestEdge.getNeighbor(bestCluster));
+        if(bestCluster == null) return null;
+        return new ClusterPair(bestCluster, (Cluster)bestEdge.getNeighbor(bestCluster));
+
     }
 
     public void convertClustersToDistricts() {
@@ -474,7 +511,11 @@ public class State {
                 while(neighborsIterator.hasNext()){
                     Long neighborId = neighborsIterator.next().asLong();
                     Precinct neighborPrecinct = precincts.get(neighborId);
-                    currentPrecinct.addEdgeTo(neighborPrecinct);
+                    if(neighborId != currentPrecinct.getId()) {
+                        currentPrecinct.addEdgeTo(neighborPrecinct);
+                    } else {
+                        System.out.println("self loop on: " + neighborId);
+                    }
                 }
             }
 
