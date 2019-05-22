@@ -508,15 +508,22 @@ public class State {
 //                System.out.println(currentPrecinct + " has neighbors " + neighbors.toString());
 //                System.out.println(precinctId);
                 Iterator<JsonNode> neighborsIterator = neighbors.elements();
+                int i = 0;
+                List<Long> list = new LinkedList<>();
                 while(neighborsIterator.hasNext()){
                     Long neighborId = neighborsIterator.next().asLong();
                     Precinct neighborPrecinct = precincts.get(neighborId);
-                    if(neighborId != currentPrecinct.getId()) {
+                    if(neighborId != currentPrecinct.getId() && !list.contains(neighborId)) {
+                        list.add(neighborId);
+                        i++;
                         currentPrecinct.addEdgeTo(neighborPrecinct);
                     } else {
                         System.out.println("self loop on: " + neighborId);
                     }
                 }
+//                if(precinctId == 157) {
+//                    System.out.println("edges in 157: "+i);
+//                }
             }
 
 

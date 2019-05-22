@@ -43,15 +43,11 @@ public class Algorithm {
      */
     private double calculateObjectiveFunction() {
         double objFunOutput = 0;
-        double totalWeight = 0;
         for(District d : state.getDistrictSet()) {
             for(MeasureType m : MeasureType.values()) {
                 objFunOutput += (((m.calculateMeasure(d, state) * pref.getWeight(m)))/ (state.getDistrictSet().size()));
-                totalWeight += pref.getWeight(m);
             }
         }
-        totalWeight /= state.getDistrictSet().size();
-        objFunOutput /= totalWeight;
         return objFunOutput;
     }
 
@@ -162,6 +158,24 @@ public class Algorithm {
             Collection<Cluster> mergedClusters = new LinkedList<>();
             ((List<Cluster>) state.getClusters()).sort(Comparator.comparingInt(Cluster::getPopulation));
 
+            if(state.getClusters().size() < 20) {
+                while(state.getClusters().stream().anyMatch(cluster -> cluster.getPrecinctSet().size() == 1)) {
+                    LinkedList<Cluster> singles = new LinkedList<>();
+                    Iterator<Cluster> citer = state.getClusters().iterator();
+                    while (citer.hasNext()) {
+                        Cluster c = citer.next();
+                        if(c.getPrecinctSet().size() == 1) {
+                            singles.add(c);
+                        }
+                    }
+                    System.out.println("SINGLES ELIMINATED: " + singles.size());
+                    List<ClusterPair> pairs = singlesHelper(singles);
+                    for(ClusterPair candidatePair : pairs) {
+                        System.out.println(candidatePair);
+                        state.getClusters().add(state.combinePair(candidatePair.getC1(), candidatePair.getC2()));
+                    }
+                }
+            }
             System.out.println("target num clusters: " + targetNumClusters);
             System.out.println("target Pop: " + targetPop);
             int gpSteps = 0;
@@ -198,6 +212,22 @@ public class Algorithm {
 
     }
 
+    public List<ClusterPair> singlesHelper(LinkedList<Cluster> singles) {
+        List<ClusterPair> pairs = new LinkedList<>();
+        List<Long> usedToClusterID = new LinkedList<>();
+        for(Cluster c : singles) {
+            Iterator<Edge> eiter = c.getEdges().iterator();
+            Edge e = eiter.next();
+            while(eiter.hasNext() && (usedToClusterID.contains((((Cluster)e.getNeighbor(c))).id) || singles.contains(((Cluster)e.getNeighbor(c)))) ) {
+                e = eiter.next();
+            }
+            if(!usedToClusterID.contains((((Cluster)e.getNeighbor(c))).id) && !singles.contains(((Cluster)e.getNeighbor(c)))) {
+                usedToClusterID.add((((Cluster)e.getNeighbor(c)).id));
+                pairs.add(new ClusterPair(c, ((Cluster)e.getNeighbor(c))));
+            }
+        }
+        return pairs;
+    }
     public Summary doSimulatedAnnealing() {
         System.out.println("\n\tSTARTED SIM ANNEALING STEP");
         if(state.getDistrictSet().size() == 0) {
