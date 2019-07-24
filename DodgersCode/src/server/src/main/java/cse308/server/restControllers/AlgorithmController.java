@@ -1,6 +1,7 @@
 package cse308.server.restControllers;
 
 import controller.Algorithm;
+import controller.LoggerState;
 import cse308.server.dao.*;
 import model.*;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class AlgorithmController {
         //TODO: Load state object from DB and set it to the private state obj
         Preference p = preference.makePreference();
         if(state == null) {
+            LoggerState.writeFile("Run:GP");
             state = State.getState(p.getStateName());
             currentState = preference.getStateName();
             algorithm = new Algorithm(p, state);
@@ -89,6 +91,7 @@ public class AlgorithmController {
      */
     @RequestMapping("/runSimulatedAnnealing")
     public SummaryDAO doSimulatedAnnealing() {
+        LoggerState.writeFile("Run:GP");
         return algorithm.doSimulatedAnnealing().toDAO();
     }
 
@@ -125,5 +128,12 @@ public class AlgorithmController {
             output.add(new PrecinctAfricanDAO(precinct.getId(),(int)(((double)precinct.getDemographics().getDemographicPopulation().get(DemographicType.AFRICAN_AMERICAN)/(double)precinct.getPopulation()) * 100)));
         });
         return output;
+    }
+
+    @RequestMapping("/closeFile")
+    public void closeFile(String file) {
+        System.out.println("THING DONE LEST GO");
+        LoggerState.writeFile("donezo");
+        LoggerState.close();
     }
 }

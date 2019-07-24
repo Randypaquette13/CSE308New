@@ -208,6 +208,7 @@ public class Algorithm {
         } else {
             s = "done";
         }
+        LoggerState.writeFile(s);
         return s;
 
     }
@@ -291,6 +292,8 @@ public class Algorithm {
         if(dist < pref.getMinMajMinDistricts()) dist = pref.getMinMajMinDistricts();
         else if(dist > pref.getMaxMajMinDistricts()) dist = pref.getMaxMajMinDistricts();
 
-        return new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove, dist);
+        Summary summary = new Summary(lastObjFunVal,calculateTotalMeasuresScores(), candidateMove, dist);
+        LoggerState.writeFile(summary.toString());
+        return summary;
     }
 }

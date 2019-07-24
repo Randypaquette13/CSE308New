@@ -1,6 +1,7 @@
 package cse308.server;
 
 import controller.Algorithm;
+import controller.LoggerState;
 import cse308.server.dao.PreferenceDAO;
 import model.Precinct;
 import model.State;

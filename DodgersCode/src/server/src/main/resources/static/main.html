@@ -240,6 +240,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Summary Data</h5>
                     <button type="button" class="close" data-dismiss="modal">×</button>
+                    <a href="thisLog.log" download="log_file.log">Download</a>
                 </div>
                 <div class="modal-body" id="summaryModalContent">
                     No Data...
@@ -659,6 +660,7 @@
                     console.log(e);
                 }
             });
+            closeFile();
         }
         function getBatchSummary(e){
             console.log("this is what i get", e);
@@ -689,6 +691,7 @@
                                          </div>`
                     ))
                 );
+                closeFile();
             }
         }
 
@@ -719,7 +722,7 @@
                             // console.log(numPop);
                             var color = "#" + decimalToHexString(numPop)+""+decimalToHexString(numPop)+""+decimalToHexString(numPop);
                             // console.log(color);
-                            colorPrecinct(color,e[vi].id);
+                            colorPrecinct(color,e[i].id);
                         }
                         africanToggle = false;
                     } else {
@@ -738,6 +741,21 @@
                     for(var i = 0; i < precinctColors.length;i++) {
                         colorPrecinct(precinctColors[i],i);
                     }
+                }
+            });
+        }
+
+        function closeFile() {
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/closeFile",
+                data: "close",
+                contentType: "text/plain",
+                success: function(e) {
+                    console.log("good");
+                },
+                error: function(e) {
+                    console.log("err");
                 }
             });
         }
